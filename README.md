@@ -148,8 +148,29 @@ Edit `dialogue/milka.dialogue` or create a new `.dialogue` file. Use these tags:
 - `#sfx=click|open|close|confirm|save|error` - Play preserved SFX
 - `- "Choice text"` - Branching dialogue
 
-## 🎬 Title Screen
-The game starts with `scenes/title_screen.tscn` featuring a milk-themed main menu with Start/Load/Settings/Quit buttons. Edit `scenes/title_screen.gd` to customize.
+## 🎬 Title Screen (milk-glass UI)
+The game starts with `scenes/title_screen.tscn` — a fully scene-authored main
+menu (no scene-builder script; `title_screen.gd` only wires buttons):
+
+- transparent milk-glass buttons over a deep lavender sky with soft milk waves
+- milk droplets that gently fall and sway (12 s ambient loop, all in-scene)
+- SVG ornaments everywhere: droplet trio divider, corner droplet clusters
+- the animated Milk Spirit character (idle breathing + blinking + expressions)
+- shared `assets/ui/milk_glass_theme.tres` theme for Buttons/Panels
+
+Screenshots: `docs/screenshots/`.
+
+## 🐄 Animated Character
+`scenes/character/milk_spirit.tscn` is a reusable 2D droplet character:
+breathing idle loop, random blinking, `set_expression("neutral"|"happy"|"surprised")`,
+`greet()` hop. Preview it via `scenes/character/character_showcase.tscn`.
+
+## 📸 Screenshots (headless sway + pixman)
+```
+sway -c <(echo 'output HEADLESS-1 mode 1280x720') &
+godot --path . --script res://tools/capture_title.gd -- \
+    --scene res://scenes/title_screen.tscn --out shot.png --frames 90
+```
 
 ## 🔊 Preserved Sound Effects
 All original demo music was removed, but these UI sound effects are preserved in `assets/sfx/`:
