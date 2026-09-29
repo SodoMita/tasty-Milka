@@ -310,3 +310,71 @@ func _pump() -> void:
 		buf[i] = Vector2.ZERO
 	_playback.push_buffer(buf)
 	frames_pushed += count
+
+func has_music_request() -> bool:
+	return not _wanted_music.is_empty()
+
+func get_last_sfx() -> String:
+	return last_sfx
+
+func hold_start() -> void:
+	if _hold_player == null:
+		return
+	_hold_player.stop()
+
+func hold_progress(progress: float) -> void:
+	# progress 0..1 -> pitch slides down as hold fills
+	if _hold_player == null:
+		return
+	if not _hold_player.playing:
+		_hold_player.play()
+	_hold_player.pitch_scale = lerpf(hold_pitch, 0.7, progress)
+
+func hold_stop() -> void:
+	if _hold_player != null:
+		_hold_player.stop()
+
+func request_music(tag: String) -> void:
+	# Simple routing based on known keywords
+	var t := tag.to_lower().strip_edges()
+	if t == "" or t == "stop":
+		stop_music()
+		return
+	for known in THEMES.keys():
+		if t.contains(String(known)):
+			play_theme(known)
+			return
+	# Fallback to calm
+	if THEMES.has(&"calm"):
+		play_theme(&"calm")
+
+func set_levels(master: float, music: float, voice: float, sfx: float) -> void:
+	master_level = master
+	music_level = music
+	voice_level = voice
+	sfx_level = sfx
+
+	# Apply to audio buses
+	var bus_map := {&"Master": master, &"Music": music, &"Voice": voice, &"SFX": sfx}
+	for b in bus_map.keys():
+		var idx := AudioServer.get_bus_index(b)
+		if idx != -1:
+			var level: float = bus_map[b]
+			var db := -80.0 if level <= 0 else linear_to_db(level / 100.0)
+			AudioServer.set_bus_volume_db(idx, db)
+
+func typing_tick(letter: String) -> void:
+	if not sfx_enabled():
+		return
+	typing_ticks += 1
+	if _audio_ctx_has_tick(letter):
+		_play_synth_sfx("tick", 1.0)
+
+func _audio_ctx_has_tick(letter: String) -> bool:
+	# Only play ticks on "noisy" letters to avoid fatigue
+	var now := Time.get_ticks_msec()
+	if now - _last_tick_ms < 30:
+		return false
+	_last_tick_ms = now
+	_tick_parity = (_tick_parity + 1) % 3
+	return letter.length() > 0 and _tick_parity == 0 and letter not in [" ", ".", ",", ":", ";"]
