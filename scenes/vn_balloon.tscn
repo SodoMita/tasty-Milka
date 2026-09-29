@@ -18,18 +18,22 @@
 [ext_resource type="Texture2D" path="res://assets/characters/shadow.svg" id="27_shadow"]
 [ext_resource type="Resource" path="res://characters/shadow.tres" id="28_def_shadow"]
 [ext_resource type="Resource" path="res://characters/milka_chan.tres" id="36_def_milka"]
+[ext_resource type="Texture2D" path="res://assets/ui/milk_drop.svg" id="40_milk_drop"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_box"]
-bg_color = Color(0.97, 0.95, 0.99, 0.82)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.64, 0.46, 0.82, 1)
-corner_radius_top_left = 22
-corner_radius_top_right = 22
-corner_radius_bottom_right = 22
-corner_radius_bottom_left = 22
+bg_color = Color(1, 0.995, 0.98, 0.72)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.94)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+shadow_color = Color(0.4, 0.3, 0.5, 0.1)
+shadow_size = 12
+shadow_offset = Vector2(0, 5)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_name"]
 bg_color = Color(0.52, 0.35, 0.72, 0.92)
@@ -495,8 +499,12 @@ mouse_filter = 2
 
 [node name="NextIndicator" type="Polygon2D" parent="Balloon/UIRoot/BottomUI/IndicatorHolder" unique_id=1415914473]
 unique_name_in_owner = true
-color = Color(0.64, 0.46, 0.82, 1)
-polygon = PackedVector2Array(0, 0, 40, 0, 20, 14)
+polygon = PackedVector2Array()
+
+[node name="MilkDrop" type="Sprite2D" parent="Balloon/UIRoot/BottomUI/IndicatorHolder/NextIndicator"]
+position = Vector2(20, 5)
+scale = Vector2(0.35, 0.35)
+texture = ExtResource("40_milk_drop")
 
 [node name="IndicatorTween" type="AnimationPlayer" parent="Balloon/UIRoot/BottomUI/IndicatorHolder" unique_id=997917757]
 libraries/ = SubResource("AnimationLibrary_bob")

@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
-# Asset rules: shipped art is highly packed WebP only. No PNG/JPEG/GIF/BMP/TGA
-# and no SVG art anywhere in the repo, EXCEPT: the project icon, addons,
-# and tiny (<=8 KB) silhouettes whitelisted below for silent bystanders,
-# and every character sprite stays small.
+# Asset rules: raster art is packed WebP; no PNG/JPEG/GIF/BMP/TGA.
+# The icon, addons, inherited SVG placeholders and tiny milk UI vectors
+# are allowed. All project SVGs stay <= 8 KB; character WebPs stay small.
 set -uo pipefail
 cd "$(dirname "$0")/.."
 fail=0
 # Tiny silhouette SVGs (silent bystanders — a face-less silhouette has no
 # fine detail to justify a rasterised alternative per expression) are
 # whitelisted below with a hard byte cap.
-SVG_WHITELIST='^(icon\.svg|assets/characters/shadow\.svg)$'
+SVG_WHITELIST='^(icon\.svg|assets/characters/(shadow|milka_chan(_smile|_surprised)?)\.svg|assets/backgrounds/(milky_meadow|cafe_parlor|starry_night)\.svg|assets/ui/milk_(drop|wave|veil)\.svg)$'
 bad=$(git ls-files | grep -Ei '\.(png|jpe?g|gif|bmp|tga|svg)$' | grep -v '^addons/' | grep -vE "$SVG_WHITELIST" || true)
 if [ -n "$bad" ]; then
   echo "[FAIL] non-WebP image files are tracked:"; echo "$bad" | sed 's/^/  /'; fail=1

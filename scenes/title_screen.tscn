@@ -1,35 +1,102 @@
-[gd_scene load_steps=5 format=3 uid="uid://title_milka_vn"]
+[gd_scene format=3]
 
 [ext_resource type="Script" path="res://scenes/title_screen.gd" id="1_script"]
-[ext_resource type="FontFile" uid="uid://ctxcxi25fm0pu" path="res://assets/fonts/DejaVuSerif.ttf" id="2_serif"]
-[ext_resource type="FontFile" uid="uid://ex3s7gibjgfb" path="res://assets/fonts/DejaVuSerif-Bold.ttf" id="3_serifbold"]
+[ext_resource type="Theme" path="res://assets/ui/milk_theme.tres" id="2_theme"]
+[ext_resource type="Texture2D" path="res://assets/title/meadow.webp" id="3_background"]
+[ext_resource type="Texture2D" path="res://assets/ui/milk_veil.svg" id="4_veil"]
+[ext_resource type="Texture2D" path="res://assets/ui/milk_drop.svg" id="5_drop"]
+[ext_resource type="Texture2D" path="res://assets/ui/milk_wave.svg" id="6_wave"]
+[ext_resource type="PackedScene" path="res://scenes/title_character.tscn" id="7_character"]
+[ext_resource type="FontFile" path="res://assets/fonts/title/dm-serif-italic.ttf" id="8_logo"]
+[ext_resource type="FontFile" path="res://assets/fonts/title/dm-serif.ttf" id="9_serif"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_menu_bg"]
-bg_color = Color(0.94, 0.9, 0.97, 1)
+[sub_resource type="StyleBoxFlat" id="Primary"]
+content_margin_left = 22.0
+content_margin_top = 13.0
+content_margin_right = 22.0
+content_margin_bottom = 13.0
+bg_color = Color(0.53, 0.42, 0.65, 0.97)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.86, 0.79, 0.93, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_left = 15
+corner_radius_bottom_right = 15
+shadow_color = Color(0.45, 0.31, 0.55, 0.14)
+shadow_size = 10
+shadow_offset = Vector2(0, 5)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn"]
-bg_color = Color(0.97, 0.95, 0.99, 0.85)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.64, 0.46, 0.82, 0.9)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
+[sub_resource type="StyleBoxFlat" id="PrimaryHover"]
+content_margin_left = 22.0
+content_margin_top = 13.0
+content_margin_right = 22.0
+content_margin_bottom = 13.0
+bg_color = Color(0.46, 0.34, 0.58, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9, 0.83, 0.96, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_left = 15
+corner_radius_bottom_right = 15
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
-bg_color = Color(0.62, 0.45, 0.82, 0.92)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.95, 0.9, 1, 1)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
+[sub_resource type="StyleBoxEmpty" id="Empty"]
+
+[sub_resource type="StyleBoxFlat" id="Callout"]
+content_margin_left = 21.0
+content_margin_top = 12.0
+content_margin_right = 21.0
+content_margin_bottom = 12.0
+bg_color = Color(1, 0.995, 0.98, 0.72)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.96)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_left = 22
+corner_radius_bottom_right = 22
+
+[sub_resource type="Animation" id="FloatReset"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Droplets/Large:position")
+tracks/0/keys = {"times": PackedFloat32Array(0), "transitions": PackedFloat32Array(1), "update": 0, "values": [Vector2(667, 207)]}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Droplets/Small:position")
+tracks/1/keys = {"times": PackedFloat32Array(0), "transitions": PackedFloat32Array(1), "update": 0, "values": [Vector2(1129, 117)]}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Droplets/Low:position")
+tracks/2/keys = {"times": PackedFloat32Array(0), "transitions": PackedFloat32Array(1), "update": 0, "values": [Vector2(583, 559)]}
+
+[sub_resource type="Animation" id="Float"]
+resource_name = "float"
+length = 7.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Droplets/Large:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {"times": PackedFloat32Array(0, 3.5, 7), "transitions": PackedFloat32Array(1, 1, 1), "update": 0, "values": [Vector2(667, 207), Vector2(670, 188), Vector2(667, 207)]}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Droplets/Small:position")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {"times": PackedFloat32Array(0, 3.5, 7), "transitions": PackedFloat32Array(1, 1, 1), "update": 0, "values": [Vector2(1129, 117), Vector2(1125, 131), Vector2(1129, 117)]}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Droplets/Low:position")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {"times": PackedFloat32Array(0, 3.5, 7), "transitions": PackedFloat32Array(1, 1, 1), "update": 0, "values": [Vector2(583, 559), Vector2(588, 548), Vector2(583, 559)]}
+
+[sub_resource type="AnimationLibrary" id="FloatLibrary"]
+_data = {&"RESET": SubResource("FloatReset"), &"float": SubResource("Float")}
 
 [node name="TitleScreen" type="Control"]
 layout_mode = 3
@@ -38,105 +105,430 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+clip_contents = true
+theme = ExtResource("2_theme")
 script = ExtResource("1_script")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.94, 0.9, 0.97, 1)
+mouse_filter = 2
+texture = ExtResource("3_background")
+expand_mode = 1
+stretch_mode = 6
 
-[node name="Content" type="VBoxContainer" parent="."]
+[node name="MilkVeil" type="TextureRect" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -150.0
-offset_right = 200.0
-offset_bottom = 150.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4_veil")
+expand_mode = 1
+
+[node name="TitleCharacter" parent="." instance=ExtResource("7_character")]
+position = Vector2(952, 432)
+scale = Vector2(0.51, 0.51)
+
+[node name="MilkWave" type="TextureRect" parent="."]
+layout_mode = 1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -155.0
+mouse_filter = 2
+texture = ExtResource("6_wave")
+expand_mode = 1
+
+[node name="Droplets" type="Control" parent="."]
+layout_mode = 0
+mouse_filter = 2
+
+[node name="Large" type="TextureRect" parent="Droplets"]
+layout_mode = 0
+offset_left = 667.0
+offset_top = 207.0
+offset_right = 713.0
+offset_bottom = 267.0
+rotation = -0.16
+mouse_filter = 2
+texture = ExtResource("5_drop")
+expand_mode = 1
+
+[node name="Small" type="TextureRect" parent="Droplets"]
+layout_mode = 0
+offset_left = 1129.0
+offset_top = 117.0
+offset_right = 1155.0
+offset_bottom = 150.0
+rotation = 0.2
+mouse_filter = 2
+texture = ExtResource("5_drop")
+expand_mode = 1
+
+[node name="Low" type="TextureRect" parent="Droplets"]
+layout_mode = 0
+offset_left = 583.0
+offset_top = 559.0
+offset_right = 608.0
+offset_bottom = 591.0
+rotation = 0.14
+mouse_filter = 2
+texture = ExtResource("5_drop")
+expand_mode = 1
+
+[node name="Header" type="Control" parent="."]
+layout_mode = 0
+mouse_filter = 2
+
+[node name="Mark" type="TextureRect" parent="Header"]
+layout_mode = 0
+offset_left = 38.0
+offset_top = 28.0
+offset_right = 64.0
+offset_bottom = 61.0
+mouse_filter = 2
+texture = ExtResource("5_drop")
+expand_mode = 1
+
+[node name="Brand" type="Label" parent="Header"]
+layout_mode = 0
+offset_left = 77.0
+offset_top = 30.0
+offset_right = 244.0
+offset_bottom = 62.0
+theme_override_fonts/font = ExtResource("9_serif")
+theme_override_font_sizes/font_size = 23
+text = "Milka VN"
+
+[node name="Version" type="Label" parent="Header"]
+layout_mode = 0
+offset_left = 955.0
+offset_top = 37.0
+offset_right = 1235.0
+offset_bottom = 61.0
+theme_override_colors/font_color = Color(0.44, 0.43, 0.48, 0.85)
+theme_override_font_sizes/font_size = 11
+text = "A STORY WAITING TO BE TOLD"
+horizontal_alignment = 2
+
+[node name="Eyebrow" type="Label" parent="."]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 119.0
+offset_right = 515.0
+offset_bottom = 143.0
+theme_override_colors/font_color = Color(0.57, 0.46, 0.64, 1)
+theme_override_font_sizes/font_size = 12
+text = "A LITTLE MILK.  A LITTLE MAGIC."
+
+[node name="Logo" type="Label" parent="."]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 137.0
+offset_right = 540.0
+offset_bottom = 303.0
+theme_override_colors/font_color = Color(0.53, 0.4, 0.65, 1)
+theme_override_colors/font_shadow_color = Color(0.86, 0.76, 0.88, 0.3)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 5
+theme_override_fonts/font = ExtResource("8_logo")
+theme_override_font_sizes/font_size = 128
+text = "Milka"
+
+[node name="Genre" type="Label" parent="."]
+layout_mode = 0
+offset_left = 92.0
+offset_top = 284.0
+offset_right = 486.0
+offset_bottom = 306.0
+theme_override_colors/font_color = Color(0.54, 0.43, 0.61, 0.85)
+theme_override_font_sizes/font_size = 12
+text = "V I S U A L   N O V E L"
+
+[node name="Subtitle" type="Label" parent="."]
+layout_mode = 0
+offset_left = 90.0
+offset_top = 327.0
+offset_right = 519.0
+offset_bottom = 384.0
+theme_override_colors/font_color = Color(0.46, 0.41, 0.49, 1)
+theme_override_font_sizes/font_size = 22
+text = "Some stories feel\nlike coming home."
+
+[node name="Menu" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 90.0
+offset_top = 410.0
+offset_right = 410.0
+offset_bottom = 637.0
+theme_override_constants/separation = 10
+
+[node name="StartButton" type="Button" parent="Menu"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.99, 0.98, 1)
+theme_override_colors/font_hover_color = Color(1, 0.99, 0.98, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.99, 0.98, 1)
+theme_override_colors/font_focus_color = Color(1, 0.99, 0.98, 1)
+theme_override_styles/normal = SubResource("Primary")
+theme_override_styles/hover = SubResource("PrimaryHover")
+theme_override_styles/pressed = SubResource("PrimaryHover")
+text = "Start a new story"
+icon = ExtResource("5_drop")
+expand_icon = true
+alignment = 0
+
+[node name="ContinueButton" type="Button" parent="Menu"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+disabled = true
+text = "Continue"
+alignment = 0
+
+[node name="LoadButton" type="Button" parent="Menu"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+text = "Load a story"
+alignment = 0
+
+[node name="SettingsButton" type="Button" parent="Menu"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+text = "Settings"
+alignment = 0
+
+[node name="Callout" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 811.0
+offset_top = 616.0
+offset_right = 1165.0
+offset_bottom = 661.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Callout")
+
+[node name="Label" type="Label" parent="Callout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.48, 0.37, 0.54, 1)
+theme_override_font_sizes/font_size = 15
+text = "✧  A world of little wonders."
+horizontal_alignment = 1
+
+[node name="AboutButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 38.0
+offset_top = 671.0
+offset_right = 260.0
+offset_bottom = 710.0
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("Empty")
+theme_override_styles/hover = SubResource("Empty")
+theme_override_styles/pressed = SubResource("Empty")
+text = "About this little world  →"
+alignment = 0
+
+[node name="Footer" type="Label" parent="."]
+layout_mode = 0
+offset_left = 389.0
+offset_top = 678.0
+offset_right = 932.0
+offset_bottom = 703.0
+theme_override_colors/font_color = Color(0.53, 0.47, 0.55, 0.75)
+theme_override_font_sizes/font_size = 12
+text = "Take your time. The story will wait."
+horizontal_alignment = 1
+
+[node name="QuitButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1136.0
+offset_top = 671.0
+offset_right = 1232.0
+offset_bottom = 710.0
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("Empty")
+theme_override_styles/hover = SubResource("Empty")
+theme_override_styles/pressed = SubResource("Empty")
+text = "Quit  ↗"
+
+[node name="FloatingAnimation" type="AnimationPlayer" parent="."]
+autoplay = "float"
+libraries = {&"": SubResource("FloatLibrary")}
+
+[node name="Overlay" type="Control" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.96, 0.94, 0.96, 0.56)
+
+[node name="Center" type="CenterContainer" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SettingsPanel" type="PanelContainer" parent="Overlay/Center"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(510, 430)
+layout_mode = 2
+
+[node name="Content" type="VBoxContainer" parent="Overlay/Center/SettingsPanel"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Overlay/Center/SettingsPanel/Content"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("9_serif")
+theme_override_font_sizes/font_size = 32
+text = "Make yourself at home."
+
+[node name="Subtitle" type="Label" parent="Overlay/Center/SettingsPanel/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Little adjustments, just for you."
+
+[node name="SoundCheck" type="CheckButton" parent="Overlay/Center/SettingsPanel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Interface sounds"
+
+[node name="MotionCheck" type="CheckButton" parent="Overlay/Center/SettingsPanel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Reduce title motion"
+
+[node name="VolumeRow" type="HBoxContainer" parent="Overlay/Center/SettingsPanel/Content"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Overlay/Center/SettingsPanel/Content/VolumeRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Sound volume"
+
+[node name="VolumeValue" type="Label" parent="Overlay/Center/SettingsPanel/Content/VolumeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "65%"
+
+[node name="VolumeSlider" type="HSlider" parent="Overlay/Center/SettingsPanel/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+value = 65.0
+
+[node name="SpeedRow" type="HBoxContainer" parent="Overlay/Center/SettingsPanel/Content"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Overlay/Center/SettingsPanel/Content/SpeedRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Dialogue text speed"
+
+[node name="SpeedValue" type="Label" parent="Overlay/Center/SettingsPanel/Content/SpeedRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "32 ms / character"
+
+[node name="SpeedSlider" type="HSlider" parent="Overlay/Center/SettingsPanel/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+min_value = 10.0
+max_value = 60.0
+value = 32.0
+
+[node name="SettingsClose" type="Button" parent="Overlay/Center/SettingsPanel/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+text = "All cozy. Done."
+
+[node name="AboutPanel" type="PanelContainer" parent="Overlay/Center"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(510, 360)
+layout_mode = 2
+
+[node name="Content" type="VBoxContainer" parent="Overlay/Center/AboutPanel"]
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="Title" type="Label" parent="Overlay/Center/AboutPanel/Content"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("9_serif")
+theme_override_font_sizes/font_size = 35
+text = "Your little world."
+
+[node name="Description" type="Label" parent="Overlay/Center/AboutPanel/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "An editable 2D visual novel foundation.\n\nReplace the illustration, write your dialogue,\nand make the scene feel like home.\n\nGodot 4 · SVG UI · Hand-authored scenes"
+
+[node name="AboutClose" type="Button" parent="Overlay/Center/AboutPanel/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+text = "Back to the little world"
+
+[node name="EmptyLoadPanel" type="PanelContainer" parent="Overlay/Center"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(510, 340)
+layout_mode = 2
+
+[node name="Content" type="VBoxContainer" parent="Overlay/Center/EmptyLoadPanel"]
+layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Title" type="Label" parent="Content"]
+[node name="Title" type="Label" parent="Overlay/Center/EmptyLoadPanel/Content"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("9_serif")
+theme_override_font_sizes/font_size = 34
+text = "A fresh beginning."
+
+[node name="Description" type="Label" parent="Overlay/Center/EmptyLoadPanel/Content"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "No saved stories. Yet.\n\nStart a new story, then save a little moment\nto come back to later."
+
+[node name="EmptyStart" type="Button" parent="Overlay/Center/EmptyLoadPanel/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+text = "Start a new story"
+
+[node name="EmptyClose" type="Button" parent="Overlay/Center/EmptyLoadPanel/Content"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.38, 0.22, 0.58, 1)
-theme_override_fonts/font = ExtResource("3_serifbold")
-theme_override_font_sizes/font_size = 64
-text = "Milka VN"
-horizontal_alignment = 1
-
-[node name="Subtitle" type="Label" parent="Content"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.45, 0.3, 0.65, 1)
-theme_override_fonts/font = ExtResource("2_serif")
-theme_override_font_sizes/font_size = 18
-text = "A Creamy Visual Novel Experience 🥛"
-horizontal_alignment = 1
-
-[node name="Spacer" type="Control" parent="Content"]
-layout_mode = 2
-custom_minimum_size = Vector2(0, 30)
-
-[node name="StartButton" type="Button" parent="Content"]
-unique_name_in_owner = true
-layout_mode = 2
-custom_minimum_size = Vector2(0, 50)
-theme_override_colors/font_color = Color(0.38, 0.22, 0.58, 1)
-theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("3_serifbold")
-theme_override_font_sizes/font_size = 22
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_hover")
-theme_override_styles/focus = SubResource("StyleBoxFlat_btn_hover")
-text = "▶  Start New Story"
-
-[node name="LoadButton" type="Button" parent="Content"]
-unique_name_in_owner = true
-layout_mode = 2
-custom_minimum_size = Vector2(0, 50)
-theme_override_colors/font_color = Color(0.38, 0.22, 0.58, 1)
-theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("2_serif")
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_hover")
-theme_override_styles/focus = SubResource("StyleBoxFlat_btn_hover")
-text = "📂  Load Saved Game"
-
-[node name="SettingsButton" type="Button" parent="Content"]
-unique_name_in_owner = true
-layout_mode = 2
-custom_minimum_size = Vector2(0, 50)
-theme_override_colors/font_color = Color(0.38, 0.22, 0.58, 1)
-theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("2_serif")
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_hover")
-theme_override_styles/focus = SubResource("StyleBoxFlat_btn_hover")
-text = "⚙  Settings"
-
-[node name="QuitButton" type="Button" parent="Content"]
-unique_name_in_owner = true
-layout_mode = 2
-custom_minimum_size = Vector2(0, 50)
-theme_override_colors/font_color = Color(0.38, 0.22, 0.58, 1)
-theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("2_serif")
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_hover")
-theme_override_styles/focus = SubResource("StyleBoxFlat_btn_hover")
-text = "✖  Quit"
+text = "Back to title"
