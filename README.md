@@ -121,3 +121,43 @@ Narrator: Thank you for playing. #sfx=save
 3. Press **F5** to run the project.
 
 Enjoy building your dream visual novel with **Milka VN**! 🥛✨
+
+## 🎨 Placeholder Assets (Ready to Replace)
+
+The project includes milk-themed SVG placeholder art that you can replace with your own:
+
+### 🖼️ Backgrounds (`assets/backgrounds/`)
+- `milky_meadow.svg` - Pastel lilac meadow with rolling hills
+- `cafe_parlor.svg` - Warm cream café interior with window
+- `starry_night.svg` - Deep purple night sky with moon and stars
+
+Replace these with your own `.webp` backgrounds (the original engine expects WebP).
+
+### 🧑 Character Sprites (`assets/characters/`)
+- `milka_chan.svg` - Neutral expression
+- `milka_chan_smile.svg` - Happy smiling face  
+- `milka_chan_surprised.svg` - Surprised expression
+
+All use the same character design with different facial expressions. Replace with your own character art and update the `sprites` dictionary in `scenes/vn_balloon.tscn`.
+
+### 📝 Writing Your Own Story
+Edit `dialogue/milka.dialogue` or create a new `.dialogue` file. Use these tags:
+- `#bg=<name>` - Set background (e.g., `#bg=milky_meadow`)
+- `#sprite=<name>:<slot>` - Show character (e.g., `#sprite=milka_chan_smile:center`)
+- `#anim=bounce|shake|nod|sway|jump` - 2D animation
+- `#sfx=click|open|close|confirm|save|error` - Play preserved SFX
+- `- "Choice text"` - Branching dialogue
+
+## 🎬 Title Screen
+The game starts with `scenes/title_screen.tscn` featuring a milk-themed main menu with Start/Load/Settings/Quit buttons. Edit `scenes/title_screen.gd` to customize.
+
+## 🔊 Preserved Sound Effects
+All original demo music was removed, but these UI sound effects are preserved in `assets/sfx/`:
+- `click.ogg` - Button click
+- `open.ogg` - Menu open
+- `close.ogg` - Menu close
+- `confirm.ogg` - Confirmation chime
+- `save.ogg` - Save success
+- `error.ogg` - Error buzz
+
+The engine also includes a procedural audio synthesizer for dynamic sound generation.
