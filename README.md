@@ -152,16 +152,24 @@ Edit `dialogue/milka.dialogue` or create a new `.dialogue` file. Use these tags:
 The game starts with `scenes/title_screen.tscn` — a fully scene-authored main
 menu (no scene-builder script; `title_screen.gd` only wires buttons):
 
-- transparent milk-glass buttons over a deep lavender sky with soft milk waves
+- transparent white milk-glass buttons over a warm white/grey sky with honey
+  glints and soft grey milk waves (white/grey/yellowish palette)
 - milk droplets that gently fall and sway (12 s ambient loop, all in-scene)
 - SVG ornaments everywhere: droplet trio divider, corner droplet clusters
-- the animated Milk Spirit character (idle breathing + blinking + expressions)
+- Crema, the animated milk-droplet character (idle breathing + blinking + expressions)
 - shared `assets/ui/milk_glass_theme.tres` theme for Buttons/Panels
 
 Screenshots: `docs/screenshots/`.
 
-## 🐄 Animated Character
-`scenes/character/milk_spirit.tscn` is a reusable 2D droplet character:
+## ⚙️ Settings (shared between title and game)
+`scenes/ui/settings_panel.tscn` is a milk-glass settings dialog used by the
+title screen; it reads and writes `user://settings.json` through the
+`SettingsStore` autoload — the same file the in-game settings panel uses —
+so language, fullscreen, V-Sync and volumes apply everywhere. The title's
+Continue button resumes the newest save slot (`user://saves/slot_*.json`).
+
+## 🐄 Animated Character: Crema
+`scenes/character/crema.tscn` is a reusable 2D droplet character:
 breathing idle loop, random blinking, `set_expression("neutral"|"happy"|"surprised")`,
 `greet()` hop. Preview it via `scenes/character/character_showcase.tscn`.
 

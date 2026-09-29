@@ -7,6 +7,10 @@ extends Node
 @export var story_seed: int = 1
 
 var custom_flags: Dictionary = {}
+
+## Save slot the title screen asked to resume (-1 = none). The VN balloon
+## consumes it when it starts.
+var pending_resume_slot: int = -1
 var rng := RandomNumberGenerator.new()
 
 func _ready() -> void:

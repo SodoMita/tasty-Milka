@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://nw8x6v5e0k6k"
-path="res://.godot/imported/neutral.svg-09b92e2ec091baf9237bea3d292dd427.ctex"
+uid="uid://dh7s7ytn0q0hh"
+path="res://.godot/imported/neutral.svg-4fdc9de49d1c44af022d1ee13118acb1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/characters/milk_spirit/neutral.svg"
-dest_files=["res://.godot/imported/neutral.svg-09b92e2ec091baf9237bea3d292dd427.ctex"]
+source_file="res://assets/characters/crema/neutral.svg"
+dest_files=["res://.godot/imported/neutral.svg-4fdc9de49d1c44af022d1ee13118acb1.ctex"]
 
 [params]
 

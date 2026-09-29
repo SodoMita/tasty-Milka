@@ -557,6 +557,14 @@ func start(with_dialogue_resource: DialogueResource = null, cue: String = "", ex
 	if not cue.is_empty():
 		start_from_cue = cue
 	show()
+	# Title "Continue": resume the requested save slot instead of the cue.
+	var game_state := get_node_or_null("/root/GameState")
+	if game_state != null and int(game_state.get("pending_resume_slot")) >= 0:
+		var resume_slot := int(game_state.get("pending_resume_slot"))
+		game_state.pending_resume_slot = -1
+		if FileAccess.file_exists(_slot_path(resume_slot)):
+			load_from_slot(resume_slot)
+			return
 	# Ambient music under the conversation; tagged #music= lines override this.
 	if audio != null and audio.music_source == "" and not audio.has_music_request():
 		audio.play_theme(&"calm")

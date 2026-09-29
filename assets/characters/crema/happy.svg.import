@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dm7ensiwogesv"
-path="res://.godot/imported/happy.svg-c22f17f7902e8ac428001fff43e23849.ctex"
+uid="uid://b84aiyv3gcmm7"
+path="res://.godot/imported/happy.svg-19fde5e1e642948917b8c8d9e2a431ba.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/characters/milk_spirit/happy.svg"
-dest_files=["res://.godot/imported/happy.svg-c22f17f7902e8ac428001fff43e23849.ctex"]
+source_file="res://assets/characters/crema/happy.svg"
+dest_files=["res://.godot/imported/happy.svg-19fde5e1e642948917b8c8d9e2a431ba.ctex"]
 
 [params]
 

@@ -21,6 +21,7 @@ general/default_playback_type.web=0
 
 [autoload]
 
+SettingsStore="*res://autoloads/settings_store.gd"
 GameState="*res://autoloads/game_state.gd"
 AudioDirector="*res://autoloads/audio_director.gd"
 DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"

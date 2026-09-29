@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="640" viewBox="0 0 512 640">
+  <defs>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.6" stop-color="#f5f3ec"/>
+      <stop offset="1" stop-color="#d9d5c7"/>
+    </linearGradient>
+    <radialGradient id="blush" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#f2a48c" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#f2a48c" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="horn" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4dd96"/>
+      <stop offset="1" stop-color="#d2a94e"/>
+    </linearGradient>
+  </defs>
+  <path d="M256 36 C 256 36 448 300 448 420 A 192 192 0 1 1 64 420 C 64 300 256 36 256 36 Z"
+        fill="url(#body)" stroke="#8f8b7a" stroke-width="4" stroke-opacity="0.5"/>
+  <ellipse cx="185" cy="330" rx="34" ry="58" fill="#ffffff" opacity="0.7" transform="rotate(-16 185 330)"/>
+  <path d="M196 150 C 176 120 176 92 196 74 C 206 96 212 122 214 148 Z" fill="url(#horn)" stroke="#b3924a" stroke-width="3"/>
+  <path d="M316 150 C 336 120 336 92 316 74 C 306 96 300 122 298 148 Z" fill="url(#horn)" stroke="#b3924a" stroke-width="3"/>
+  <path d="M186 384 Q 205 362 224 384" fill="none" stroke="#4a463c" stroke-width="8" stroke-linecap="round"/>
+  <path d="M288 384 Q 307 362 326 384" fill="none" stroke="#4a463c" stroke-width="8" stroke-linecap="round"/>
+  <path d="M228 420 Q 256 456 284 420 Q 256 434 228 420 Z" fill="#4a463c"/>
+  <ellipse cx="160" cy="420" rx="30" ry="17" fill="url(#blush)"/>
+  <ellipse cx="352" cy="420" rx="30" ry="17" fill="url(#blush)"/>
+  <path d="M328 116 C 328 116 344 140 344 150 A 16 16 0 1 1 312 150 C 312 140 328 116 328 116 Z" fill="#ffe9ad" opacity="0.9"/>
+</svg>

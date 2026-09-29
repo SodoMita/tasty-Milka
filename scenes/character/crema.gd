@@ -1,13 +1,13 @@
 extends Node2D
-## Milk Spirit - the animated 2D droplet character.
+## Crema - the animated 2D milk-droplet character.
 ## Idle breathing + random blinking + switchable expressions.
-## The scene structure lives in milk_spirit.tscn; this script only animates it.
+## The scene structure lives in crema.tscn; this script only animates it.
 
 const TEXTURES := {
-	"neutral": preload("res://assets/characters/milk_spirit/neutral.svg"),
-	"happy": preload("res://assets/characters/milk_spirit/happy.svg"),
-	"surprised": preload("res://assets/characters/milk_spirit/surprised.svg"),
-	"blink": preload("res://assets/characters/milk_spirit/blink.svg"),
+	"neutral": preload("res://assets/characters/crema/neutral.svg"),
+	"happy": preload("res://assets/characters/crema/happy.svg"),
+	"surprised": preload("res://assets/characters/crema/surprised.svg"),
+	"blink": preload("res://assets/characters/crema/blink.svg"),
 }
 
 @export var blink_interval_min: float = 2.2

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cit0d01wvg6gp"
-path="res://.godot/imported/blink.svg-80c51f9b7b1be82c30bb07d1e6ace98e.ctex"
+uid="uid://u884gshkc1nb"
+path="res://.godot/imported/surprised.svg-7644bde039b6e4c4a821074af24865b1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/characters/milk_spirit/blink.svg"
-dest_files=["res://.godot/imported/blink.svg-80c51f9b7b1be82c30bb07d1e6ace98e.ctex"]
+source_file="res://assets/characters/crema/surprised.svg"
+dest_files=["res://.godot/imported/surprised.svg-7644bde039b6e4c4a821074af24865b1.ctex"]
 
 [params]
 

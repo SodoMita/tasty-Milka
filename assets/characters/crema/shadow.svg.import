@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cutrq38ht4xq3"
-path="res://.godot/imported/shadow.svg-7ae7db1aab35e58b028929640cc39e46.ctex"
+uid="uid://4wfgyob1t8u7"
+path="res://.godot/imported/shadow.svg-08b89c05392185ba30e4ffd986b57498.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/characters/milk_spirit/shadow.svg"
-dest_files=["res://.godot/imported/shadow.svg-7ae7db1aab35e58b028929640cc39e46.ctex"]
+source_file="res://assets/characters/crema/shadow.svg"
+dest_files=["res://.godot/imported/shadow.svg-08b89c05392185ba30e4ffd986b57498.ctex"]
 
 [params]
 

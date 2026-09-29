@@ -1,0 +1,179 @@
+[gd_scene load_steps=4 format=3 uid="uid://daisysettings01"]
+
+[ext_resource type="Script" path="res://scenes/ui/settings_panel.gd" id="1_panel"]
+[ext_resource type="Theme" path="res://assets/ui/milk_glass_theme.tres" id="2_theme"]
+[ext_resource type="Texture2D" path="res://assets/ui/milk_droplet.svg" id="3_drop"]
+
+[node name="SettingsPanel" type="PanelContainer"]
+custom_minimum_size = Vector2(520, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -230.0
+offset_right = 260.0
+offset_bottom = 230.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_panel")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="TitleRow" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Margin/VBox/TitleRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.3, 0.29, 0.24, 1)
+theme_override_font_sizes/font_size = 28
+text = "Settings"
+
+[node name="CloseButton" type="Button" parent="Margin/VBox/TitleRow"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(40, 40)
+theme_override_font_sizes/font_size = 18
+text = "✕"
+
+[node name="LanguageRow" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="LanguageLabel" type="Label" parent="Margin/VBox/LanguageRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(180, 0)
+theme_override_colors/font_color = Color(0.32, 0.31, 0.26, 1)
+text = "Language"
+
+[node name="LanguageOption" type="OptionButton" parent="Margin/VBox/LanguageRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 2
+popup/item_0/text = "English"
+popup/item_1/text = "Русский"
+
+[node name="TextSpeedRow" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TextSpeedLabel" type="Label" parent="Margin/VBox/TextSpeedRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(180, 0)
+theme_override_colors/font_color = Color(0.32, 0.31, 0.26, 1)
+text = "Text speed"
+
+[node name="TextSpeedSlider" type="HSlider" parent="Margin/VBox/TextSpeedRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 32)
+min_value = 0.005
+max_value = 0.08
+step = 0.005
+value = 0.02
+
+[node name="TextSizeRow" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TextSizeLabel" type="Label" parent="Margin/VBox/TextSizeRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(180, 0)
+theme_override_colors/font_color = Color(0.32, 0.31, 0.26, 1)
+text = "Text size"
+
+[node name="TextSizeSlider" type="HSlider" parent="Margin/VBox/TextSizeRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 32)
+min_value = 16.0
+max_value = 36.0
+step = 1.0
+value = 24.0
+
+[node name="FullscreenRow" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="FullscreenLabel" type="Label" parent="Margin/VBox/FullscreenRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(180, 0)
+theme_override_colors/font_color = Color(0.32, 0.31, 0.26, 1)
+text = "Fullscreen"
+
+[node name="FullscreenCheck" type="CheckButton" parent="Margin/VBox/FullscreenRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="VSyncRow" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="VSyncLabel" type="Label" parent="Margin/VBox/VSyncRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(180, 0)
+theme_override_colors/font_color = Color(0.32, 0.31, 0.26, 1)
+text = "V-Sync"
+
+[node name="VSyncCheck" type="CheckButton" parent="Margin/VBox/VSyncRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+button_pressed = true
+
+[node name="MasterVolRow" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="MasterVolLabel" type="Label" parent="Margin/VBox/MasterVolRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(180, 0)
+theme_override_colors/font_color = Color(0.32, 0.31, 0.26, 1)
+text = "Master volume"
+
+[node name="MasterVolSlider" type="HSlider" parent="Margin/VBox/MasterVolRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 32)
+min_value = 0.0
+max_value = 100.0
+step = 1.0
+value = 100.0
+
+[node name="SfxVolRow" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SfxVolLabel" type="Label" parent="Margin/VBox/SfxVolRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(180, 0)
+theme_override_colors/font_color = Color(0.32, 0.31, 0.26, 1)
+text = "SFX volume"
+
+[node name="SfxVolSlider" type="HSlider" parent="Margin/VBox/SfxVolRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 32)
+min_value = 0.0
+max_value = 100.0
+step = 1.0
+value = 100.0
