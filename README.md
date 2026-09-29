@@ -74,15 +74,15 @@ Create or edit `.dialogue` files in the `dialogue/` folder:
 ```dialogue
 ~ start
 
-Narrator: Welcome to Milka VN! 🥛 #sfx=open
-Character: Milk-themed dialogue looks soft, clean, and delicious! #sfx=confirm
+Narrator: Welcome to Milka VN! [#bg=milky_meadow, #sfx=open]
+Milka: Milk-themed dialogue looks soft, clean, and delicious! [#show=milka_chan@center, #sfx=confirm]
 
 - What should we do next?
-	Character: Let's explore the story paths! #anim=bounce #sfx=click
+	Milka: Let's explore the story paths! [#anim=milka_chan:bounce, #sfx=click]
 - Tell me more about animations
-	Character: Sprites can bounce, shake, or slide smoothly! #anim=shake
+	Milka: Sprites can bounce, shake, or sway smoothly! [#anim=milka_chan:shake]
 
-Narrator: Thank you for playing. #sfx=save
+Narrator: Thank you for playing. [#sfx=save]
 => END
 ```
 
@@ -90,12 +90,14 @@ Narrator: Thank you for playing. #sfx=save
 
 | Tag | Description | Example |
 |---|---|---|
-| `#bg=<name>` | Set stage background | `#bg=cafe` |
-| `#sprite=<name>:<slot>` | Show character sprite in slot | `#sprite=alice:left` |
-| `#focus=<slot>` | Spotlight one slot and dim others | `#focus=left` |
-| `#anim=<type>` | Trigger 2D animation on active sprite | `#anim=bounce` / `#anim=shake` |
-| `#sfx=<name>` | Play sound effect from `assets/sfx/` | `#sfx=confirm` |
-| `#box=hide` / `#box=show` | Hide or show dialogue text box | `#box=hide` |
+| `#bg=<name>` | Set stage background | `[#bg=milky_meadow]` |
+| `#show=<actor>:<look>@<place>` | Stage a 2D actor | `[#show=milka_chan:smile@center]` |
+| `#focus=<actor>` | Spotlight an actor | `[#focus=milka_chan]` |
+| `#anim=<actor>:<clip>` | Play an authored actor animation | `[#anim=milka_chan:bounce]` |
+| `#sfx=<name>` | Play sound effect from `assets/sfx/` | `[#sfx=confirm]` |
+| `#box=hide` / `#box=show` | Hide or show dialogue text box | `[#box=hide]` |
+
+**Important:** Tags must be wrapped in `[# ... ]` and separated by commas. Bare `#...` lines are comments, and unbracketed suffixes are ordinary dialogue text. Cue jumps use `=> cue_name`.
 
 ---
 
