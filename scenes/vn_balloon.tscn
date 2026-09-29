@@ -9,6 +9,12 @@
 [ext_resource type="PackedScene" uid="uid://ba4pj5dj4gjtc" path="res://scenes/route_graph/route_graph_panel.tscn" id="12_route"]
 [ext_resource type="Script" path="res://scenes/motion/stage_director.gd" id="13_director"]
 [ext_resource type="Script" path="res://scenes/stage/stage_actors.gd" id="14_actors"]
+[ext_resource type="Texture2D" path="res://assets/characters/milka_chan.svg" id="30_milka"]
+[ext_resource type="Texture2D" path="res://assets/characters/milka_chan_smile.svg" id="31_milka_smile"]
+[ext_resource type="Texture2D" path="res://assets/characters/milka_chan_surprised.svg" id="32_milka_surprised"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/milky_meadow.svg" id="33_bg_meadow"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/cafe_parlor.svg" id="34_bg_cafe"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/starry_night.svg" id="35_bg_night"]
 [ext_resource type="Texture2D" path="res://assets/characters/shadow.svg" id="27_shadow"]
 [ext_resource type="Resource" path="res://characters/shadow.tres" id="28_def_shadow"]
 
@@ -180,11 +186,17 @@ border_color = Color(0.64, 0.46, 0.82, 1)
 [node name="VNBalloon" type="CanvasLayer" unique_id=309007023]
 layer = 100
 script = ExtResource("1_balloon")
-backgrounds = Dictionary[String, Texture2D]({})
-sprites = Dictionary[String, Texture2D]({
-"shadow": ExtResource("27_shadow")
+backgrounds = Dictionary[String, Texture2D]({
+"milky_meadow": ExtResource("33_bg_meadow"),
+"cafe_parlor": ExtResource("34_bg_cafe"),
+"starry_night": ExtResource("35_bg_night")
 })
-
+sprites = Dictionary[String, Texture2D]({
+"shadow": ExtResource("27_shadow"),
+"milka_chan": ExtResource("30_milka"),
+"milka_chan_smile": ExtResource("31_milka_smile"),
+"milka_chan_surprised": ExtResource("32_milka_surprised")
+})
 actor_definitions = [ExtResource("28_def_shadow")]
 [node name="Balloon" type="Control" parent="." unique_id=1419289364]
 unique_name_in_owner = true

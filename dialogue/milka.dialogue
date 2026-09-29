@@ -1,16 +1,63 @@
 ~ start
+#bg=milky_meadow
+#sfx=open
 
-Narrator: Welcome to Milka VN! 🥛 #sfx=open
-Narrator: A clean, milk-themed 2D Visual Novel engine with smooth droplet UI, animation controls, and branching routes. #sfx=confirm
+Narrator: Welcome to Milka VN! 🥛
+Narrator: A gentle breeze sweeps across the creamy meadow, carrying the sweet scent of fresh milk. #sfx=confirm
 
-- Learn about Staging & 2D Animations
-	Narrator: You can control 2D animations using tags like #anim=bounce or #anim=shake!
-	Narrator: Sprite slots and animated transitions bring your characters to life.
-- Learn about Sound Effects
-	Narrator: Built-in SFX include click, open, close, confirm, save, and error! #sfx=click
-	Narrator: Trigger SFX at any moment using #sfx=name. #sfx=save
-- Start Authoring Your Story
-	Narrator: You have full control! Edit this dialogue file and add your character sprites to begin. #sfx=confirm
+#sprite=milka_chan_smile:center
+#anim=bounce
+Milka: "Nya~ Welcome traveler! I'm Milka-chan, your milky guide!" #sfx=click
+Milka: "I'm so excited to meet you today!"
 
-Narrator: Enjoy creating your story with Milka VN! ✨
+#sprite=milka_chan:center
+Milka: "This is just the beginning. You can write your own story now."
+Milka: "Replace my placeholder art with your own character sprites in 'assets/characters/'."
+
+- "Tell me about the backgrounds!"
+    #bg=cafe_parlor
+    #sprite=milka_chan_smile:center
+    Milka: "Look! This is the cozy café parlor background!" #sfx=open
+    Milka: "Replace these SVG placeholders with your own beautiful WebP backgrounds." #sfx=confirm
+    -> branch_continue
+
+- "What about animations?"
+    #sprite=milka_chan_surprised:center
+    #anim=shake
+    Milka: "Oh! Watch me shake with excitement!" #sfx=error
+    #sprite=milka_chan_smile:center
+    #anim=bounce
+    Milka: "And here's a cheerful bounce!" #sfx=click
+    #anim=nod
+    Milka: "I can also nod thoughtfully~" #sfx=confirm
+    -> branch_continue
+
+- "Show me all the sound effects!"
+    #sprite=milka_chan_smile:center
+    Milka: "Let me play through all the preserved SFX!" #sfx=click
+    #sfx=save
+    Milka: "That's the save sound!"
+    #sfx=open
+    Milka: "Menu open sound!"
+    #sfx=close
+    Milka: "And close!"
+    #sfx=confirm
+    Milka: "Finally, the confirmation chime!" #sfx=confirm
+    -> branch_continue
+
+~ branch_continue
+#bg=starry_night
+#sprite=milka_chan_smile:center
+Milka: "Look, the starry night has arrived!" #sfx=open
+
+#sprite=milka_chan:center
+Milka: "Now the stage is all yours."
+Milka: "Edit 'dialogue/milka.dialogue' to write your own story."
+Milka: "Add your characters to 'assets/characters/' and backgrounds to 'assets/backgrounds/'."
+
+#sprite=milka_chan_smile:center
+#anim=bounce
+Milka: "Thank you for choosing Milka VN! May your stories be as sweet as chocolate milk! ✨🥛" #sfx=confirm
+
+Narrator: [End of prologue — the stage is yours!]
 => END

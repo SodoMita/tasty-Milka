@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <defs>
+    <linearGradient id="cafe_bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f7e6d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ebd4bf;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1280" height="720" fill="url(#cafe_bg)"/>
+  
+  <!-- Wainscoting -->
+  <rect x="0" y="500" width="1280" height="220" fill="#8c5737"/>
+  <rect x="0" y="500" width="1280" height="8" fill="#6b4026"/>
+  
+  <!-- Window -->
+  <rect x="440" y="80" width="400" height="280" rx="40" fill="#87ceeb" opacity="0.6" stroke="#996544" stroke-width="8"/>
+  <rect x="440" y="80" width="400" height="140" fill="#b0e0e6" opacity="0.4"/>
+  
+  <!-- Window panes -->
+  <line x1="640" y1="80" x2="640" y2="360" stroke="#996544" stroke-width="4"/>
+  <line x1="440" y1="220" x2="840" y2="220" stroke="#996544" stroke-width="4"/>
+  
+  <!-- Placeholder text -->
+  <text x="640" y="360" font-family="serif" font-size="32" fill="#8c5737" text-anchor="middle" opacity="0.7">
+    [Café Parlor Background]
+  </text>
+</svg>

@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="800" viewBox="0 0 512 800">
+  <defs>
+    <linearGradient id="skin3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" style="stop-color:#fff5f0"/>
+      <stop offset="100%" style="stop-color:#fee8de"/>
+    </linearGradient>
+    <linearGradient id="hair3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" style="stop-color:#a276c2"/>
+      <stop offset="100%" style="stop-color:#80549c"/>
+    </linearGradient>
+    <linearGradient id="dress3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" style="stop-color:#ffffff"/>
+      <stop offset="100%" style="stop-color:#fdfaf6"/>
+    </linearGradient>
+  </defs>
+
+  <path d="M100 250 C80 450 100 680 135 720 C160 640 145 480 145 350 L367 350 C367 480 352 640 377 720 C412 680 432 450 412 250 Z" fill="url(#hair3)"/>
+  <path d="M155 480 L357 480 L380 780 L132 780 Z" fill="url(#dress3)" stroke="#80549c" stroke-width="3"/>
+  <path d="M185 480 L327 480 L310 650 L202 650 Z" fill="#fdfaf6" stroke="#80549c" stroke-width="2"/>
+  <polygon points="200,480 256,510 312,480 256,495" fill="#ffffff" stroke="#80549c" stroke-width="2"/>
+  <path d="M152 480 L90 620 L125 630 L175 505 Z" fill="url(#dress3)" stroke="#80549c" stroke-width="3"/>
+  <path d="M360 480 L422 620 L387 630 L337 505 Z" fill="url(#dress3)" stroke="#80549c" stroke-width="3"/>
+  <circle cx="105" cy="630" r="22" fill="url(#skin3)"/>
+  <circle cx="407" cy="630" r="22" fill="url(#skin3)"/>
+  <rect x="230" y="420" width="52" height="70" fill="url(#skin3)" rx="10"/>
+  <ellipse cx="256" cy="280" rx="95" ry="115" fill="url(#skin3)"/>
+  
+  <ellipse cx="200" cy="330" rx="22" ry="11" fill="#ff7675" opacity="0.4"/>
+  <ellipse cx="312" cy="330" rx="22" ry="11" fill="#ff7675" opacity="0.4"/>
+  
+  <!-- Wide surprised eyes -->
+  <ellipse cx="220" cy="280" rx="22" ry="30" fill="#6c3483"/>
+  <ellipse cx="220" cy="280" rx="14" ry="20" fill="#2d133b"/>
+  <circle cx="214" cy="270" r="8" fill="#ffffff"/>
+  <circle cx="226" cy="292" r="4" fill="#ffffff"/>
+  
+  <ellipse cx="292" cy="280" rx="22" ry="30" fill="#6c3483"/>
+  <ellipse cx="292" cy="280" rx="14" ry="20" fill="#2d133b"/>
+  <circle cx="286" cy="270" r="8" fill="#ffffff"/>
+  <circle cx="298" cy="292" r="4" fill="#ffffff"/>
+  
+  <!-- Raised surprised eyebrows -->
+  <path d="M205 230 Q220 220 235 230" fill="none" stroke="#80549c" stroke-width="4" stroke-linecap="round"/>
+  <path d="M277 230 Q292 220 307 230" fill="none" stroke="#80549c" stroke-width="4" stroke-linecap="round"/>
+  
+  <circle cx="256" cy="315" r="2.5" fill="#e17055"/>
+  
+  <!-- Surprised O mouth -->
+  <ellipse cx="256" cy="350" rx="10" ry="14" fill="#d63031"/>
+  
+  <path d="M140 220 C140 140 372 140 372 220 C372 240 345 245 320 225 C300 210 280 245 256 225 C240 210 215 245 195 225 C167 210 140 245 140 220 Z" fill="url(#hair3)"/>
+  <path d="M170 160 Q256 140 342 160" fill="none" stroke="#c9a3e0" stroke-width="8" stroke-linecap="round" opacity="0.7"/>
+  <path d="M140 200 C125 300 140 380 150 430 C135 375 128 300 135 200 Z" fill="url(#hair3)"/>
+  <path d="M372 200 C387 300 372 380 362 430 C377 375 384 300 377 200 Z" fill="url(#hair3)"/>
+  
+  <g transform="translate(330, 175) scale(1.2)">
+    <path d="M15 0 C15 0 5 15 5 22 C5 28 9.5 33 15 33 C20.5 33 25 28 25 22 C25 15 15 0 15 0 Z" fill="#ffffff" stroke="#80549c" stroke-width="2"/>
+    <circle cx="11" cy="20" r="3.5" fill="#ffffff"/>
+  </g>
+  <g transform="translate(256, 540)">
+    <path d="M0 -22 C0 -22 -14 0 -14 10 C-14 18 -7.7 24 0 24 C7.7 24 14 18 14 10 C14 0 0 -22 0 -22 Z" fill="#80549c"/>
+  </g>
+  
+  <text x="256" y="770" font-family="sans-serif" font-size="14" fill="#80549c" text-anchor="middle" opacity="0.7">
+    [Milka-chan - Surprised]
+  </text>
+</svg>
