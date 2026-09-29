@@ -1,0 +1,16 @@
+~ start
+
+Narrator: Welcome to Milka VN! 🥛 #sfx=open
+Narrator: A clean, milk-themed 2D Visual Novel engine with smooth droplet UI, animation controls, and branching routes. #sfx=confirm
+
+- Learn about Staging & 2D Animations
+	Narrator: You can control 2D animations using tags like #anim=bounce or #anim=shake!
+	Narrator: Sprite slots and animated transitions bring your characters to life.
+- Learn about Sound Effects
+	Narrator: Built-in SFX include click, open, close, confirm, save, and error! #sfx=click
+	Narrator: Trigger SFX at any moment using #sfx=name. #sfx=save
+- Start Authoring Your Story
+	Narrator: You have full control! Edit this dialogue file and add your character sprites to begin. #sfx=confirm
+
+Narrator: Enjoy creating your story with Milka VN! ✨
+=> END

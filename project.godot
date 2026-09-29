@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="VN Dialogue Demo"
+config/name="Milka VN"
 run/main_scene="res://scenes/vn_scene.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
