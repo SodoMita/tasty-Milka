@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" path="res://assets/backgrounds/starry_night.svg" id="35_bg_night"]
 [ext_resource type="Texture2D" path="res://assets/characters/shadow.svg" id="27_shadow"]
 [ext_resource type="Resource" path="res://characters/shadow.tres" id="28_def_shadow"]
+[ext_resource type="Resource" path="res://characters/milka_chan.tres" id="36_def_milka"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_box"]
 bg_color = Color(0.97, 0.95, 0.99, 0.82)
@@ -197,7 +198,7 @@ sprites = Dictionary[String, Texture2D]({
 "milka_chan_smile": ExtResource("31_milka_smile"),
 "milka_chan_surprised": ExtResource("32_milka_surprised")
 })
-actor_definitions = [ExtResource("28_def_shadow")]
+actor_definitions = [ExtResource("28_def_shadow"), ExtResource("36_def_milka")]
 [node name="Balloon" type="Control" parent="." unique_id=1419289364]
 unique_name_in_owner = true
 layout_mode = 3
