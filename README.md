@@ -116,7 +116,7 @@ Narrator: Thank you for playing. #sfx=save
 
 ## 🚀 Running the Project
 
-1. Open **Godot 4.3+** (or Godot 4.7).
+1. Open **Godot 4.7.2** (the tested version; the bundled Dialogue Manager requires a recent Godot 4 release).
 2. Import `project.godot`.
 3. Press **F5** to run the project.
 
@@ -149,7 +149,11 @@ Edit `dialogue/milka.dialogue` or create a new `.dialogue` file. Use these tags:
 - `- "Choice text"` - Branching dialogue
 
 ## 🎬 Title Screen
-The game starts with `scenes/title_screen.tscn` featuring a milk-themed main menu with Start/Load/Settings/Quit buttons. Edit `scenes/title_screen.gd` to customize.
+The game starts with the hand-authored `scenes/title_screen.tscn`: transparent milk-glass buttons, animated SVG droplets, and a reusable 2D character idle scene. Start, Continue, Load, Settings, About and Quit are functional. Preferences persist locally; Continue resumes the newest valid save. Visuals stay in `.tscn` / `.tres` files — the controller is not a scene builder.
+
+See [the title customization and validation guide](docs/MILK_TITLE.md). The illustration is optional placeholder art; the story and character design are yours.
+
+![Milk-glass title](docs/milk-title.webp)
 
 ## 🔊 Preserved Sound Effects
 All original demo music was removed, but these UI sound effects are preserved in `assets/sfx/`:

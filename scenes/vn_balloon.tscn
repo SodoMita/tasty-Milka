@@ -9,10 +9,10 @@
 [ext_resource type="PackedScene" uid="uid://ba4pj5dj4gjtc" path="res://scenes/route_graph/route_graph_panel.tscn" id="12_route"]
 [ext_resource type="Script" path="res://scenes/motion/stage_director.gd" id="13_director"]
 [ext_resource type="Script" path="res://scenes/stage/stage_actors.gd" id="14_actors"]
-[ext_resource type="Texture2D" path="res://assets/characters/milka_chan.svg" id="30_milka"]
+[ext_resource type="Texture2D" path="res://assets/title/character.webp" id="30_milka"]
 [ext_resource type="Texture2D" path="res://assets/characters/milka_chan_smile.svg" id="31_milka_smile"]
 [ext_resource type="Texture2D" path="res://assets/characters/milka_chan_surprised.svg" id="32_milka_surprised"]
-[ext_resource type="Texture2D" path="res://assets/backgrounds/milky_meadow.svg" id="33_bg_meadow"]
+[ext_resource type="Texture2D" path="res://assets/title/meadow.webp" id="33_bg_meadow"]
 [ext_resource type="Texture2D" path="res://assets/backgrounds/cafe_parlor.svg" id="34_bg_cafe"]
 [ext_resource type="Texture2D" path="res://assets/backgrounds/starry_night.svg" id="35_bg_night"]
 [ext_resource type="Texture2D" path="res://assets/characters/shadow.svg" id="27_shadow"]
@@ -199,8 +199,8 @@ backgrounds = Dictionary[String, Texture2D]({
 sprites = Dictionary[String, Texture2D]({
 "shadow": ExtResource("27_shadow"),
 "milka_chan": ExtResource("30_milka"),
-"milka_chan_smile": ExtResource("31_milka_smile"),
-"milka_chan_surprised": ExtResource("32_milka_surprised")
+"milka_chan_smile": ExtResource("30_milka"),
+"milka_chan_surprised": ExtResource("30_milka")
 })
 actor_definitions = [ExtResource("28_def_shadow"), ExtResource("36_def_milka")]
 [node name="Balloon" type="Control" parent="." unique_id=1419289364]

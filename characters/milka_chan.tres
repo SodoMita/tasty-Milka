@@ -1,6 +1,51 @@
-[gd_resource type="Resource" script_class="ActorDefinition" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="ActorDefinition" format=3]
 
 [ext_resource type="Script" path="res://scenes/stage/actor_definition.gd" id="1_def"]
+
+[sub_resource type="Animation" id="Idle"]
+resource_name = "idle"
+length = 5.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 2
+tracks/0/keys = {"times": PackedFloat32Array(0, 2.8, 5.6), "transitions": PackedFloat32Array(1, 1, 1), "update": 0, "values": [Vector2(1, 1), Vector2(1.003, 1.006), Vector2(1, 1)]}
+
+[sub_resource type="Animation" id="Sway"]
+resource_name = "sway"
+length = 4.8
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 2
+tracks/0/keys = {"times": PackedFloat32Array(0, 2.4, 4.8), "transitions": PackedFloat32Array(1, 1, 1), "update": 0, "values": [-0.004, 0.004, -0.004]}
+
+[sub_resource type="Animation" id="Bounce"]
+resource_name = "bounce"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 2
+tracks/0/keys = {"times": PackedFloat32Array(0, 0.15, 0.3, 0.6), "transitions": PackedFloat32Array(1, 1, 1, 1), "update": 0, "values": [Vector2(1, 1), Vector2(1.02, 0.98), Vector2(0.99, 1.025), Vector2(1, 1)]}
+
+[sub_resource type="Animation" id="Shake"]
+resource_name = "shake"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/keys = {"times": PackedFloat32Array(0, 0.08, 0.16, 0.24, 0.32, 0.5), "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1), "update": 0, "values": [0.0, -0.016, 0.016, -0.011, 0.011, 0.0]}
+
+[sub_resource type="Animation" id="Nod"]
+resource_name = "nod"
+length = 0.65
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 2
+tracks/0/keys = {"times": PackedFloat32Array(0, 0.25, 0.65), "transitions": PackedFloat32Array(1, 1, 1), "update": 0, "values": [Vector2(1, 1), Vector2(1, 0.985), Vector2(1, 1)]}
+
+[sub_resource type="AnimationLibrary" id="Motions"]
+_data = {&"idle": SubResource("Idle"), &"sway": SubResource("Sway"), &"bounce": SubResource("Bounce"), &"shake": SubResource("Shake"), &"nod": SubResource("Nod")}
 
 [resource]
 script = ExtResource("1_def")
@@ -11,3 +56,4 @@ default_place = "center"
 height_2d = 0.85
 height_3d = 1.65
 feet_anchor = 1.0
+animations_2d = SubResource("Motions")

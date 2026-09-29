@@ -25,6 +25,8 @@ func _ready() -> void:
 			balloon.dialogue_label.seconds_per_step = speed_ms / 1000.0
 			balloon.button_sfx = bool(config.get_value("player", "sound", true))
 			balloon.button_sfx_check.button_pressed = balloon.button_sfx
+			balloon.typewriter_sfx = balloon.button_sfx
+			balloon.typewriter_sfx_check.button_pressed = balloon.button_sfx
 	if action == "continue" and slot >= 0:
 		balloon.load_from_slot(slot)
 	elif action == "load":
