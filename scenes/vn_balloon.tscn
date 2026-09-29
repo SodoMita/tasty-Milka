@@ -33,12 +33,12 @@ corner_radius_bottom_right = 26
 corner_radius_bottom_left = 26
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_name"]
-bg_color = Color(0.9, 0.82, 0.58, 0.92)
+bg_color = Color(0.95, 0.9, 0.63, 0.92)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.45, 0.4, 0.27, 0.9)
+border_color = Color(0.55, 0.51, 0.33, 0.9)
 corner_radius_top_left = 16
 corner_radius_top_right = 16
 corner_radius_bottom_right = 16
@@ -522,7 +522,7 @@ mouse_filter = 2
 
 [node name="NextIndicator" type="Polygon2D" parent="Balloon/UIRoot/BottomUI/IndicatorHolder" unique_id=1415914473]
 unique_name_in_owner = true
-color = Color(0.87, 0.74, 0.4, 0.95)
+color = Color(0.9, 0.83, 0.51, 0.95)
 polygon = PackedVector2Array(20, 0, 29, 8, 32, 16, 20, 28, 8, 16, 11, 8)
 
 [node name="IndicatorTween" type="AnimationPlayer" parent="Balloon/UIRoot/BottomUI/IndicatorHolder" unique_id=997917757]

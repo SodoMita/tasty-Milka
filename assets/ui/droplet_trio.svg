@@ -17,5 +17,5 @@
         fill="url(#trioDrop)" stroke="#8f8b7a" stroke-width="1.2" stroke-opacity="0.5"/>
   <path d="M228 12 C 228 12 238 27 238 33 A 10 10 0 1 1 218 33 C 218 27 228 12 228 12 Z"
         fill="url(#trioDrop)" stroke="#8f8b7a" stroke-width="1.2" stroke-opacity="0.5"/>
-  <circle cx="180" cy="35" r="3" fill="#ffe9ad" opacity="0.85"/>
+  <circle cx="180" cy="35" r="3" fill="#f7eec0" opacity="0.85"/>
 </svg>

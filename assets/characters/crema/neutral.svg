@@ -10,15 +10,15 @@
       <stop offset="1" stop-color="#f2b4a0" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="horn" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#f4dd96"/>
-      <stop offset="1" stop-color="#d2a94e"/>
+      <stop offset="0" stop-color="#f7eec0"/>
+      <stop offset="1" stop-color="#dcc87e"/>
     </linearGradient>
   </defs>
   <path d="M256 36 C 256 36 448 300 448 420 A 192 192 0 1 1 64 420 C 64 300 256 36 256 36 Z"
         fill="url(#body)" stroke="#8f8b7a" stroke-width="4" stroke-opacity="0.5"/>
   <ellipse cx="185" cy="330" rx="34" ry="58" fill="#ffffff" opacity="0.7" transform="rotate(-16 185 330)"/>
-  <path d="M196 150 C 176 120 176 92 196 74 C 206 96 212 122 214 148 Z" fill="url(#horn)" stroke="#b3924a" stroke-width="3"/>
-  <path d="M316 150 C 336 120 336 92 316 74 C 306 96 300 122 298 148 Z" fill="url(#horn)" stroke="#b3924a" stroke-width="3"/>
+  <path d="M196 150 C 176 120 176 92 196 74 C 206 96 212 122 214 148 Z" fill="url(#horn)" stroke="#b3a76a" stroke-width="3"/>
+  <path d="M316 150 C 336 120 336 92 316 74 C 306 96 300 122 298 148 Z" fill="url(#horn)" stroke="#b3a76a" stroke-width="3"/>
   <ellipse cx="205" cy="380" rx="16" ry="24" fill="#4a463c"/>
   <ellipse cx="307" cy="380" rx="16" ry="24" fill="#4a463c"/>
   <circle cx="211" cy="371" r="5.5" fill="#ffffff"/>

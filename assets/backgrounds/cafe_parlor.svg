@@ -14,7 +14,7 @@
   <rect x="0" y="500" width="1280" height="8" fill="#5c584a"/>
   
   <!-- Window -->
-  <rect x="440" y="80" width="400" height="280" rx="40" fill="#d9d2b8" opacity="0.6" stroke="#8f8b78" stroke-width="8"/>
+  <rect x="440" y="80" width="400" height="280" rx="40" fill="#eadfa0" opacity="0.6" stroke="#8f8b78" stroke-width="8"/>
   <rect x="440" y="80" width="400" height="140" fill="#e8e4d5" opacity="0.4"/>
   
   <!-- Window panes -->
