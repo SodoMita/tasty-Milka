@@ -368,7 +368,6 @@ theme_override_constants/margin_bottom = 5
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
-theme_override_colors/default_color = Color(1, 1, 1, 1)
 bbcode_enabled = true
 text = "Character"
 fit_content = true
@@ -382,6 +381,7 @@ offset_right = 44.0
 offset_bottom = -6.0
 mouse_filter = 2
 modulate = Color(1, 1, 1, 0.95)
+expand_mode = 1
 stretch_mode = 5
 texture = ExtResource("40_drop")
 
@@ -397,6 +397,7 @@ offset_bottom = -8.0
 grow_horizontal = 0
 mouse_filter = 2
 modulate = Color(1, 1, 1, 0.95)
+expand_mode = 1
 stretch_mode = 5
 texture = ExtResource("40_drop")
 

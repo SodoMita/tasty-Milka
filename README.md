@@ -148,37 +148,68 @@ Edit `dialogue/milka.dialogue` or create a new `.dialogue` file. Use these tags:
 - `#sfx=click|open|close|confirm|save|error` - Play preserved SFX
 - `- "Choice text"` - Branching dialogue
 
-## 🎬 Title Screen (milk-glass UI)
-The game starts with `scenes/title_screen.tscn` — a fully scene-authored main
-menu (no scene-builder script; `title_screen.gd` only wires buttons):
+## 🥛 Milk-glass UI: one shared settings resource
+All UI look settings live in **one** resource, `assets/ui/milk_glass_theme.tres`
+(a Godot `Theme`). The dialogue balloon (`scenes/vn_balloon.tscn`), the title
+screen and every overlay reference it and hold **no inline styles** of their own,
+so editing a colour, radius or transparency there changes the whole game.
 
-- transparent white milk-glass buttons over a warm white/grey sky with honey
-  glints and soft grey milk waves (white/grey/yellowish palette)
-- milk droplets that gently fall and sway (12 s ambient loop, all in-scene)
-- SVG ornaments everywhere: droplet trio divider, corner droplet clusters
-- Crema, the animated milk-droplet character (idle breathing + blinking + expressions)
-- shared `assets/ui/milk_glass_theme.tres` theme for Buttons/Panels
+Type variations you can put on nodes (`theme_type_variation`):
 
-Screenshots: `docs/screenshots/`.
+| variation      | base           | used by                                             |
+|----------------|----------------|-----------------------------------------------------|
+| `DialogueBox`  | PanelContainer | the dialogue bubble **and** the title panel         |
+| `NamePlate`    | PanelContainer | speaker name plate (pale butter)                    |
+| `OverlayPanel` | PanelContainer | history / save / settings / pause overlays          |
+| `IconButton`   | Button         | every square icon-only button (46×46)               |
+| `TitleButton`  | Button         | round 72×72 title menu buttons                      |
+| `GhostButton`  | Button         | history lines, save slots                           |
+| `TitleLabel`   | Label          | the big title                                       |
+
+Buttons carry **no text** — only white SVG icons from `assets/ui/icons/`
+(tinted by the theme's `icon_*_color`), plus a `tooltip_text` that is
+translated through `i18n/ru.po`. Sliders, check boxes, toggles, option arrows
+and scrollbars use the same small SVGs. Palette: milk white, cream, pale
+butter accent, grey-brown ink.
+
+## 🎬 Title Screen
+`scenes/title_screen.tscn` is hand-authored (no scene-builder script;
+`title_screen.gd` only wires input): a `DialogueBox`-styled milk-glass panel
+with four round icon buttons (begin / continue / settings / quit), a hint
+line that shows the hovered icon's tooltip, falling SVG droplets (12 s
+in-scene ambient loop) and Crema, the animated 2D character.
 
 ## ⚙️ Settings (shared between title and game)
-`scenes/ui/settings_panel.tscn` is a milk-glass settings dialog used by the
-title screen; it reads and writes `user://settings.json` through the
-`SettingsStore` autoload — the same file the in-game settings panel uses —
-so language, fullscreen, V-Sync and volumes apply everywhere. The title's
-Continue button resumes the newest save slot (`user://saves/slot_*.json`).
+`scenes/ui/settings_panel.tscn` is the title's milk-glass settings dialog; it
+reads and writes `user://settings.json` through the `SettingsStore` autoload —
+the same file the in-game settings panel uses — so language, fullscreen,
+V-Sync and volumes apply everywhere. Continue resumes the newest save slot.
 
 ## 🐄 Animated Character: Crema
 `scenes/character/crema.tscn` is a reusable 2D droplet character:
 breathing idle loop, random blinking, `set_expression("neutral"|"happy"|"surprised")`,
 `greet()` hop. Preview it via `scenes/character/character_showcase.tscn`.
+Placeholder art — replace freely.
 
-## 📸 Screenshots (headless sway + pixman)
+## ✅ Checks & 📸 Screenshots (headless sway + pixman)
 ```
-sway -c <(echo 'output HEADLESS-1 mode 1280x720') &
-godot --path . --script res://tools/capture_title.gd -- \
-    --scene res://scenes/title_screen.tscn --out shot.png --frames 90
+# UI contract (57 assertions: icon-only buttons, shared theme, overlays, i18n)
+godot --headless --path . --script res://tools/probe_milk_ui.gd
+
+# real render under a headless Wayland compositor with the pixman renderer
+export XDG_RUNTIME_DIR=/tmp/xdg; mkdir -p $XDG_RUNTIME_DIR; chmod 700 $XDG_RUNTIME_DIR
+WLR_BACKENDS=headless WLR_RENDERER=pixman WLR_LIBINPUT_NO_DEVICES=1 \
+    sway -c <(echo 'output HEADLESS-1 mode 1280x720') &
+WAYLAND_DISPLAY=wayland-1 LIBGL_ALWAYS_SOFTWARE=1 godot --path . \
+    --display-driver wayland --rendering-driver opengl3 \
+    --script res://tools/capture_milk.gd -- --out docs/screenshots
 ```
+Captures: `docs/screenshots/title_screen.png`, `title_hover.png`,
+`title_settings.png`, `vn_dialogue.png`, `vn_pause.png`, `vn_settings.png`,
+`vn_save_menu.png`.
+
+Note: `tests/test_vn_ui.gd` still targets the removed demo `intro.dialogue`
+(pre-existing on this branch); `tools/probe_milk_ui.gd` covers the UI.
 
 ## 🔊 Preserved Sound Effects
 All original demo music was removed, but these UI sound effects are preserved in `assets/sfx/`:

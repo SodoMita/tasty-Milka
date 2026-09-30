@@ -281,7 +281,7 @@ layout_mode = 0
 offset_left = 84.0
 offset_top = 118.0
 offset_right = 556.0
-offset_bottom = 518.0
+offset_bottom = 470.0
 theme_type_variation = &"DialogueBox"
 
 [node name="Margin" type="MarginContainer" parent="TitleBlock"]
