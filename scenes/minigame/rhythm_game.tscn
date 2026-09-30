@@ -1,0 +1,156 @@
+[gd_scene load_steps=3 format=3 uid="uid://cq7milkbeat01"]
+
+[ext_resource type="Script" path="res://scenes/minigame/rhythm_game.gd" id="1_rhythm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_note"]
+bg_color = Color(1, 1, 1, 0.92)
+corner_radius_top_left = 26
+corner_radius_top_right = 26
+corner_radius_bottom_right = 26
+corner_radius_bottom_left = 26
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0.74, 0.6, 0.8)
+
+[node name="RhythmGame" type="CanvasLayer"]
+layer = 30
+script = ExtResource("1_rhythm")
+
+[node name="Root" type="Control" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+
+[node name="Backdrop" type="ColorRect" parent="Root"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.11, 0.1, 0.14, 0.82)
+
+[node name="Play" type="Control" parent="Root"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Lanes" type="HBoxContainer" parent="Root/Play"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Lane0" type="ColorRect" parent="Root/Play/Lanes"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+color = Color(1, 1, 1, 0.05)
+
+[node name="Lane1" type="ColorRect" parent="Root/Play/Lanes"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+color = Color(1, 1, 1, 0.09)
+
+[node name="Lane2" type="ColorRect" parent="Root/Play/Lanes"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+color = Color(1, 1, 1, 0.05)
+
+[node name="Lane3" type="ColorRect" parent="Root/Play/Lanes"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+color = Color(1, 1, 1, 0.09)
+
+[node name="HitLine" type="ColorRect" parent="Root/Play"]
+offset_top = 560.0
+offset_right = 1280.0
+offset_bottom = 566.0
+mouse_filter = 2
+color = Color(1, 0.96, 0.82, 0.85)
+
+[node name="Notes" type="Control" parent="Root/Play"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="NoteTemplate" type="PanelContainer" parent="Root/Play"]
+custom_minimum_size = Vector2(76, 52)
+offset_right = 76.0
+offset_bottom = 52.0
+mouse_filter = 2
+visible = false
+theme_override_styles/panel = SubResource("StyleBoxFlat_note")
+
+[node name="Glyph" type="Label" parent="Root/Play/NoteTemplate"]
+layout_mode = 2
+mouse_filter = 2
+text = "o"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_colors/font_color = Color(0.25, 0.2, 0.17, 1)
+theme_override_font_sizes/font_size = 30
+
+[node name="Hud" type="Control" parent="Root"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Top" type="HBoxContainer" parent="Root/Hud"]
+offset_left = 32.0
+offset_top = 24.0
+offset_right = 1248.0
+offset_bottom = 60.0
+mouse_filter = 2
+theme_override_constants/separation = 28
+
+[node name="Title" type="Label" parent="Root/Hud/Top"]
+layout_mode = 2
+text = "Milk Beat"
+theme_override_colors/font_color = Color(1, 0.98, 0.92, 1)
+theme_override_font_sizes/font_size = 26
+
+[node name="Score" type="Label" parent="Root/Hud/Top"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Score 0"
+horizontal_alignment = 2
+theme_override_colors/font_color = Color(1, 0.98, 0.92, 1)
+theme_override_font_sizes/font_size = 22
+
+[node name="Combo" type="Label" parent="Root/Hud/Top"]
+layout_mode = 2
+text = "Combo 0"
+theme_override_colors/font_color = Color(0.86, 0.94, 1, 1)
+theme_override_font_sizes/font_size = 22
+
+[node name="Judge" type="Label" parent="Root/Hud"]
+offset_left = 32.0
+offset_top = 620.0
+offset_right = 1248.0
+offset_bottom = 680.0
+mouse_filter = 2
+text = "Click the droplets, flick the arrows"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(1, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 28

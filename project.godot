@@ -26,10 +26,13 @@ GameState="*res://autoloads/game_state.gd"
 AudioDirector="*res://autoloads/audio_director.gd"
 DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
 BrowserSaveSync="*res://autoloads/browser_save_sync.gd"
+NameLore="*res://autoloads/name_lore.gd"
+Minigame="*res://autoloads/minigame_host.gd"
 
 [dialogue_manager]
 
 runtime/balloon_path="res://scenes/vn_balloon.tscn"
+runtime/state_autoload_shortcuts=PackedStringArray("GameState", "Minigame", "NameLore")
 
 [display]
 

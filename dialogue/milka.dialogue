@@ -3,38 +3,100 @@ Narrator: Welcome to Milka VN! 🥛 [#bg=milky_meadow, sfx=open]
 Narrator: A gentle breeze sweeps across the creamy meadow, carrying the sweet scent of fresh milk. [#sfx=confirm]
 
 Milka: "Nya~ Welcome traveler! I'm Milka-chan, your milky guide!" [#sprite=milka_chan_smile:center, anim=bounce, sfx=click]
-Milka: "I'm so excited to meet you today!"
+Milka: "And you told me your name is... {{GameState.player_name}}." [#sprite=milka_chan:center]
+=> name_reaction
 
-Milka: "This is just the beginning. You can write your own story now." [#sprite=milka_chan:center]
-Milka: "Replace my placeholder art with your own character sprites in 'assets/characters/'."
+~ name_reaction
+if GameState.name_is("is_empty")
+	Milka: "Wait, that is nothing at all! I will call you Traveler then." [#sprite=milka_chan_surprised:center, anim=shake, sfx=error]
+elif GameState.name_is("no_letters")
+	Milka: "Not one single letter?! {{GameState.player_name}} looks like a secret code." [#sprite=milka_chan_surprised:center, anim=shake, sfx=error]
+	Milka: "Fine. Mysterious guests get extra milk." [#sprite=milka_chan_smile:center, sfx=confirm]
+else
+	Milka: "{{GameState.player_name}}. I like the sound of it." [#sprite=milka_chan_smile:center, anim=nod, sfx=confirm]
 
-- "Tell me about the backgrounds!"
-    Milka: "Look! This is the cozy café parlor background!" [#bg=cafe_parlor, sprite=milka_chan_smile:center, sfx=open]
-    Milka: "Replace these SVG placeholders with your own beautiful WebP backgrounds." [#sfx=confirm]
-    -> branch_continue
+if GameState.name_is("starts_lowercase")
+	Milka: "But hold on... it starts with a small letter." [#sprite=milka_chan_surprised:center, anim=shake, sfx=error]
+	Milka: "Are you shy, or did the capital letter run away to the pasture?" [#sprite=milka_chan:center]
+	Milka: "I will write it big in my notebook anyway: {{GameState.player_name.capitalize()}}." [#sprite=milka_chan_smile:center, sfx=click]
+elif GameState.name_is("starts_with_digit")
+	Milka: "You start with a number? Are you a serial edition of a person?" [#sprite=milka_chan_surprised:center, anim=shake, sfx=error]
+elif GameState.name_is("starts_with_symbol")
+	Milka: "Starting with a symbol... very bold. My keyboard is scared." [#sprite=milka_chan_surprised:center, anim=shake, sfx=click]
 
-- "What about animations?"
-    Milka: "Oh! Watch me shake with excitement!" [#sprite=milka_chan_surprised:center, anim=shake, sfx=error]
-    Milka: "And here's a cheerful bounce!" [#sprite=milka_chan_smile:center, anim=bounce, sfx=click]
-    Milka: "I can also nod thoughtfully~" [#anim=nod, sfx=confirm]
-    -> branch_continue
+if GameState.name_is("has_digits")
+	Milka: "There are numbers hiding in your name. {{GameState.name_count('digits')}} of them!" [#sprite=milka_chan:center, sfx=click]
+	Milka: "Is that your milk quota, or your username from a very old forum?" [#sprite=milka_chan_smile:center, anim=bounce]
 
-- "Show me all the sound effects!"
-    Milka: "Let me play through all the preserved SFX!" [#sprite=milka_chan_smile:center, sfx=click]
-    Milka: "That's the save sound!" [#sfx=save]
-    Milka: "Menu open sound!" [#sfx=open]
-    Milka: "And close!" [#sfx=close]
-    Milka: "Finally, the confirmation chime!" [#sfx=confirm]
-    -> branch_continue
+if GameState.name_is("has_emoji")
+	Milka: "Emoji! Right there in your name!" [#sprite=milka_chan_surprised:center, anim=bounce, sfx=open]
+	Milka: "I cannot pronounce pictures, so I will just smile very loudly at you." [#sprite=milka_chan_smile:center, sfx=confirm]
+
+if GameState.name_is("has_math")
+	Milka: "Plus, minus, equals... your name does arithmetic on its own." [#sprite=milka_chan:center, sfx=click]
+	Milka: "If I solve you, do I get a second glass of milk?" [#sprite=milka_chan_smile:center, anim=nod]
+
+if GameState.name_is("has_special")
+	Milka: "Those brackets and slashes look sharp. Careful, you might cut the cheese." [#sprite=milka_chan:center, sfx=click]
+
+if GameState.name_is("all_caps")
+	Milka: "WHY ARE WE SHOUTING? THE COWS ARE SLEEPING!" [#sprite=milka_chan_surprised:center, anim=shake, sfx=error]
+	Milka: "...sorry. Indoor voice restored." [#sprite=milka_chan:center, sfx=confirm]
+
+if GameState.name_is("is_long")
+	Milka: "That name is long enough to milk a whole herd while saying it." [#sprite=milka_chan_smile:center, anim=bounce]
+elif GameState.name_is("is_short")
+	Milka: "So short! It fits in one sip." [#sprite=milka_chan_smile:center, anim=bounce, sfx=click]
+
+if GameState.name_is("has_spaces")
+	Milka: "A name with a space in it. Room for a cow to lie down." [#sprite=milka_chan:center]
+
+if GameState.name_is("non_latin")
+	Milka: "Letters from far away. My notebook feels well travelled today." [#sprite=milka_chan_smile:center, sfx=confirm]
+
+if GameState.name_is("is_tidy")
+	Milka: "Neat, capital at the front, no strange guests inside. Very tidy, {{GameState.player_name}}." [#sprite=milka_chan_smile:center, anim=nod, sfx=confirm]
+
+=> rhythm_intro
+
+~ rhythm_intro
+Milka: "Now, {{GameState.player_name}}, the meadow has a heartbeat. Want to play it with me?" [#bg=cafe_parlor, sprite=milka_chan_smile:center, sfx=open]
+
+- "Teach me the beat!"
+	Milka: "Click the round droplets when they touch the cream line." [#sprite=milka_chan:center, sfx=click]
+	Milka: "And when you see an arrow, press it and flick it that way. Slide, do not tap!" [#sprite=milka_chan_smile:center, anim=bounce]
+	=> play_rhythm
+- "Let's just play."
+	Milka: "That is the spirit. Droplets are tapped, arrows are slid!" [#sprite=milka_chan_smile:center, anim=bounce, sfx=click]
+	=> play_rhythm
+- "Maybe later."
+	Milka: "The beat will wait. It is very patient milk." [#sprite=milka_chan:center, sfx=close]
+	=> branch_continue
+
+~ play_rhythm
+do Minigame.play_rhythm(18)
+=> rhythm_result
+
+~ rhythm_result
+Milka: "Scored {{GameState.rhythm_score()}} points. I call that a {{GameState.rhythm_rank()}}!" [#sprite=milka_chan_smile:center, anim=bounce, sfx=confirm]
+if GameState.rhythm_missed() == 0
+	Milka: "Not a single drop spilled, {{GameState.player_name}}. Flawless." [#sprite=milka_chan_smile:center, anim=nod, sfx=save]
+elif GameState.rhythm_missed() > 6
+	Milka: "The floor is very milky now. We will mop it together." [#sprite=milka_chan_surprised:center, anim=shake, sfx=error]
+
+- "One more round!"
+	=> play_rhythm
+- "Back to the story."
+	=> branch_continue
 
 ~ branch_continue
 Milka: "Look, the starry night has arrived!" [#bg=starry_night, sprite=milka_chan_smile:center, sfx=open]
 
-Milka: "Now the stage is all yours." [#sprite=milka_chan:center]
+Milka: "Now the stage is all yours, {{GameState.player_name}}." [#sprite=milka_chan:center]
 Milka: "Edit 'dialogue/milka.dialogue' to write your own story."
 Milka: "Add your characters to 'assets/characters/' and backgrounds to 'assets/backgrounds/'."
 
-Milka: "Thank you for choosing Milka VN! May your stories be as sweet as chocolate milk! ✨🥛" [#sprite=milka_chan_smile:center, anim=bounce, sfx=confirm]
+Milka: "Thank you for visiting, {{GameState.player_name}}! May your stories be as sweet as chocolate milk! ✨🥛" [#sprite=milka_chan_smile:center, anim=bounce, sfx=confirm]
 
 Narrator: [End of prologue — the stage is yours!]
 => END
