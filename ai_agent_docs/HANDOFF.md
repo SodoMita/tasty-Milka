@@ -17,6 +17,25 @@ Branch `hecker-7qz-milka-release`, deployed from `build/hecker-7qz-milka`.
 * README gained a **Play** table (itch / Pages / Releases) and `docs/WEB_BUILD.md`
   gained a **Destinations** table explaining the deploy-pages-from-artifact flow.
 * Pages was enabled on the repo (`build_type: workflow`) through the GitHub API.
+* The auto-created `github-pages` environment shipped with a deployment branch
+  policy that only allowed `main`, so the first `build/*` deploy was rejected
+  with *"Branch ... is not allowed to deploy to github-pages due to environment
+  protection rules"*. `build/*` was added to that policy via the API and the
+  deploy went green.
+
+### Verified live — run 36728196156 (`build/hecker-milka-7qz` @ 99cf5be)
+
+| Job | Result |
+| --- | --- |
+| Export web + desktop | success (web 38 MB wasm, linux, windows) |
+| Publish to itch.io | success — `html5`, `linux`, `windows` channels, v1.17.0-milka-build.2 |
+| Deploy to GitHub Pages | success — <https://sodomita.github.io/tasty-Milka/> (HTTP 200) |
+| GitHub Release | success — `tasty-milka-{web,linux,windows}-1.17.0-milka-build.2.zip` |
+
+Headless Chromium web smoke test (plain server, no COOP/COEP headers):
+cross-origin isolation via the service worker ✓, Godot booted as a
+**multi-threaded** build ✓ (`variant/thread_support=true`), no uncaught page
+errors, no script errors. `<https://delatel.itch.io/tasty-milka>` answers 200.
 
 No scene, script or dialogue content was touched.
 
