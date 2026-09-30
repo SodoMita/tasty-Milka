@@ -412,8 +412,70 @@ var dialogue_line: DialogueLine:
 	get:
 		return dialogue_line
 
+## Milk-glass look. The bubble owns no style of its own: it reads the shared
+## settings resource, the very same file the title screen and the settings
+## panel read, so one edit restyles the whole game.
+const MILK_GLASS: MilkGlassSettings = preload("res://assets/ui/milk_glass_settings.tres")
+## Chrome buttons show a glyph, never a word - the label moves to the tooltip.
+const CHROME_ICONS: Dictionary = {
+	"QSButton": "qsave", "QLButton": "qload", "SaveButton": "save", "LoadButton": "load",
+	"AutoButton": "auto", "SkipButton": "skip", "PrevChoiceButton": "prev",
+	"NextChoiceButton": "next", "LogButton": "log", "SettingsButton": "settings",
+	"PanicButton": "panic", "PauseButton": "pause", "RouteButton": "route",
+	"SaveCloseButton": "close", "SettingsCloseButton": "close",
+}
+## Buttons with no authored word of their own still need a tooltip to describe.
+const CHROME_LABEL_KEYS := {"QSButton": "Quick save", "QLButton": "Quick load",
+	"SaveCloseButton": "Close", "SettingsCloseButton": "Close"}
+## Optional override: drop another MilkGlassSettings here to reskin this bubble.
+@export var glass: MilkGlassSettings = null
+var _chrome_text: Dictionary = {}
+
+
+func _glass() -> MilkGlassSettings:
+	return glass if glass != null else MILK_GLASS
+
+
+## Theme, bubble plate and icon-only chrome, all from the shared resource.
+func _apply_milk_glass() -> void:
+	var g := _glass()
+	g.apply_to(balloon)
+	dialogue_box.add_theme_stylebox_override("panel", g.style("bubble"))
+	name_plate.add_theme_stylebox_override("panel", g.style("name_tag"))
+	if not g.restyled.is_connected(_on_glass_restyled):
+		g.restyled.connect(_on_glass_restyled)
+	_apply_chrome_icons()
+
+
+func _on_glass_restyled() -> void:
+	_apply_milk_glass()
+
+
+## Glyph in, words out. Runs again on a locale change so the tooltips, which
+## are the only place the words still live, follow the .po.
+func _apply_chrome_icons() -> void:
+	var g := _glass()
+	for node_name: String in CHROME_ICONS:
+		var b: Button = find_child(node_name, true, false)
+		if b == null:
+			continue
+		if not _chrome_text.has(node_name):
+			# The scene stays the source of the string; the button keeps the glyph.
+			_chrome_text[node_name] = _chrome_label_key(node_name, b.text)
+		g.icon_only(b, CHROME_ICONS[node_name], _chrome_text[node_name])
+
+
+func _chrome_label_key(node_name: String, authored: String) -> String:
+	if CHROME_LABEL_KEYS.has(node_name):
+		return String(CHROME_LABEL_KEYS[node_name])
+	for entry: Array in UI_TEXT_KEYS:
+		if entry[0] == node_name:
+			return String(entry[1])
+	return authored if not authored.is_empty() else node_name
+
 
 func _ready() -> void:
+	_apply_milk_glass()
 	balloon.hide()
 	history_panel.hide()
 	history_entry_template.hide()
@@ -1970,6 +2032,7 @@ func _retranslate_dynamic() -> void:
 		save_menu_title.text = tr("Save") if save_menu_mode == "save" else tr("Load")
 	if is_instance_valid(route_graph_panel) and route_graph_panel.has_method("refresh_locale"):
 		route_graph_panel.refresh_locale()
+	_apply_chrome_icons()
 	if is_instance_valid(advance_key_button):
 		_refresh_binding_labels()
 		if not _listening_for_action.is_empty():

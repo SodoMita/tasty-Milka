@@ -1,7 +1,17 @@
 extends Control
 ## Milka VN - title screen behaviour.
-## Every visual element is authored in title_screen.tscn.
+## Every visual element is authored in title_screen.tscn, and the look comes
+## from the same shared milk-glass settings resource the dialogue bubble uses
+## (res://assets/ui/milk_glass_settings.tres) - no theme is duplicated here.
 ## This script wires input: menu buttons, settings, saves and reactions.
+
+## Title and bubble share one settings file; assign another to reskin the title only.
+@export var glass: MilkGlassSettings = null
+
+const MILK_GLASS: MilkGlassSettings = preload("res://assets/ui/milk_glass_settings.tres")
+## Menu rows keep their words; the glyph is the shared SVG set.
+const MENU_ICONS := {"StartButton": "start", "ContinueButton": "continue",
+	"SettingsButton": "settings", "QuitButton": "quit"}
 
 @onready var start_button: Button = %StartButton
 @onready var continue_button: Button = %ContinueButton
@@ -15,6 +25,7 @@ extends Control
 
 
 func _ready() -> void:
+	_apply_glass()
 	ambient.play("ambient")
 	_apply_settings()
 	_translate_labels()
@@ -30,6 +41,21 @@ func _ready() -> void:
 	continue_button.mouse_exited.connect(func() -> void: crema.set_expression("neutral"))
 	settings_panel.closed.connect(func() -> void: crema.set_expression("neutral"))
 	_play_sfx("open")
+
+
+## The bubble's settings, applied here: theme + SVG glyphs on the menu rows.
+func _apply_glass() -> void:
+	var g := glass if glass != null else MILK_GLASS
+	g.apply_to(self)
+	for node_name: String in MENU_ICONS:
+		var b: Button = find_child(node_name, true, false)
+		if b == null:
+			continue
+		b.icon = g.icon(MENU_ICONS[node_name])
+		b.expand_icon = true
+		b.add_theme_constant_override("icon_max_width", g.icon_size)
+		b.tooltip_text = tr(b.text)
+		b.accessible_name = tr(b.text)
 
 
 ## Boot-time settings (language, display, volumes) apply on the title too.

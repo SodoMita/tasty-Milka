@@ -999,7 +999,8 @@ func run() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	check(alive() and TranslationServer.get_locale() == "ru", "language option switches the locale to Russian")
-	check(alive() and balloon.save_button.text == "Сохранить", "authored UI strings follow the locale")
+	check(alive() and balloon.save_button.tooltip_text == "Сохранить" and balloon.save_button.text == "",
+		"authored UI strings follow the locale (icon-only buttons carry them in the tooltip)")
 	check(alive() and balloon.skip_mode_option.get_item_text(0) == "Всё", "runtime option items follow the locale")
 	var cyr := false
 	for ch: String in balloon.dialogue_label.text:
@@ -1023,7 +1024,7 @@ func run() -> void:
 	balloon.language_option.item_selected.emit(0)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	check(alive() and TranslationServer.get_locale() == "en" and balloon.save_button.text == "Save",
+	check(alive() and TranslationServer.get_locale() == "en" and balloon.save_button.tooltip_text == "Save",
 		"switching back restores English")
 
 	# Sprite scale & Y offset are settings of their own, separate from UI scale
@@ -1544,6 +1545,8 @@ func run() -> void:
 	check(not balloon._hold_active, "a press on a control does not start the hold")
 	balloon._close_overlay(balloon.save_menu_panel)
 
+	await _milk_glass_tests()
+
 	finish()
 
 
@@ -1662,3 +1665,70 @@ func _volume_off_tests() -> void:
 	balloon.music_vol_slider.value = 80
 	balloon.voice_vol_slider.value = 100
 	balloon.sfx_vol_slider.value = 80
+
+
+## Milk-glass chrome: one shared settings resource feeds the bubble, the title
+## screen and the settings panel; every button is an SVG glyph with no words.
+func _milk_glass_tests() -> void:
+	var g: MilkGlassSettings = balloon._glass()
+	check(g != null and g.resource_path == "res://assets/ui/milk_glass_settings.tres",
+		"the bubble reads the shared milk-glass settings resource")
+	check(not ResourceLoader.exists("res://assets/ui/milk_glass_theme.tres"),
+		"the duplicated theme file is gone; the settings resource is the only source")
+	var bubble_theme: Theme = balloon.balloon.theme
+	check(bubble_theme != null and bubble_theme == g.build_theme(),
+		"the bubble theme is built by the settings resource and cached")
+	check(g.build_theme() == bubble_theme, "build_theme() hands out one shared Theme")
+	check(balloon.dialogue_box.get_theme_stylebox("panel").corner_radius_top_left == g.bubble_radius,
+		"the dialogue plate takes its radius from the settings")
+	check(is_equal_approx(balloon.dialogue_box.get_theme_stylebox("panel").bg_color.a, g.bubble_alpha),
+		"the dialogue plate stays translucent (milk glass, not a solid box)")
+
+	# Icon-only chrome, no words on the buttons.
+	var chrome := [balloon.qs_button, balloon.ql_button, balloon.save_button, balloon.load_button,
+		balloon.auto_button, balloon.skip_button, balloon.log_button, balloon.settings_button,
+		balloon.panic_button, balloon.pause_button, balloon.prev_choice_button,
+		balloon.next_choice_button, balloon.save_close_button]
+	var clean := 0
+	var no_text := 0
+	for b: Button in chrome:
+		if b.icon != null:
+			clean += 1
+		if b.text.is_empty() and not b.tooltip_text.is_empty():
+			no_text += 1
+	check(clean == chrome.size(), "every chrome button shows an SVG glyph")
+	check(no_text == chrome.size(), "no chrome button carries visible text; each has a tooltip")
+
+	# Icons are tiny hand-authored SVG, and every key the bubble uses exists.
+	var missing := 0
+	var too_big := 0
+	for key: String in balloon.CHROME_ICONS:
+		var path := "%s/%s.svg" % [g.icon_dir, String(balloon.CHROME_ICONS[key])]
+		if not FileAccess.file_exists(path):
+			missing += 1
+			continue
+		if FileAccess.get_file_as_string(path).length() > 2048:
+			too_big += 1
+	check(missing == 0, "every chrome icon exists as an SVG asset")
+	check(too_big == 0, "chrome icons stay under 2 KB each")
+
+	# The title screen reads the same settings, without a scene builder script.
+	var title: Control = load("res://scenes/title_screen.tscn").instantiate()
+	add_child(title)
+	await get_tree().process_frame
+	check(title.glass == null and title.theme != null,
+		"the title falls back to the shared settings and applies the theme")
+	check(title.theme == bubble_theme, "title screen and dialogue bubble share one Theme")
+	var title_built := true
+	for child: Node in title.find_children("*", "Button", true, false):
+		if child.get_child_count() > 0:
+			title_built = false
+	check(title_built, "the title scene is authored as it stands (no nodes built from code)")
+	title.queue_free()
+	await get_tree().process_frame
+
+	# Restyling: one token change reaches both surfaces through the cache reset.
+	g.restyle()
+	check(balloon.balloon.theme != null and balloon.balloon.theme != bubble_theme,
+		"restyle() rebuilds the shared theme for the bubble")
+	g.restyle()

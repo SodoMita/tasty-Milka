@@ -1,10 +1,14 @@
 extends PanelContainer
-## Milk-glass settings panel shared by the title screen.
+## Milk-glass settings panel shared by the title screen and (in spirit) the
+## in-game settings rows. Its look is the one shared MilkGlassSettings resource
+## the dialogue bubble uses - no theme file of its own.
 ## Reads and writes user://settings.json via the SettingsStore autoload,
 ## which is the same file the in-game settings panel uses, so settings
 ## apply everywhere. Emits `closed` when dismissed.
 
 signal closed
+
+const MILK_GLASS: MilkGlassSettings = preload("res://assets/ui/milk_glass_settings.tres")
 
 @onready var close_button: Button = %CloseButton
 @onready var language_option: OptionButton = %LanguageOption
@@ -18,8 +22,17 @@ signal closed
 const SFX_BUS := "Sfx"
 
 
+## Same glass as the bubble and the title: style lives outside every scene.
+func _apply_glass() -> void:
+	MILK_GLASS.apply_to(self)
+
+
 func _ready() -> void:
+	_apply_glass()
 	hide()
+	# The X glyph replaces the word, exactly like the bubble's chrome row.
+	MILK_GLASS.icon_only(close_button, "close", "Close")
+	close_button.custom_minimum_size = Vector2(40, 40)
 	close_button.pressed.connect(close)
 	language_option.item_selected.connect(_on_language_selected)
 	text_speed_slider.value_changed.connect(_on_text_speed_changed)
