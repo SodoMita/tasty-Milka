@@ -6,7 +6,11 @@
 [ext_resource type="Texture2D" path="res://assets/ui/milk_droplet.svg" id="4_droplet"]
 [ext_resource type="Texture2D" path="res://assets/ui/droplet_trio.svg" id="5_trio"]
 [ext_resource type="Texture2D" path="res://assets/ui/droplet_cluster.svg" id="6_cluster"]
-[ext_resource type="PackedScene" path="res://scenes/ui/settings_panel.tscn" id="7_settings"]
+[ext_resource type="PackedScene" path="res://scenes/ui/settings_menu.tscn" id="7_settings"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/play.svg" id="11_play"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/resume.svg" id="12_resume"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/settings.svg" id="13_settings"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/quit.svg" id="14_quit"]
 [ext_resource type="PackedScene" path="res://scenes/character/crema.tscn" id="10_crema"]
 [ext_resource type="FontFile" path="res://assets/fonts/DejaVuSerif.ttf" id="8_serif"]
 [ext_resource type="FontFile" path="res://assets/fonts/DejaVuSerif-Bold.ttf" id="9_serifbold"]
@@ -345,41 +349,54 @@ mouse_filter = 2
 stretch_mode = 5
 texture = ExtResource("5_trio")
 
-[node name="Menu" type="VBoxContainer" parent="TitleBlock"]
+[node name="MenuBubble" type="PanelContainer" parent="TitleBlock"]
 layout_mode = 2
-theme_override_constants/separation = 12
+size_flags_horizontal = 0
+theme_type_variation = &"MilkBubble"
 
-[node name="StartButton" type="Button" parent="TitleBlock/Menu"]
-unique_name_in_owner = true
+[node name="Menu" type="HBoxContainer" parent="TitleBlock/MenuBubble"]
 layout_mode = 2
-custom_minimum_size = Vector2(300, 48)
-focus_mode = 2
-text = "Begin the Story"
-icon = ExtResource("4_droplet")
+theme_override_constants/separation = 14
 
-[node name="ContinueButton" type="Button" parent="TitleBlock/Menu"]
+[node name="StartButton" type="Button" parent="TitleBlock/MenuBubble/Menu"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(76, 76)
 layout_mode = 2
-custom_minimum_size = Vector2(300, 48)
-focus_mode = 2
-text = "Continue"
-icon = ExtResource("4_droplet")
+tooltip_text = "Begin the Story"
+theme_type_variation = &"IconButtonLarge"
+icon = ExtResource("11_play")
+icon_alignment = 1
+expand_icon = true
 
-[node name="SettingsButton" type="Button" parent="TitleBlock/Menu"]
+[node name="ContinueButton" type="Button" parent="TitleBlock/MenuBubble/Menu"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(76, 76)
 layout_mode = 2
-custom_minimum_size = Vector2(300, 48)
-focus_mode = 2
-text = "Settings"
-icon = ExtResource("4_droplet")
+tooltip_text = "Continue"
+theme_type_variation = &"IconButtonLarge"
+icon = ExtResource("12_resume")
+icon_alignment = 1
+expand_icon = true
 
-[node name="QuitButton" type="Button" parent="TitleBlock/Menu"]
+[node name="SettingsButton" type="Button" parent="TitleBlock/MenuBubble/Menu"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(76, 76)
 layout_mode = 2
-custom_minimum_size = Vector2(300, 48)
-focus_mode = 2
-text = "Quit"
-icon = ExtResource("4_droplet")
+tooltip_text = "Settings"
+theme_type_variation = &"IconButtonLarge"
+icon = ExtResource("13_settings")
+icon_alignment = 1
+expand_icon = true
+
+[node name="QuitButton" type="Button" parent="TitleBlock/MenuBubble/Menu"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(76, 76)
+layout_mode = 2
+tooltip_text = "Quit"
+theme_type_variation = &"IconButtonLarge"
+icon = ExtResource("14_quit")
+icon_alignment = 1
+expand_icon = true
 
 [node name="Version" type="Label" parent="."]
 unique_name_in_owner = true

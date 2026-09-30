@@ -39,13 +39,11 @@ func _apply_settings() -> void:
 		store.apply_globals()
 
 
+## Menu buttons are icon-only (SVG, no text); their tooltips are translated
+## automatically, so only the two labels need tr() here.
 func _translate_labels() -> void:
 	subtitle.text = tr(subtitle.text)
 	version.text = tr(version.text)
-	start_button.text = tr(start_button.text)
-	continue_button.text = tr(continue_button.text)
-	settings_button.text = tr(settings_button.text)
-	quit_button.text = tr(quit_button.text)
 
 
 func _on_start_pressed() -> void:

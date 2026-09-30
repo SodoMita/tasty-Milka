@@ -154,57 +154,57 @@ const PRESENTATION_FORMAT := 1
 
 ## Settings
 @onready var settings_panel: PanelContainer = %SettingsPanel
-@onready var settings_scroll: ScrollContainer = %SettingsScroll
-@onready var text_speed_slider: HSlider = %TextSpeedSlider
-@onready var text_speed_value: Label = %TextSpeedValue
-@onready var text_size_slider: HSlider = %TextSizeSlider
-@onready var text_size_value: Label = %TextSizeValue
-@onready var skip_speed_slider: HSlider = %SkipSpeedSlider
-@onready var skip_speed_value: SpinBox = %SkipSpeedValue
-@onready var skip_mode_option: OptionButton = %SkipModeOption
-@onready var advance_key_button: Button = %AdvanceKeyButton
-@onready var skip_key_button: Button = %SkipKeyButton
-@onready var close_key_button: Button = %CloseKeyButton
-@onready var history_key_button: Button = %HistoryKeyButton
-@onready var quick_save_key_button: Button = %QuickSaveKeyButton
-@onready var quick_load_key_button: Button = %QuickLoadKeyButton
-@onready var pause_key_button: Button = %PauseKeyButton
-@onready var panic_key_button: Button = %PanicKeyButton
-@onready var auto_delay_slider: HSlider = %AutoDelaySlider
-@onready var auto_delay_value: Label = %AutoDelayValue
-@onready var ui_scale_slider: HSlider = %UIScaleSlider
-@onready var ui_scale_value: SpinBox = %UIScaleValue
-@onready var settings_margin: MarginContainer = %SettingsMargin
+@onready var settings_scroll: ScrollContainer = get_node("%SettingsPanel/%SettingsScroll")
+@onready var text_speed_slider: HSlider = get_node("%SettingsPanel/%TextSpeedSlider")
+@onready var text_speed_value: Label = get_node("%SettingsPanel/%TextSpeedValue")
+@onready var text_size_slider: HSlider = get_node("%SettingsPanel/%TextSizeSlider")
+@onready var text_size_value: Label = get_node("%SettingsPanel/%TextSizeValue")
+@onready var skip_speed_slider: HSlider = get_node("%SettingsPanel/%SkipSpeedSlider")
+@onready var skip_speed_value: SpinBox = get_node("%SettingsPanel/%SkipSpeedValue")
+@onready var skip_mode_option: OptionButton = get_node("%SettingsPanel/%SkipModeOption")
+@onready var advance_key_button: Button = get_node("%SettingsPanel/%AdvanceKeyButton")
+@onready var skip_key_button: Button = get_node("%SettingsPanel/%SkipKeyButton")
+@onready var close_key_button: Button = get_node("%SettingsPanel/%CloseKeyButton")
+@onready var history_key_button: Button = get_node("%SettingsPanel/%HistoryKeyButton")
+@onready var quick_save_key_button: Button = get_node("%SettingsPanel/%QuickSaveKeyButton")
+@onready var quick_load_key_button: Button = get_node("%SettingsPanel/%QuickLoadKeyButton")
+@onready var pause_key_button: Button = get_node("%SettingsPanel/%PauseKeyButton")
+@onready var panic_key_button: Button = get_node("%SettingsPanel/%PanicKeyButton")
+@onready var auto_delay_slider: HSlider = get_node("%SettingsPanel/%AutoDelaySlider")
+@onready var auto_delay_value: Label = get_node("%SettingsPanel/%AutoDelayValue")
+@onready var ui_scale_slider: HSlider = get_node("%SettingsPanel/%UIScaleSlider")
+@onready var ui_scale_value: SpinBox = get_node("%SettingsPanel/%UIScaleValue")
+@onready var settings_margin: MarginContainer = get_node("%SettingsPanel/%SettingsMargin")
 @onready var ui_root: Control = %UIRoot
-@onready var sprite_scale_slider: HSlider = %SpriteScaleSlider
-@onready var sprite_scale_value: Label = %SpriteScaleValue
-@onready var sprite_y_slider: HSlider = %SpriteYSlider
-@onready var sprite_y_value: Label = %SpriteYValue
-@onready var sync_voice_check: CheckBox = %SyncVoiceCheck
+@onready var sprite_scale_slider: HSlider = get_node("%SettingsPanel/%SpriteScaleSlider")
+@onready var sprite_scale_value: Label = get_node("%SettingsPanel/%SpriteScaleValue")
+@onready var sprite_y_slider: HSlider = get_node("%SettingsPanel/%SpriteYSlider")
+@onready var sprite_y_value: Label = get_node("%SettingsPanel/%SpriteYValue")
+@onready var sync_voice_check: CheckBox = get_node("%SettingsPanel/%SyncVoiceCheck")
 @onready var settings_close_button: Button = %SettingsCloseButton
-@onready var settings_vbox: VBoxContainer = %SettingsVBox
-@onready var portrait_check: CheckBox = %PortraitCheck
-@onready var language_option: OptionButton = %LanguageOption
+@onready var settings_vbox: VBoxContainer = get_node("%SettingsPanel/%SettingsVBox")
+@onready var portrait_check: CheckBox = get_node("%SettingsPanel/%PortraitCheck")
+@onready var language_option: OptionButton = get_node("%SettingsPanel/%LanguageOption")
 @onready var responses_center: CenterContainer = %ResponsesCenter
-@onready var fullscreen_check: CheckBox = %FullscreenCheck
-@onready var vsync_check: CheckBox = %VsyncCheck
-@onready var resolution_option: OptionButton = %ResolutionOption
-@onready var res_width_spin: SpinBox = %ResWidthSpin
-@onready var res_height_spin: SpinBox = %ResHeightSpin
-@onready var glyph_scale_option: OptionButton = %GlyphScaleOption
-@onready var game_filter_option: OptionButton = %GameFilterOption
-@onready var map_filter_option: OptionButton = %MapFilterOption
-@onready var master_vol_slider: HSlider = %MasterVolSlider
-@onready var master_vol_value: Label = %MasterVolValue
-@onready var music_vol_slider: HSlider = %MusicVolSlider
-@onready var music_vol_value: Label = %MusicVolValue
-@onready var voice_vol_slider: HSlider = %VoiceVolSlider
-@onready var voice_vol_value: Label = %VoiceVolValue
-@onready var sfx_vol_slider: HSlider = %SfxVolSlider
-@onready var sfx_vol_value: Label = %SfxVolValue
-@onready var procedural_music_check: CheckBox = %ProceduralMusicCheck
-@onready var typewriter_sfx_check: CheckBox = %TypewriterSfxCheck
-@onready var button_sfx_check: CheckBox = %ButtonSfxCheck
+@onready var fullscreen_check: CheckBox = get_node("%SettingsPanel/%FullscreenCheck")
+@onready var vsync_check: CheckBox = get_node("%SettingsPanel/%VsyncCheck")
+@onready var resolution_option: OptionButton = get_node("%SettingsPanel/%ResolutionOption")
+@onready var res_width_spin: SpinBox = get_node("%SettingsPanel/%ResWidthSpin")
+@onready var res_height_spin: SpinBox = get_node("%SettingsPanel/%ResHeightSpin")
+@onready var glyph_scale_option: OptionButton = get_node("%SettingsPanel/%GlyphScaleOption")
+@onready var game_filter_option: OptionButton = get_node("%SettingsPanel/%GameFilterOption")
+@onready var map_filter_option: OptionButton = get_node("%SettingsPanel/%MapFilterOption")
+@onready var master_vol_slider: HSlider = get_node("%SettingsPanel/%MasterVolSlider")
+@onready var master_vol_value: Label = get_node("%SettingsPanel/%MasterVolValue")
+@onready var music_vol_slider: HSlider = get_node("%SettingsPanel/%MusicVolSlider")
+@onready var music_vol_value: Label = get_node("%SettingsPanel/%MusicVolValue")
+@onready var voice_vol_slider: HSlider = get_node("%SettingsPanel/%VoiceVolSlider")
+@onready var voice_vol_value: Label = get_node("%SettingsPanel/%VoiceVolValue")
+@onready var sfx_vol_slider: HSlider = get_node("%SettingsPanel/%SfxVolSlider")
+@onready var sfx_vol_value: Label = get_node("%SettingsPanel/%SfxVolValue")
+@onready var procedural_music_check: CheckBox = get_node("%SettingsPanel/%ProceduralMusicCheck")
+@onready var typewriter_sfx_check: CheckBox = get_node("%SettingsPanel/%TypewriterSfxCheck")
+@onready var button_sfx_check: CheckBox = get_node("%SettingsPanel/%ButtonSfxCheck")
 
 ## Pause + panic
 @onready var pause_panel: PanelContainer = %PausePanel
@@ -1392,17 +1392,9 @@ func _handle_pause_or_close(event: InputEvent) -> bool:
 
 ## Sliders are short by default and easy to miss. Volume keeps its 0-100 range.
 func _prepare_sliders() -> void:
-	var track := StyleBoxFlat.new()
-	track.bg_color = Color(0.12, 0.14, 0.22, 1)
-	track.corner_radius_top_left = 6
-	track.corner_radius_top_right = 6
-	track.corner_radius_bottom_right = 6
-	track.corner_radius_bottom_left = 6
-	track.content_margin_top = 14
-	track.content_margin_bottom = 14
-	var fill := track.duplicate() as StyleBoxFlat
-	fill.bg_color = Color(0.83, 0.68, 0.36, 1)
-	_style_sliders(settings_vbox, track, fill)
+	# Track, fill and droplet grabber come from the shared milk-glass theme
+	# (assets/ui/milk_glass_theme.tres), same as the title-screen settings menu.
+	_style_sliders(settings_vbox, null, null)
 	ui_scale_value.min_value = ui_scale_slider.min_value
 	ui_scale_value.max_value = ui_scale_slider.max_value
 	ui_scale_value.step = ui_scale_slider.step
@@ -1423,9 +1415,10 @@ func _style_sliders(node: Node, track: StyleBox, fill: StyleBox) -> void:
 		if child is HSlider:
 			var slider := child as HSlider
 			slider.custom_minimum_size.y = 44
-			slider.add_theme_stylebox_override("slider", track)
-			slider.add_theme_stylebox_override("grabber_area", fill)
-			slider.add_theme_stylebox_override("grabber_area_highlight", fill)
+			if track != null:
+				slider.add_theme_stylebox_override("slider", track)
+				slider.add_theme_stylebox_override("grabber_area", fill)
+				slider.add_theme_stylebox_override("grabber_area_highlight", fill)
 			slider.add_theme_constant_override("center_grabber", 1)
 		_style_sliders(child, track, fill)
 
@@ -1696,6 +1689,10 @@ func _save_settings() -> void:
 		"sfx_buttons": button_sfx_check.button_pressed,
 	}))
 	file.close()
+	# Keep the shared store (title-screen settings menu) in sync with this write.
+	var store := get_node_or_null("/root/SettingsStore")
+	if store != null:
+		store.load_settings()
 
 
 func _on_text_speed_changed(v: float) -> void:

@@ -38,10 +38,16 @@ func get_value(key: String, default: Variant = null) -> Variant:
 
 
 func set_value(key: String, value: Variant) -> void:
-	data[key] = value
+	set_values({key: value})
+
+
+## Write several keys with one save (used by the shared settings menu on the title).
+func set_values(values: Dictionary) -> void:
+	data.merge(values, true)
 	save_settings()
 	apply_globals()
-	settings_changed.emit(key, value)
+	for key: String in values:
+		settings_changed.emit(key, values[key])
 
 
 ## Apply the display/audio settings that matter outside the VN scene too.
