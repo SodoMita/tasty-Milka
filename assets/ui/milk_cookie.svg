@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <radialGradient id="biscuit" cx="0.42" cy="0.36" r="0.62">
+      <stop offset="0" stop-color="#fff4c8"/>
+      <stop offset="0.58" stop-color="#ebd089"/>
+      <stop offset="0.88" stop-color="#c9a256"/>
+      <stop offset="1" stop-color="#9e7834"/>
+    </radialGradient>
+    <radialGradient id="cream" cx="0.45" cy="0.38" r="0.55">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.72" stop-color="#fcf8ec"/>
+      <stop offset="1" stop-color="#e8dfc8"/>
+    </radialGradient>
+    <linearGradient id="drop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.6" stop-color="#fff6d6"/>
+      <stop offset="1" stop-color="#e3cfa0"/>
+    </linearGradient>
+  </defs>
+  <circle cx="128" cy="134" r="106" fill="#3a2a18" opacity="0.28"/>
+  <circle cx="128" cy="128" r="104" fill="url(#biscuit)" stroke="#7c5b24" stroke-width="5"/>
+  <circle cx="128" cy="128" r="94" fill="none" stroke="#fff9df" stroke-width="2.5" stroke-dasharray="10 8" opacity="0.7"/>
+  <path d="M52 108 C62 62, 108 42, 146 48 C186 54, 212 92, 204 132 C198 164, 210 178, 184 194 C162 208, 142 192, 118 202 C92 212, 66 196, 56 170 C46 144, 44 132, 52 108 Z"
+        fill="url(#cream)" stroke="#d4c7a5" stroke-width="3"/>
+  <circle cx="78" cy="78" r="10" fill="#6b442a"/>
+  <circle cx="75" cy="75" r="3.5" fill="#9c6b49"/>
+  <circle cx="182" cy="82" r="11" fill="#6b442a"/>
+  <circle cx="179" cy="79" r="3.5" fill="#9c6b49"/>
+  <circle cx="68" cy="164" r="9" fill="#6b442a"/>
+  <circle cx="184" cy="166" r="10.5" fill="#6b442a"/>
+  <circle cx="128" cy="204" r="8.5" fill="#6b442a"/>
+  <circle cx="102" cy="58" r="7" fill="#e6be6a"/>
+  <circle cx="162" cy="192" r="7" fill="#e6be6a"/>
+  <path d="M128 74 C128 74 164 122 164 146 A 36 36 0 1 1 92 146 C92 122 128 74 128 74 Z"
+        fill="url(#drop)" stroke="#9c7e44" stroke-width="3"/>
+  <ellipse cx="115" cy="136" rx="8" ry="15" fill="#ffffff" opacity="0.9" transform="rotate(-18 115 136)"/>
+  <ellipse cx="96" cy="68" rx="32" ry="12" fill="#ffffff" opacity="0.45" transform="rotate(-22 96 68)"/>
+</svg>

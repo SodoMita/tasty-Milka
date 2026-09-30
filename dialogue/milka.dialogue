@@ -3,7 +3,11 @@ Narrator: Welcome to Milka VN! 🥛 [#bg=milky_meadow, sfx=open]
 Narrator: A gentle breeze sweeps across the creamy meadow, carrying the sweet scent of fresh milk. [#sfx=confirm]
 
 Milka: "Nya~ Welcome traveler! I'm Milka-chan, your milky guide!" [#sprite=milka_chan_smile:center, anim=bounce, sfx=click]
-Milka: "And you told me your name is... {{GameState.player_name}}." [#sprite=milka_chan:center]
+Milka: "I'm so excited you wandered into my meadow today!" [#sprite=milka_chan:center]
+Milka: "Before I pour your first warm glass... wait a second! I still don't know what to call you!" [#sprite=milka_chan_surprised:center, anim=bounce, sfx=open]
+Milka: "Tell me your name right up top so I can write it on your milk mug~" [#sprite=milka_chan_smile:center, sfx=click]
+do Minigame.ask_player_name()
+Milka: "Let me read the mug... {{GameState.player_name}}!" [#sprite=milka_chan:center, sfx=confirm]
 => name_reaction
 
 ~ name_reaction
@@ -60,14 +64,14 @@ if GameState.name_is("is_tidy")
 => rhythm_intro
 
 ~ rhythm_intro
-Milka: "Now, {{GameState.player_name}}, the meadow has a heartbeat. Want to play it with me?" [#bg=cafe_parlor, sprite=milka_chan_smile:center, sfx=open]
+Milka: "Now, {{GameState.player_name}}, the meadow has a heartbeat! Want to bake and churn the giant Milk Cookie with me?" [#bg=cafe_parlor, sprite=milka_chan_smile:center, sfx=open]
 
-- "Teach me the beat!"
-	Milka: "Click the round droplets when they touch the cream line." [#sprite=milka_chan:center, sfx=click]
-	Milka: "And when you see an arrow, press it and flick it that way. Slide, do not tap!" [#sprite=milka_chan_smile:center, anim=bounce]
+- "How does it work?"
+	Milka: "Click the big Milk Cookie in the center — especially when the glowing beat ring touches its rim!" [#sprite=milka_chan:center, sfx=click]
+	Milka: "And sliding is optional: drag the mouse across the cookie, or simply hold down your 1 keyboard key to sweep the butter churn!" [#sprite=milka_chan_smile:center, anim=bounce]
 	=> play_rhythm
-- "Let's just play."
-	Milka: "That is the spirit. Droplets are tapped, arrows are slid!" [#sprite=milka_chan_smile:center, anim=bounce, sfx=click]
+- "Let's click and churn!"
+	Milka: "That is the spirit! Mouse-only or 1-button keyboard both work!" [#sprite=milka_chan_smile:center, anim=bounce, sfx=click]
 	=> play_rhythm
 - "Maybe later."
 	Milka: "The beat will wait. It is very patient milk." [#sprite=milka_chan:center, sfx=close]
@@ -78,9 +82,11 @@ do Minigame.play_rhythm(18)
 => rhythm_result
 
 ~ rhythm_result
-Milka: "Scored {{GameState.rhythm_score()}} points. I call that a {{GameState.rhythm_rank()}}!" [#sprite=milka_chan_smile:center, anim=bounce, sfx=confirm]
+Milka: "Scored {{GameState.rhythm_score()}} milk drops! I call that a {{GameState.rhythm_rank()}}!" [#sprite=milka_chan_smile:center, anim=bounce, sfx=confirm]
 if GameState.rhythm_missed() == 0
-	Milka: "Not a single drop spilled, {{GameState.player_name}}. Flawless." [#sprite=milka_chan_smile:center, anim=nod, sfx=save]
+	Milka: "Not a single beat missed, {{GameState.player_name}}. Cream perfection!" [#sprite=milka_chan_smile:center, anim=nod, sfx=save]
+elif GameState.rhythm_score() >= 90
+	Milka: "You unlocked Golden Cream Fever, {{GameState.player_name}}! My churn is overflowing!" [#sprite=milka_chan_smile:center, anim=bounce, sfx=save]
 elif GameState.rhythm_missed() > 6
 	Milka: "The floor is very milky now. We will mop it together." [#sprite=milka_chan_surprised:center, anim=shake, sfx=error]
 

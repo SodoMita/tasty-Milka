@@ -1,9 +1,12 @@
 extends Node
-## Headless probe for the name prompt, Milka's name reactions and Milk Beat.
+## Headless probe for:
+##   1) Mid-dialogue top-anchored NameEntry popout (with top margin for screen keyboard)
+##   2) NameLore trait analysis & Milka's reactions (lowercase, digits, emoji, math, special, etc.)
+##   3) Visual Cookie-Clicker + Rhythm Click & Optional Slide minigame (mouse-only & 1-key-only)
 
+const Lore = preload("res://autoloads/name_lore.gd")
 const NameEntryScene: PackedScene = preload("res://scenes/ui/name_entry.tscn")
 const RhythmScene: PackedScene = preload("res://scenes/minigame/rhythm_game.tscn")
-const Lore = preload("res://autoloads/name_lore.gd")
 const DialogueRes: DialogueResource = preload("res://dialogue/milka.dialogue")
 
 var _passed: int = 0
@@ -12,15 +15,19 @@ var _failed: int = 0
 func _ready() -> void:
 	await get_tree().process_frame
 	_test_name_lore()
-	await _test_name_entry()
-	await _test_rhythm()
-	await _test_hits()
-	await _test_dialogue()
+	await _test_name_entry_top_popout()
+	await _test_mid_dialogue_name_ask()
+	await _test_rhythm_visuals_and_controls()
+	await _test_rhythm_completion()
+	await _test_dialogue_reactions()
 	print("== name/beat probe: %d passed, %d failed ==" % [_passed, _failed])
 	get_tree().quit(1 if _failed > 0 else 0)
 
 func _gs() -> Node:
 	return get_tree().root.get_node_or_null("GameState")
+
+func _mg() -> Node:
+	return get_tree().root.get_node_or_null("Minigame")
 
 func _check(label: String, ok: bool) -> void:
 	if ok:
@@ -53,12 +60,16 @@ func _test_name_lore() -> void:
 	_check("validation accepts normal", Lore.validation_error("Anna") == "")
 	_check("notes list mentions numbers", ", ".join(Lore.notes("ann4")).contains("numbers"))
 
-func _test_name_entry() -> void:
+func _test_name_entry_top_popout() -> void:
 	var entry: CanvasLayer = NameEntryScene.instantiate()
 	add_child(entry)
 	await get_tree().process_frame
-	var field: LineEdit = entry.get_node("Root/Center/Panel/Rows/Field")
-	var confirm: Button = entry.get_node("Root/Center/Panel/Rows/Confirm") if entry.has_node("Root/Center/Panel/Rows/Confirm") else entry.get_node("Root/Center/Panel/Rows/Buttons/Confirm")
+	var top_margin: MarginContainer = entry.get_node("Root/TopMargin")
+	var field: LineEdit = entry.call("get_field")
+	var confirm: Button = entry.call("get_confirm_button")
+	var margin_top_px: int = int(entry.call("get_top_margin"))
+	_check("popout has top margin for screen keyboard", margin_top_px >= 24)
+	_check("popout sits in top area of screen (keyboard-safe)", top_margin.offset_bottom <= 280.0 and top_margin.anchor_top == 0.0)
 	_check("confirm disabled while empty", confirm.disabled)
 	field.text = "vlad1"
 	field.text_changed.emit(field.text)
@@ -78,77 +89,116 @@ func _test_name_entry() -> void:
 	_gs().restore(snap)
 	_check("traits survive save/restore", _gs().name_is("has_digits"))
 
-func _test_rhythm() -> void:
+func _test_mid_dialogue_name_ask() -> void:
+	var dm: Node = get_tree().root.get_node("DialogueManager")
+	# Walk from ~ start; verify Milka speaks first and then triggers ask_player_name mid-dialogue.
+	var line: DialogueLine = await dm.get_next_dialogue_line(DialogueRes, "start")
+	var before_ask_lines: int = 0
+	var prompted: Array = []
+	_mg().name_prompt_opened.connect(func(prompt: CanvasLayer) -> void:
+		var f: LineEdit = prompt.call("get_field")
+		var c: Button = prompt.call("get_confirm_button")
+		f.text = "misha+7🥛!"
+		f.text_changed.emit(f.text)
+		c.pressed.emit()
+	, CONNECT_ONE_SHOT)
+	_mg().name_prompt_finished.connect(func(chosen: String) -> void:
+		prompted.append(chosen)
+	, CONNECT_ONE_SHOT)
+	var guard: int = 0
+	while line != null and guard < 10 and prompted.is_empty():
+		guard += 1
+		before_ask_lines += 1
+		line = await dm.get_next_dialogue_line(DialogueRes, line.next_id)
+	_check("Milka speaks several lines before asking name mid-game", before_ask_lines >= 4)
+	_check("mid-dialogue name prompt acquired player name", prompted.size() == 1 and prompted[0] == "misha+7🥛!" and _gs().player_name == "misha+7🥛!")
+	_check("line after prompt uses acquired player name", line != null and line.text.contains("misha+7🥛!"))
+
+func _test_rhythm_visuals_and_controls() -> void:
+	var game: CanvasLayer = RhythmScene.instantiate()
+	game.set("note_count", 8)
+	add_child(game)
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	# 1. Verify rich visual elements exist
+	var cookie_tex: TextureRect = game.get_node("Root/CenterStage/CookiePivot/CookieTexture")
+	var milka_tex: TextureRect = game.get_node("Root/LeftCard/Rows/MilkaPortrait")
+	var bottle_tex: TextureRect = game.get_node("Root/RightCard/Rows/Header/BottleIcon")
+	var stage_canvas: Control = game.get_node("Root/StageCanvas")
+	_check("visual Milk Cookie texture loaded", cookie_tex != null and cookie_tex.texture != null)
+	_check("visual Milka cheerleader portrait loaded", milka_tex != null and milka_tex.texture != null)
+	_check("visual Milk Churn bottle icon loaded", bottle_tex != null and bottle_tex.texture != null)
+	_check("custom stage canvas present", stage_canvas != null and stage_canvas.visible)
+
+	# 2. Verify Mouse-only Cookie Click + Mouse Drag Optional Slide
+	var s0: int = int(game.get("_score"))
+	game.call("perform_click", Vector2(640.0, 330.0))
+	var s1: int = int(game.get("_score"))
+	_check("mouse cookie click scores drops & spawns particles", s1 > s0 and (game.get("_particles") as Array).size() > 0)
+
+	var slides_before: int = int(game.get("_slides"))
+	game.call("_press", Vector2(580.0, 330.0))
+	game.call("_motion", Vector2(660.0, 330.0))
+	game.call("_release", Vector2(660.0, 330.0))
+	_check("mouse drag triggers optional slide churn bonus", int(game.get("_slides")) > slides_before and int(game.get("_score")) > s1)
+
+	# 3. Verify 1-Button Keyboard-Only: tap to click, hold same button to slide
+	var clicks_before: int = int(game.get("_clicks"))
+	var score_before_key: int = int(game.get("_score"))
+	game.call("press_one_button")
+	game.call("release_one_button")
+	_check("1-button keyboard tap clicks cookie", int(game.get("_clicks")) > clicks_before and int(game.get("_score")) > score_before_key)
+
+	var slides_before_key: int = int(game.get("_slides"))
+	var score_before_hold: int = int(game.get("_score"))
+	game.call("hold_one_button", 0.62)
+	_check("1-button keyboard hold performs slide churn", int(game.get("_slides")) > slides_before_key and int(game.get("_score")) > score_before_hold)
+
+	game.queue_free()
+	await get_tree().process_frame
+
+func _test_rhythm_completion() -> void:
 	var game: CanvasLayer = RhythmScene.instantiate()
 	game.set("note_count", 8)
 	game.set("beat_length", 0.05)
 	add_child(game)
 	await get_tree().process_frame
-	await get_tree().process_frame
 	var notes: Array = game.get("_notes")
-	_check("chart built", notes.size() == 8)
-	_check("notes spawned", game.get_node("Root/Play/Notes").get_child_count() == 8)
+	_check("chart built with 8 beats", notes.size() == 8)
 	var has_slide: bool = false
 	for n: Dictionary in notes:
 		if bool(n["slide"]):
 			has_slide = true
-	_check("chart mixes tap and slide", has_slide)
+	_check("chart includes optional slide cues", has_slide)
 	var result: Array = []
 	game.finished.connect(func(r: Dictionary) -> void: result.append(r))
-	# Let every note fall past the window so the game resolves itself.
 	var guard: int = 0
 	while result.is_empty() and guard < 900:
 		guard += 1
 		await get_tree().process_frame
-	_check("minigame finishes", result.size() == 1)
+	_check("minigame finishes cleanly", result.size() == 1)
 	if result.size() == 1:
-		_check("result carries a rank", String(result[0].get("rank", "")) != "")
-		_check("misses counted", int(result[0]["missed"]) == 8)
-		_check("state recorded", _gs().rhythm_rank() != "unplayed" or true)
+		_check("result carries rank and stats", String(result[0].get("rank", "")) != "" and result[0].has("slides"))
 
-func _test_hits() -> void:
-	var game: CanvasLayer = RhythmScene.instantiate()
-	game.set("note_count", 8)
-	add_child(game)
-	await get_tree().process_frame
-	await get_tree().process_frame
-	var notes: Array = game.get("_notes")
-	var tap: Dictionary = {}
-	var slide: Dictionary = {}
-	for n: Dictionary in notes:
-		if bool(n["slide"]) and slide.is_empty():
-			slide = n
-		elif not bool(n["slide"]) and tap.is_empty():
-			tap = n
-	# Tap note: pretend the song is exactly at its beat and click its lane.
-	game.set("_time", float(tap["time"]))
-	var x: float = game.call("_lane_x", int(tap["lane"]))
-	game.call("_press", Vector2(x, 560.0))
-	_check("tap note scores", bool(tap["done"]) and int(game.get("_score")) > 0)
-	# Slide note: press then flick towards its arrow direction.
-	var before: int = int(game.get("_score"))
-	game.set("_time", float(slide["time"]))
-	var sx: float = game.call("_lane_x", int(slide["lane"]))
-	game.call("_press", Vector2(sx, 560.0))
-	_check("slide note is not solved by a tap", not bool(slide["done"]))
-	game.call("_motion", Vector2(sx + 80.0 * float(int(slide["dir"])), 560.0))
-	_check("slide note scores after the flick", bool(slide["done"]) and int(game.get("_score")) > before)
-	game.queue_free()
-	await get_tree().process_frame
-
-func _test_dialogue() -> void:
-	_gs().set_player_name("boris42")
+func _test_dialogue_reactions() -> void:
+	_gs().set_player_name("boris42+🥛!")
+	var dm: Node = get_tree().root.get_node("DialogueManager")
 	var seen: PackedStringArray = []
-	var line: DialogueLine = await (get_tree().root.get_node("DialogueManager") as Node).get_next_dialogue_line(DialogueRes, "name_reaction")
+	var line: DialogueLine = await dm.get_next_dialogue_line(DialogueRes, "name_reaction")
 	var guard: int = 0
 	while line != null and guard < 60:
 		guard += 1
 		seen.append(line.text)
 		if not line.responses.is_empty():
 			break
-		line = await (get_tree().root.get_node("DialogueManager") as Node).get_next_dialogue_line(DialogueRes, line.next_id)
-	var joined: String = "\n".join(seen)
-	_check("dialogue interpolates the name", joined.contains("boris42"))
-	_check("dialogue reacts to lowercase start", joined.to_lower().contains("small letter"))
-	_check("dialogue reacts to numbers", joined.to_lower().contains("numbers hiding"))
-	_check("dialogue reaches the minigame offer", joined.to_lower().contains("heartbeat"))
+		print("    step ", guard, " id=", line.id, " next=", line.next_id, " text=", line.text)
+		line = await dm.get_next_dialogue_line(DialogueRes, line.next_id)
+	var joined: String = "\n".join(seen).to_lower()
+	_check("dialogue interpolates the player name", joined.contains("boris42+🥛!"))
+	_check("dialogue reacts to lowercase start", joined.contains("small letter"))
+	_check("dialogue reacts to numbers", joined.contains("numbers hiding"))
+	_check("dialogue reacts to emoji", joined.contains("emoji"))
+	_check("dialogue reacts to math", joined.contains("arithmetic"))
+	_check("dialogue reacts to special symbols", joined.contains("brackets and slashes"))
+	_check("dialogue reaches the cookie-clicker rhythm offer", joined.contains("milk cookie"))

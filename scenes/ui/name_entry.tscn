@@ -1,96 +1,149 @@
-[gd_scene load_steps=4 format=3 uid="uid://bp7name0entry1"]
+[gd_scene load_steps=7 format=3 uid="uid://bp7name0entry1"]
 
 [ext_resource type="Script" path="res://scenes/ui/name_entry.gd" id="1_name_entry"]
+[ext_resource type="Theme" path="res://assets/ui/milk_glass_theme.tres" id="2_theme"]
+[ext_resource type="Texture2D" path="res://assets/ui/milk_droplet.svg" id="3_droplet"]
+[ext_resource type="Texture2D" path="res://assets/ui/droplet_trio.svg" id="4_trio"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
-bg_color = Color(0.98, 0.97, 0.93, 0.85)
+bg_color = Color(0.99, 0.97, 0.92, 0.94)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.92, 0.82, 0.55, 0.95)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+shadow_color = Color(0.18, 0.12, 0.08, 0.28)
+shadow_size = 14
+shadow_offset = Vector2(0, 6)
+content_margin_left = 28.0
+content_margin_top = 18.0
+content_margin_right = 28.0
+content_margin_bottom = 18.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_field"]
+bg_color = Color(1, 0.99, 0.96, 0.98)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(1, 1, 1, 0.75)
-corner_radius_top_left = 24
-corner_radius_top_right = 24
-corner_radius_bottom_right = 24
-corner_radius_bottom_left = 24
-content_margin_left = 36.0
-content_margin_top = 28.0
-content_margin_right = 36.0
-content_margin_bottom = 28.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_field"]
-bg_color = Color(1, 1, 1, 0.9)
+border_color = Color(0.84, 0.74, 0.48, 0.9)
 corner_radius_top_left = 12
 corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
-content_margin_left = 12.0
+content_margin_left = 14.0
 content_margin_top = 8.0
-content_margin_right = 12.0
+content_margin_right = 14.0
 content_margin_bottom = 8.0
 
 [node name="NameEntry" type="CanvasLayer"]
-layer = 20
+layer = 25
 script = ExtResource("1_name_entry")
 
 [node name="Root" type="Control" parent="."]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("2_theme")
 
-[node name="Dim" type="ColorRect" parent="Root"]
-anchors_preset = 15
+[node name="TopShade" type="ColorRect" parent="Root"]
+layout_mode = 1
+anchors_preset = 10
 anchor_right = 1.0
-anchor_bottom = 1.0
+offset_bottom = 250.0
 grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.13, 0.11, 0.16, 0.6)
+mouse_filter = 2
+color = Color(0.14, 0.1, 0.18, 0.32)
 
-[node name="Center" type="CenterContainer" parent="Root"]
-anchors_preset = 15
+[node name="TopMargin" type="MarginContainer" parent="Root"]
+layout_mode = 1
+anchors_preset = 10
 anchor_right = 1.0
-anchor_bottom = 1.0
+offset_bottom = 236.0
 grow_horizontal = 2
-grow_vertical = 2
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 36
+theme_override_constants/margin_bottom = 12
 
-[node name="Panel" type="PanelContainer" parent="Root/Center"]
-custom_minimum_size = Vector2(560, 0)
+[node name="Center" type="HBoxContainer" parent="Root/TopMargin"]
+layout_mode = 2
+alignment = 1
+
+[node name="Panel" type="PanelContainer" parent="Root/TopMargin/Center"]
+custom_minimum_size = Vector2(680, 0)
+layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
-[node name="Rows" type="VBoxContainer" parent="Root/Center/Panel"]
-theme_override_constants/separation = 14
+[node name="Rows" type="VBoxContainer" parent="Root/TopMargin/Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 10
 
-[node name="Title" type="Label" parent="Root/Center/Panel/Rows"]
-text = "What may Milka call you?"
+[node name="Header" type="HBoxContainer" parent="Root/TopMargin/Center/Panel/Rows"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 10
+
+[node name="LeftDrop" type="TextureRect" parent="Root/TopMargin/Center/Panel/Rows/Header"]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+texture = ExtResource("3_droplet")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Title" type="Label" parent="Root/TopMargin/Center/Panel/Rows/Header"]
+layout_mode = 2
+text = "Milka leans in: \"What should I call you?\""
 horizontal_alignment = 1
-theme_override_colors/font_color = Color(0.25, 0.19, 0.16, 1)
-theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(0.24, 0.18, 0.15, 1)
+theme_override_font_sizes/font_size = 22
 
-[node name="Field" type="LineEdit" parent="Root/Center/Panel/Rows"]
-custom_minimum_size = Vector2(0, 46)
-placeholder_text = "type your name"
+[node name="RightTrio" type="TextureRect" parent="Root/TopMargin/Center/Panel/Rows/Header"]
+custom_minimum_size = Vector2(32, 26)
+layout_mode = 2
+texture = ExtResource("4_trio")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="InputRow" type="HBoxContainer" parent="Root/TopMargin/Center/Panel/Rows"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Field" type="LineEdit" parent="Root/TopMargin/Center/Panel/Rows/InputRow"]
+custom_minimum_size = Vector2(360, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Type your name here..."
 max_length = 24
-theme_override_colors/font_color = Color(0.2, 0.15, 0.13, 1)
+clear_button_enabled = true
+theme_override_colors/font_color = Color(0.18, 0.13, 0.11, 1)
+theme_override_colors/font_placeholder_color = Color(0.55, 0.48, 0.42, 0.85)
 theme_override_styles/normal = SubResource("StyleBoxFlat_field")
 theme_override_styles/focus = SubResource("StyleBoxFlat_field")
 
-[node name="Hint" type="Label" parent="Root/Center/Panel/Rows"]
+[node name="Surprise" type="Button" parent="Root/TopMargin/Center/Panel/Rows/InputRow"]
+custom_minimum_size = Vector2(128, 44)
+layout_mode = 2
+text = "Random"
+
+[node name="Confirm" type="Button" parent="Root/TopMargin/Center/Panel/Rows/InputRow"]
+custom_minimum_size = Vector2(128, 44)
+layout_mode = 2
+disabled = true
+text = "Tell Milka"
+
+[node name="Hint" type="Label" parent="Root/TopMargin/Center/Panel/Rows"]
+layout_mode = 2
 text = "Milka is waiting for at least one character."
 horizontal_alignment = 1
 autowrap_mode = 2
-theme_override_colors/font_color = Color(0.36, 0.3, 0.26, 1)
-
-[node name="Buttons" type="HBoxContainer" parent="Root/Center/Panel/Rows"]
-alignment = 1
-theme_override_constants/separation = 18
-
-[node name="Surprise" type="Button" parent="Root/Center/Panel/Rows/Buttons"]
-custom_minimum_size = Vector2(150, 44)
-text = "Surprise me"
-
-[node name="Confirm" type="Button" parent="Root/Center/Panel/Rows/Buttons"]
-custom_minimum_size = Vector2(150, 44)
-disabled = true
-text = "Begin"
+theme_override_colors/font_color = Color(0.36, 0.28, 0.22, 1)
+theme_override_font_sizes/font_size = 16
