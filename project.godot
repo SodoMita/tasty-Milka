@@ -10,16 +10,22 @@ config_version=5
 
 [application]
 
-config/name="VN Dialogue Demo"
-run/main_scene="res://scenes/vn_scene.tscn"
-config/features=PackedStringArray("4.7", "Forward Plus")
+config/name="Milka VN"
+run/main_scene="res://scenes/title_screen.tscn"
+config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[audio]
+
+general/default_playback_type.web=0
 
 [autoload]
 
+SettingsStore="*res://autoloads/settings_store.gd"
 GameState="*res://autoloads/game_state.gd"
 AudioDirector="*res://autoloads/audio_director.gd"
 DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
+BrowserSaveSync="*res://autoloads/browser_save_sync.gd"
 
 [dialogue_manager]
 
@@ -82,11 +88,9 @@ dialogue_panic={
 [internationalization]
 
 locale/translations=PackedStringArray("res://i18n/ru.po")
-locale/translations_pot_files=PackedStringArray("res://dialogue/intro.dialogue", "res://examples/staging_demo.dialogue")
+locale/translations_pot_files=PackedStringArray("res://dialogue/milka.dialogue")
 
-[audio]
+[rendering]
 
-; Web defaults to "Sample" playback, which cannot play AudioStreamGenerator
-; (procedural music) and re-times pitch/volume ramps. Stream playback mixes in the
-; audio worklet exactly like desktop.
-general/default_playback_type.web=0
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"

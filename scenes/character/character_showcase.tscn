@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://daisyshowcase01"]
+
+[ext_resource type="Texture2D" path="res://assets/ui/title_backdrop.svg" id="1_backdrop"]
+[ext_resource type="PackedScene" path="res://scenes/character/crema.tscn" id="2_spirit"]
+
+[node name="CharacterShowcase" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Backdrop" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+texture = ExtResource("1_backdrop")
+
+[node name="Crema" parent="." instance=ExtResource("2_spirit")]
+position = Vector2(640, 620)

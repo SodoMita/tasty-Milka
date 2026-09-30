@@ -1,358 +1,192 @@
-# VN Dialogue Demo — classical visual-novel UI on Nathan Hoad's Dialogue Manager
+# 🥛 Milka VN — 2D Visual Novel Framework with Milk Droplet UI
 
-A complete Godot **4.7.2** project using **nathanhoad/godot_dialogue_manager v4.1.0**
-(the release built for Godot 4.7) with a fully custom, classical visual-novel balloon.
+**Milka VN** is a clean, modern, milk-themed 2D Visual Novel engine and template. Built for storytelling freedom, it features a creamy droplet-themed UI, smooth 2D sprite animations, branching choice menus, full SFX integration, history backlog with rollback, multi-slot save/load, and route graph navigation.
 
-### Why if Dialogic exists?
-- Godot 4.7.2, unlike 4.5
-- easier to customize
-- no binary files
+All demo music and sample story assets have been purged so you can write and create your own original game from a clean slate.
 
-### Features:
-- full-screen background stage (`#bg=` tag)
-- left / right character sprite slots with spotlight dimming (`#sprite=`, `#focus=`)
-- gold-trimmed dialogue box + name plate, serif novel font
-- typewriter text via the addon's `DialogueLabel`; the remappable Advance (`Enter`) key
-  and click finish the typewriter first, then proceed on the next press; holding the
-  Skip (`Ctrl`) key fast-forwards only while held
-- bobbing "next" indicator
-- centred choice buttons via the addon's `DialogueResponsesMenu`
-- **history (backlog) panel with rollback**: `H` opens it (scrollable with wheel / keys),
-  clicking any logged line jumps back to it and restores the story state + stage exactly as
-  they were; Ren'Py-style the rollback is non-destructive — the mouse wheel rolls the game
-  back a line and forward again through the kept lines (`docs/05_history.webp`)
-- **save / load with an arbitrary number of slots**: a Kirikiri/Ren'Py-style **bottom system
-  row** under the dialogue box (`QS QL Save Load Auto Skip < Choice Choice > Log Set Panic`,
-  including Kirikiri-style jumps to the previous/next choice), save/load menus that list every
-  `user://saves/slot_*.json` with a runtime-rendered thumbnail, a `+ New slot` button, and
-  `F5`/`F9` quick save/load into slot 0 (`docs/07_system_row.webp`, `docs/08_save_menu.webp`)
-- **auto & skip modes** (skip stops by itself at choices; skip speed configurable (higher slider values are faster); "skip
-  seen only" halts with a toast at the first line the player has never read, tracked in
-  `user://seen.json`), **full settings screen** (text speed, text size, skip speed,
-  skip-everything-vs-seen, auto delay, UI scaling scoped to the UI only (the stage and
-  sprites keep their authored size and the settings column keeps a usable width at any
-  scale), fullscreen, V-Sync, resolution presets or any custom positive size,
-  master/music/voice/SFX volumes, separate sprite scale / Y-offset settings, and click-to-listen
-  remapping for every keyboard action — applied live, persisted to `user://settings.json`), **pause menu**
-  (`Esc` / right click, with Resume/History/Save/Load/Settings/Quit; Resume continues a paused
-  voice clip from its previous playback position), **panic/boss screen**
-  (`F12`) that swaps the whole game for a dry quantum-mechanics lecture page
-  (`docs/09_settings.webp`, `docs/10_pause.webp`, `docs/11_panic.webp`)
-- **mobile controls**: with `input_devices/pointing/emulate_mouse_from_touch` enabled,
-  taps drive the same click/advance path, an upward swipe opens the history backlog, and
-  every control is an authored touch target; settings get an on-screen close button and a
-  portrait layout that wraps each slider under its label, fullscreen-wide — entered
-  automatically when the window is resized taller than wide, or forced from the "Portrait layout"
-  setting when the engine can't rotate; the bottom system row wraps onto multiple lines
-  on narrow aspects / big UI scales and gains a Pause button; the panic page scrolls and
-  closes from a corner X (`docs/13_settings_portrait.webp`,
-  `docs/15_system_row_wrapped.webp`, `docs/16_panic_portrait.webp`). v1.15 adds the
-  Russian localization with localized character voices.
-- **voiced dialogue**: all fourteen spoken character lines carry `#voice=` tags and play
-  per-character clips (Maya and Rook) on the Voice bus, silenced again on unvoiced lines;
-  the clips were generated as Opus but ship as tightly packed Ogg Vorbis (mono, 32 kbps)
-- **internationalization**: a Language setting (English / Русский) persisted in
-  `user://settings.json`, following the OS locale on first launch; `i18n/ru.po` translates
-  the dialogue (via the addon's `dialogue` context), every authored UI string and the
-  runtime toasts/titles, and the current line, name plate and choices repaint live on
-  switch; voices live per locale in `assets/voices/{en,ru}` with English fallback
-  (`docs/17_russian.webp`)
-  because Godot 4.7 has no Opus importer; an optional "Sync text to voice" setting paces
-  the typewriter so each voiced line finishes typing when its clip ends
-- **music & SFX**: runtime *procedural* music — an `AudioStreamGenerator` score of
-  chord pads, a bass pulse and an arpeggio, scheduled bar by bar ahead of the playhead,
-  with four themes (`calm`, `warm`, `tense`, `night`) — that crossfades to tiny seamless
-  OGG loops (`assets/music/day.ogg` / `night.ogg`, 4 s, < 13 KB each); SFX play from
-  `assets/sfx/*.ogg` (click / open / close / confirm / save / error, each < 5 KB) or are
-  synthesized at runtime when no file matches; the typewriter ticks softly per character,
-  chrome buttons tick on press, choices chime and save/load chime or buzz; the
-  **Generated music** setting swaps the engine for the mood-matched loops, and every
-  generated file stays under 20 KB
-- **compact art**: backgrounds and portraits ship as lossy WebP at quality 0.9 — ~483 KB
-  instead of ~4 MB of PNG, with no visible quality loss (doc screenshots are WebP too)
-- **styled text**: BBCode (`[b]`, `[i]`, `[color=…]`, …) renders in the typewriter label;
-  the backlog and save-slot labels store the same lines without markup
+---
 
-Verified headless with Godot 4.7: `bash run_tests.sh` runs the asset rules (WebP only) and five
-suites - UI, route graph, panic return, motion director and staging - and every check passes,
-with zero `SCRIPT ERROR` / `Parse Error` in import and runtime logs. Real rendered frames are
-saved in `docs/` (captured under Xvfb).
+## 🍼 Features
 
-**Web build / releases:** see [docs/WEB_BUILD.md](docs/WEB_BUILD.md) (build/* pipeline, the SharedArrayBuffer service worker, the browser smoke test).
+- **🥛 Milk Droplet Themed UI**:
+  - Creamy milk cards with lavender/lilac accents and rounded droplet geometry.
+  - Animated milk droplet next-indicator, bobbing dialogue cues, and smooth UI transitions.
+  - Clean typography and customizable UI scale.
 
-## The balloon is an authored scene, not a scene-builder script
+- **✨ 2D Character Animations & Staging**:
+  - 2D sprite animation tags: `#anim=bounce`, `#anim=shake`, `#anim=fade_in`, `#anim=slide_left`, `#anim=slide_right`.
+  - Multi-slot stage layout (`left`, `center`, `right`, `far_left`, `far_right`) with spotlight dimming (`#focus=slot`).
+  - Emotion popups: milk droplets, question marks, sweat drops, sparkles.
 
-`scenes/vn_balloon.tscn` contains the *entire* UI as plain nodes you can open and edit in the
-Godot editor (theme, margins, sprite slots, name plate, indicator animation, the response
-button template, even the `MutationCooldown` timer). `scenes/vn_balloon.gd` only adds
-behaviour — it creates **no** nodes, adds **no** children and instantiates **no** scenes (the
-test-suite asserts this). All node references use `%UniqueName` lookups.
+- **🔊 Sound Effects Suite**:
+  - Core UI SFX included in `assets/sfx/`: `click.ogg`, `open.ogg`, `close.ogg`, `confirm.ogg`, `save.ogg`, `error.ogg`.
+  - Inline sound triggers: `#sfx=click`, `#sfx=save`, `#sfx=confirm`.
+  - Clean audio director with sound volume controls and procedural audio generator.
 
-## Wiring
+- **📖 Dialogue Scripting (Dialogue Manager)**:
+  - Intuitive dialogue syntax powered by Nathan Hoad's Dialogue Manager.
+  - Dynamic branching with nested choice trees.
+  - Character speaker labels, typewriter text with customizable typing speed.
 
-- Autoloads: `GameState` (story state) + `DialogueManager` (addon runtime).
-- Project setting `dialogue_manager/runtime/balloon_path = res://scenes/vn_balloon.tscn`
-  makes `DialogueManager.show_dialogue_balloon(...)` use the custom balloon.
-- The balloon implements DM's contract: `start(resource, cue, extra_game_states)`.
-- `scenes/vn_scene.tscn` is the runnable demo (also the main scene).
+- **💾 Save / Load & History Rollback**:
+  - Kirikiri / Ren'Py style system row (`QS`, `QL`, `Save`, `Load`, `Auto`, `Skip`, `Log`).
+  - Unlimited save slots with thumbnails, timestamps, and save preview.
+  - Non-destructive history backlog (`H` key or `Log` button): scroll back to any previous line and restore stage/state.
 
-## Stage-direction tags (DM v4 syntax: `[#tag, #tag=value]`)
+- **🗺️ Route Graph & Boss Screen**:
+  - Visual route flowchart to map out story branches and choices.
+  - Panic / Boss key (`F12`) instantly displays a quantum physics lecture decoy screen.
 
-| tag | effect |
-| --- | --- |
-| `[#bg=key]` / `[#bg=none]` | switch / clear background (keys of `backgrounds` on the balloon) |
-| `[#sprite=key:left\|right]`, `[#sprite=none:slot]` | show / clear a portrait (keys of `sprites`) |
-| `[#focus=left\|right]` | spotlight one slot, dim the other |
-| `[#box=hide]` / `[#box=show]` | hide / show the dialogue box for pure stage moments |
+---
 
-### Short staging tags (movable actors, 3D stage, animation, video)
+## 📁 Project Directory Structure
 
-Full cheat sheet: **`docs/STAGING.md`**; demo: `examples/staging_demo.dialogue`. The 2D stage is no longer limited to `SpriteLeft` / `SpriteRight`: any number of short-tag actors can share the stage with the legacy pair (the shipped intro keeps a silent third bystander next to Maya and Rook, and the test suite puts twelve sprites on the 2D stage at once).
-
-| tag | effect |
-| --- | --- |
-| `#show=maya[:look][@place]` | show a character / change look / snap to a place |
-| `#move=maya@place` · `@x y` · `?by=dx dy` (`?t=0.8`) | walk/slide (tweened) |
-| `#hide=maya[@off_left]` | remove, optionally walking off first |
-| `#focus=maya` | spotlight any actor (legacy `left`/`right` still work) |
-| `#anim=maya:wave` | play an animation authored on the character |
-| `#video=intro[:stop]` (`?loop`, `?on=maya`) | Ogg Theora video on the stage or on a character |
-| `#stage=classroom` / `#stage=2d` | switch to a 3D stage scene (`scenes/stages/`) and back |
-
-2D places are the anchors under `Balloon/Stage/Anchors`; 3D places are the `Marker3D`
-nodes under a stage scene's `Marks`. Characters are `ActorDefinition` resources
-(`characters/*.tres`). Klima's advanced motion tags (`#tween=` `#set=` `#shake=` `#nla=`
-`#sprite3d=` `#place3d=` `#target=`) run on the same `StageDirector`
-(`scenes/motion/`). Every accepted presentation command is recorded in story order per
-history entry and replayed on rollback / load / route travel (end poses).
-
-![3D stage](docs/18_staging_3d.webp)
-![2D actors](docs/19_staging_2d.webp)
-
-Dialogue also uses v4 features: `{{var}}` interpolation, `do x = true` mutations, `if/else`,
-cues (`~ start`, `~ rooftop`), choices, and `[speed=0.5]...[/speed]` bbcode. See
-`dialogue/intro.dialogue`.
-
-## History & rollback
-
-Every shown line is logged into the balloon's `history` (text, character, the line's ID, a
-`GameState` snapshot, the dressed-stage keys and whether the line offered choices). The panel
-itself is authored in `vn_balloon.tscn` (`HistoryPanel` / `HistoryScroll` / `HistoryList` /
-`HistoryEntry` template); entries duplicate the template the same way the choices menu does,
-and the `ScrollContainer` scrolls with the mouse wheel or by moving focus.
-
-Rollback is **non-destructive** (Ren'Py-style): a `history_cursor` marks the line on screen,
-entries past it form a forward stack, and wheel-up / wheel-down roll the game back / forward
-one entry at a time. Advancing from a rolled-back position starts a new branch and drops the
-forward stack. Clicking an entry (or rolling the wheel):
-
-1. moves the cursor to that entry,
-2. restores the `GameState` snapshot (`snapshot()`/`restore()` in `autoloads/game_state.gd`),
-3. re-dresses the stage from the stored `#bg`/`#sprite`/`#focus` keys,
-4. re-fetches the line by ID and types it out again.
-
-Scope note: snapshots cover `GameState`'s exported variables; ephemeral balloon `locals` and
-other autoloads are not snapshotted.
-
-## Save / load, settings, pause & panic
-
-The bottom system row (authored in `vn_balloon.tscn`, `Balloon/BottomUI/SystemRow`) mirrors the
-control bars of Kirikiri / Ren'Py / Monogatari-style engines: `QS`/`QL` quick-save/load slot 0,
-`Save`/`Load` open the slot menu, `Auto`/`Skip` toggle modes (the button tints gold while on),
-`Log` opens the backlog, `Set` the settings panel, `Panic` the boss screen, `Map` the optional story map, and `< Choice` /
-`Choice >` jump back to the previous choice / forward to the next one (Kirikiri-style). The
-same actions work from the keyboard: `F5`/`F9` quick save/load, `Esc` or right-click pauses,
-`F12` panics, mouse wheel rolls the game back/forward through the backlog.
-
-Slots live in `user://saves/slot_<n>.json`, one file each — any number of them:
-
-```json
-{ "resource": "res://dialogue/intro.dialogue", "cursor": 7,
-  "meta": { "label": "Maya: Fine, you win...", "when": "2026-09-20T19:19:00",
-            "bg": "classroom", "left": "maya_smile", "right": "rook", "focus": "left" },
-  "history": [ {id, character, text, bg, left, right, focus, choices, state}, ... ] }
+```text
+├── addons/                  # Dialogue Manager addon
+├── assets/
+│   ├── backgrounds/         # Place your background images (.webp) here
+│   ├── characters/          # Place your character sprites (.webp) here
+│   ├── fonts/               # DejaVu Serif typography
+│   ├── music/               # Place your custom BGM loops here
+│   ├── sfx/                 # Preserved UI sound effects (click, open, close, confirm, save, error)
+│   └── voices/              # Optional voice acting audio clips
+├── autoloads/
+│   ├── audio_director.gd    # Sound & audio management
+│   └── game_state.gd        # Story variables, flags, and rollback snapshotting
+├── dialogue/
+│   └── milka.dialogue       # Starter scenario script
+├── scenes/
+│   ├── vn_balloon.tscn      # Milk droplet dialogue balloon & UI
+│   ├── vn_balloon.gd        # Balloon presentation controller
+│   ├── vn_scene.tscn        # Main VN startup scene
+│   ├── panic_screen.tscn    # Boss / decoy screen
+│   └── route_graph/         # Route graph visualizer
+├── icon.svg                 # Milka VN carton & droplet icon
+└── project.godot            # Godot 4 engine configuration
 ```
 
-The save menu lists every slot file found on disk (sorted, labelled with the saved line and
-timestamp) and shows a **thumbnail** per slot: no image data is stored in the JSON — the menu
-composes a small 160x90 `ImageTexture` at runtime from the stage keys in `meta` (background +
-sprite portraits, cached per unique stage) and sets it as the row's icon. `+ New slot` creates
-the next free index and saves into it. Loading parses a slot, restores `dialogue_resource`,
-replaces the backlog and rolls back to the saved cursor — story state, stage dressing and the
-current line all come back through the same code path the history panel uses. A toast confirms
-each action.
+---
 
-**Settings** (`Set`): a scrolling, sectioned screen with everything a VN player expects —
-*Text*: speed (typewriter seconds-per-step), size (applied to the dialogue and name labels),
-optional sync of the typewriter to the voice clip length,
-skip speed, skip-everything vs skip-seen-only, auto delay; *Display*: UI scale (scales only
-the UI subtree — the background and character sprites stay untouched — while the settings
-margins shrink with the scale so the panel keeps a constant, usable width at any size),
-fullscreen, V-Sync, a resolution dropdown of presets (1280×720 … 2560×1440) plus a custom
-width/height accepting any positive numbers (custom sizes flip the dropdown to "Custom",
-matching sizes re-select their preset; a higher resolution keeps the same layout size and
-draws it at the window's pixel density, so the UI and sprites stay the same size without being stretched.
-The panic page uses that same scale, and when it replaces the game it also uses the saved rotation), **Glyph scale** for the story map (1×–4×, how many texels each symbol is baked with; the atlas grows to fit, capped at 4096), and texture filtering for the game art and for the map (nearest, linear, or with mipmaps); *Audio*: the **Generated music** toggle
-(procedural engine vs. bundled OGG loops), **Typewriter sound** and **Button sound**
-toggles, plus master, music, voice and SFX volumes driving runtime-created buses
-(100 = 0 dB; **0 switches that subsystem off**, not just down: music stops generating and its loops stop, SFX and typewriter blips are not synthesized or played, voice clips are not loaded, and Master 0 switches all of them off and mutes the Master bus; raising the level resumes the music the story last asked for); *Sprites*: character-sprite scale
-(pivoted at the bottom centre) and a Y offset, independent of the UI scale. UI scale and skip speed each have a number field beside the slider; the skip number is the delay in seconds (the slider still reads as speed, right is faster). Every slider except volume has a wider range, and every slider is taller so it is easier to press. In a portrait view the character sprites are larger and set apart, and the speaker stands in front of the other portrait, still behind the dialogue UI. Changing that speaker's expression brings their portrait forward even when the line does not repeat the focus tag. Every control
-applies live and is
-persisted to `user://settings.json`, and lines the player has read are recorded in
-`user://seen.json` so seen-only skip knows where to halt. The panel notes that `Esc` closes
-it; `docs/12_settings_at_150.webp` shows it at 150% UI scale, still fully usable.
+## 📝 Writing Dialogue
 
-**Voices**: every spoken line in `dialogue/intro.dialogue` tags its clip with `#voice=key`;
-the balloon plays it through an authored `VoicePlayer` node routed to the Voice bus (so the
-Voice volume slider governs it) and stops it whenever an unvoiced line shows. Clips live in
-`assets/voices/*.ogg`, one per character voice; a missing clip simply stays silent. **Pause** (`Esc` / right click) freezes the typewriter and offers Resume / History /
-Save / Load / Settings / Quit.
-**Panic** (`F12` / `Panic`) loads `scenes/panic_screen.tscn` — an opaque, completely unrelated physics-lecture page you can redesign on its own — and swallows every input except the boss key itself. Closing it loads the game back at the same line, backlog place, stage and story state.
+Create or edit `.dialogue` files in the `dialogue/` folder:
 
-**Music & SFX**: the `AudioDirector` autoload owns everything audible that is not a
-voice clip. Music plays two interchangeable ways: `play_theme(&"calm"|"warm"|"tense"|"night")`
-renders a procedural score at runtime into an `AudioStreamGenerator` (pad chords, bass pulse,
-arpeggio — samples are synthesized on the fly from a seeded RNG, so runs are reproducible),
-while `play_music_loop(path)` crossfades to a short seamless OGG loop; turn off *Generated
-music* in Settings and the same themes fall back to mood-matched loops instead. Dialogue
-tags drive both: `#music=calm`, `#music=loop:night`, `#music=stop`. SFX resolve per key —
-`#sfx=confirm` plays `assets/sfx/confirm.ogg`, and any key without a file gets a runtime
-synthesized blip (typewriter ticks, UI clicks, sweeps, chimes and buzzes all synthesize this
-way). Every choice plays its own pitch (ascending per option index) so picking options
-audibly steps, and a response can name its own clip with `#sfx=`, e.g.
-`- Duck! #sfx=confirm`. Everything routes through the Music / SFX buses the sliders
-already govern, the **Typewriter sound** / **Button sound** toggles gate the ticks and
-the UI feedback (story `#sfx=` tags ignore the button toggle), and Pause / Panic keep
-ducking the Master bus exactly as before.
+```dialogue
+~ start
 
-**Dismissing menus**: every menu (history, save/load, settings, pause) closes after a
-**press-and-hold on the empty space** around its content — a big golden ring fills on the finger (including when the UI is scaled
-or the view is rotated) and a continuous tone falls from high to low pitch while growing louder to
-its end, so the sound itself indicates hold progress; release once the ring completes
-and the menu closes. Quick taps
-do nothing (accidental-tap protection) and any swipe/drag beyond 10 px cancels the hold
-silently, so touch scrolling through long histories and slot lists is completely
-unaffected. Menus themselves scroll by swiping: rows and key/rotation buttons pass drags
-to their ScrollContainer (with a 24 px deadzone) so swipes pan the list, while a tap on a
-row still activates it — a press that moves never triggers the button under your finger.
-`Esc` and the save menu's own `X` still work. Close is its own binding, separate from Pause; both start on Esc, and an open menu backs out instead of also pausing. Backspace stays free for number fields. The
-panic screen deliberately keeps its strict swallow-all behavior — only the boss key or its
-corner X leave it.
+Narrator: Welcome to Milka VN! 🥛 #sfx=open
+Character: Milk-themed dialogue looks soft, clean, and delicious! #sfx=confirm
 
-**Mobile**: `input_devices/pointing/emulate_mouse_from_touch = true` is enabled in
-`project.godot`, so touch taps become the mouse clicks the balloon already understands; all
-system-row buttons are authored ≥ 44 px tall touch targets. On the story map, one finger drags to pan and a pinch zooms around the fingers.
+- What should we do next?
+	Character: Let's explore the story paths! #anim=bounce #sfx=click
+- Tell me more about animations
+	Character: Sprites can bounce, shake, or slide smoothly! #anim=shake
 
-## Run it
-
-```bash
-# import assets / compile dialogue (headless)
-Godot_v4.7.2-stable_linux.x86_64 --headless --import
-
-# play (needs a display; use xvfb-run on a server)
-Godot_v4.7.2-stable_linux.x86_64 res://scenes/vn_scene.tscn
+Narrator: Thank you for playing. #sfx=save
+=> END
 ```
 
-Default controls: `Enter` / click / tap = finish the typewriter, then advance, or pick a focused choice, `↓/↑` = move between
-choices, `Ctrl` = hold to skip, `Esc` = close the top overlay (its own binding, not the Pause action), `H` or swipe up =
-open history, wheel / arrow keys = scroll the history, click a history line = roll back to it,
-wheel up / down in-game = roll back / forward one line, `F5` / `QS` =
-quick save, `F9` / `QL` = quick load, `Save`/`Load` = slot menus, `Auto`/`Skip` = modes,
-`< Choice`/`Choice >` = jump to previous/next choice, `Esc` or right-click = pause,
-`F12` / `Panic` = boss screen. Every keyboard action can be rebound in Settings: click its
-binding button, then press the desired key.
+### Staging Tags Cheat Sheet
 
-## Test & verify
+| Tag | Description | Example |
+|---|---|---|
+| `#bg=<name>` | Set stage background | `#bg=cafe` |
+| `#sprite=<name>:<slot>` | Show character sprite in slot | `#sprite=alice:left` |
+| `#focus=<slot>` | Spotlight one slot and dim others | `#focus=left` |
+| `#anim=<type>` | Trigger 2D animation on active sprite | `#anim=bounce` / `#anim=shake` |
+| `#sfx=<name>` | Play sound effect from `assets/sfx/` | `#sfx=confirm` |
+| `#box=hide` / `#box=show` | Hide or show dialogue text box | `#box=hide` |
 
-```bash
-./run_tests.sh            # import + per-script checks + headless UI and route-graph suites
+---
+
+## ⌨️ Controls & Shortcuts
+
+| Action | Key / Input |
+|---|---|
+| **Advance Dialogue** | `Enter` / `Space` / Left Click |
+| **Skip Text** | `Ctrl` / Skip Button |
+| **Auto Play** | `Auto` Button |
+| **History (Backlog)** | `H` / Up Swipe / `Log` Button |
+| **Quick Save** | `F5` / `QS` Button |
+| **Quick Load** | `F9` / `QL` Button |
+| **Pause Menu** | `Esc` / Right Click |
+| **Panic / Boss Key** | `F12` |
+
+---
+
+## 🚀 Running the Project
+
+1. Open **Godot 4.3+** (or Godot 4.7).
+2. Import `project.godot`.
+3. Press **F5** to run the project.
+
+Enjoy building your dream visual novel with **Milka VN**! 🥛✨
+
+## 🎨 Placeholder Assets (Ready to Replace)
+
+The project includes milk-themed SVG placeholder art that you can replace with your own:
+
+### 🖼️ Backgrounds (`assets/backgrounds/`)
+- `milky_meadow.svg` - Pastel lilac meadow with rolling hills
+- `cafe_parlor.svg` - Warm cream café interior with window
+- `starry_night.svg` - Deep purple night sky with moon and stars
+
+Replace these with your own `.webp` backgrounds (the original engine expects WebP).
+
+### 🧑 Character Sprites (`assets/characters/`)
+- `milka_chan.svg` - Neutral expression
+- `milka_chan_smile.svg` - Happy smiling face  
+- `milka_chan_surprised.svg` - Surprised expression
+
+All use the same character design with different facial expressions. Replace with your own character art and update the `sprites` dictionary in `scenes/vn_balloon.tscn`.
+
+### 📝 Writing Your Own Story
+Edit `dialogue/milka.dialogue` or create a new `.dialogue` file. Use these tags:
+- `#bg=<name>` - Set background (e.g., `#bg=milky_meadow`)
+- `#sprite=<name>:<slot>` - Show character (e.g., `#sprite=milka_chan_smile:center`)
+- `#anim=bounce|shake|nod|sway|jump` - 2D animation
+- `#sfx=click|open|close|confirm|save|error` - Play preserved SFX
+- `- "Choice text"` - Branching dialogue
+
+## 🎬 Title Screen (milk-glass UI)
+The game starts with `scenes/title_screen.tscn` — a fully scene-authored main
+menu (no scene-builder script; `title_screen.gd` only wires buttons):
+
+- transparent white milk-glass buttons over a warm white/grey sky with honey
+  glints and soft grey milk waves (white/grey/yellowish palette)
+- milk droplets that gently fall and sway (12 s ambient loop, all in-scene)
+- SVG ornaments everywhere: droplet trio divider, corner droplet clusters
+- Crema, the animated milk-droplet character (idle breathing + blinking + expressions)
+- shared `assets/ui/milk_glass_theme.tres` theme for Buttons/Panels
+
+Screenshots: `docs/screenshots/`.
+
+## ⚙️ Settings (shared between title and game)
+`scenes/ui/settings_panel.tscn` is a milk-glass settings dialog used by the
+title screen; it reads and writes `user://settings.json` through the
+`SettingsStore` autoload — the same file the in-game settings panel uses —
+so language, fullscreen, V-Sync and volumes apply everywhere. The title's
+Continue button resumes the newest save slot (`user://saves/slot_*.json`).
+
+## 🐄 Animated Character: Crema
+`scenes/character/crema.tscn` is a reusable 2D droplet character:
+breathing idle loop, random blinking, `set_expression("neutral"|"happy"|"surprised")`,
+`greet()` hop. Preview it via `scenes/character/character_showcase.tscn`.
+
+## 📸 Screenshots (headless sway + pixman)
+```
+sway -c <(echo 'output HEADLESS-1 mode 1280x720') &
+godot --path . --script res://tools/capture_title.gd -- \
+    --scene res://scenes/title_screen.tscn --out shot.png --frames 90
 ```
 
-`tests/motion_director_test.tscn` (StageDirector) and `tests/test_staging.tscn` (short tags,
-parser contract, many actors, 3D markers, stage switching, video restore rules, ordered
-history restore, old saves, route travel, docs examples) run as part of it.
+## 🔊 Preserved Sound Effects
+All original demo music was removed, but these UI sound effects are preserved in `assets/sfx/`:
+- `click.ogg` - Button click
+- `open.ogg` - Menu open
+- `close.ogg` - Menu close
+- `confirm.ogg` - Confirmation chime
+- `save.ogg` - Save success
+- `error.ogg` - Error buzz
 
-The suite (`tests/test_vn_ui.gd`) drives the *real* balloon with synthetic keyboard input and
-checks: authored-scene structure, no code-built UI, balloon routing via project setting,
-tags → stage, typewriter + skip, next indicator, choices via keyboard, mutations, conditions,
-cue jumps, `dialogue_ended`, balloon self-freeing, history & rollback, quick save/load (slot 0),
-the save/load slot menu (New slot, slot rows, mode titles, Esc-close), settings sliders
-(persisted + applied live), auto mode advancing on its own, skip mode running to choices and
-stopping there, pause freezing input and resuming cleanly (with its Quit entry present), the
-panic screen swallowing everything except the boss key, the fullscreen preference persisting,
-and a mobile swipe-up opening the history without advancing the dialogue. v1.5 adds checks
-for the Ren'Py-style wheel (roll back one line, roll forward again), the scrolling backlog
-panel, the Kirikiri `< Choice` / `Choice >` jumps, and runtime-rendered slot thumbnails with
-no image data persisted in the saves. v1.6 adds checks for the full settings surface: text
-size applied to both labels, skip speed driving the skip timer, both skip modes, UI scale on
-the window, resolution presets ↔ custom spinbox sync with persistence of any custom positive
-size, V-Sync persistence, the runtime audio buses with dB conversion and mute at zero, the
-scrolling settings container, and seen-only skip advancing through read lines and halting
-with a toast on the first unread line. v1.7 checks that UI scaling touches only the UI
-subtree (the stage and sprites keep their authored size), that the settings column keeps a
-constant rendered width as the scale grows, and that the separate sprite scale / Y offset
-settings apply to both sprites and persist. v1.8 checks that a voiced line actually plays on
-the Voice bus, that unvoiced narration stops it, that every `#voice=` clip is loadable, and
-that the WebP-swapped backgrounds still switch and re-dress on rollback. v1.8.1 adds
-regressions for the two field bugs it fixes: portraits keep their authored height (the
-sprite Y offset is a delta on the authored rect, never a flatten), and settings rows fill
-the scrollable column instead of stopping at their minimum width. v1.9 adds the optional
-"Sync text to voice" pacing: with it on, a voiced line's typewriter speed is derived from
-the clip length so typing ends as the voice does, and the checks assert both the paced
-value and the fallback to the configured text speed. v1.10 enables BBCode-styled dialogue
-(the typewriter label renders the markup while the backlog and save labels store it
-stripped), ships the user documentation set, and stores the doc screenshots as WebP.
-v1.11 anchors the choice menu in a band above the dialogue box (it could slip behind the
-box on tall/portrait windows), adds the settings close button and the portrait reflow,
-and the repo history was purged of the pre-WebP PNG blobs. v1.12 sizes the choices band to
-the menu at show time (parked just above the box, clamped on-screen at any window size),
-widens the landscape settings column, and adds the force-portrait setting so the portrait
-layout is testable without window rotation. v1.13 puts the dialogue box/system row *below*
-the overlay panels (their old top-most z-order silently swallowed taps on the lower
-settings rows, e.g. the sprite sliders) and adds four rotation buttons (0/90/180/270) that
-rotate the whole view — rotation also flips the logical resolution's X/Y, so the turned
-view fills the window exactly (no letterbox gaps), and 90/270 flip the effective
-orientation, giving a true portrait preview on engines/windows that never rotate. v1.14 makes
-the bottom system row wrap onto as many lines as the logical width needs (narrow aspects,
-big UI scales), adds a Pause button to it for touch devices, and gives the panic page a
-scrollable layout plus a corner X so portrait phones can always leave it. The headless suite pins that
-layering, and `tools/capture_shots.gd` re-proves with a real pointer tap (under xvfb) that
-the sprite sliders slide again. The audio region asserts that every generated OGG
-stays under 20 KB, that the procedural scheduler queues notes and pushes rendered frames,
-that `#music=` / `#sfx=` tags route through the director (themes, loops, stop), that
-unknown SFX keys fall back to runtime synthesis, that the typewriter forwards per-character
-ticks, that the **Generated music** toggle persists and falls back to the loops, and that
-Pause/Resume keep the music state while the Master bus ducks. The sound-toggle region
-checks that **Typewriter sound** / **Button sound** gate their streams (story `#sfx=`
-tags stay audible), that both persist, that different choices play different pitches
-with `#sfx=` response tags overriding the clip, that an empty click dismisses each
-menu (and non-left clicks don't), and that the save/load menu `X` closes it.
-
-## Documentation
-
-- `docs/TUTORIAL.md` — how to play: controls, modes, saves, settings, styled text.
-- `docs/CUSTOMIZING.md` — swapping art/voices/story content, theming, settings ranges.
-- `docs/RECREATION.md` — rebuilding this balloon from scratch with Dialogue Manager,
-  layout blueprint and the pitfalls list.
-- `docs/STAGING.md` — short staging tags, places, characters, 3D stages, video, restore rules, Klima migration.
-- `ai_agent_docs/` — agent handoff notes, the edit plan and the test baseline.
-- `docs/ROUTE_GRAPH_DESIGN.md` — the optional story-map renderer (single-pass, one atlas fetch). The map marks where you are; a header click travels there; an edge click pans to the further of that edge's two nodes; **Visited only** hides unread routes until you approve spoilers.
-
-Rendered screenshots (under Xvfb + software GL):
-
-```bash
-xvfb-run -a -s "-screen 0 1280x720x24" Godot_v4.7.2-stable_linux.x86_64 \
-  --rendering-driver opengl3 --rendering-method gl_compatibility \
-  res://tools/capture_shots.tscn
-```
-
-## Notes / patches
-
-- `addons/dialogue_manager/utilities/theme_values.gd` carries one 2-line headless-compat
-  guard: `interface/editor/code_font_size` can be `Nil` outside the GUI editor, which crashed
-  the addon's editor UI on headless import. Everything else in `addons/` is stock v4.1.0.
-- The two "resources still in use at exit" lines you may see are teardown bookkeeping of the
-  *test harness* (forced `get_tree().quit()`); the game scene itself exits clean.
-- Art in `assets/` is AI-generated placeholder imagery (magenta-keyed to transparency for the
-  sprites); swap in your own WebP art (see `tests/check_assets.sh` — PNG/JPEG are rejected) and re-point the balloon's exported `backgrounds` /
-  `sprites` dictionaries in the inspector.
+The engine also includes a procedural audio synthesizer for dynamic sound generation.

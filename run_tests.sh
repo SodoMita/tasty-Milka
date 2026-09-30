@@ -62,12 +62,17 @@ echo "== Scanning logs for runtime errors =="
 grep -nE "SCRIPT ERROR|Parse Error|ERROR:" /tmp/vn_test.log /tmp/vn_route.log /tmp/vn_import.log /tmp/vn_panic.log /tmp/vn_motion.log /tmp/vn_staging.log | grep -v "errors_panel" || echo "  no script/parse errors found"
 
 echo
+echo "== Running shared settings-menu check (title + balloon use scenes/ui/settings_menu.tscn) =="
+"$GODOT" --headless res://tests/test_settings_menu.tscn 2>&1 | tee /tmp/vn_settings_menu.log
+SETTINGS_EXIT=${PIPESTATUS[0]}
+echo
 echo "ui exit code: $TEST_EXIT"
+echo "settings-menu exit code: $SETTINGS_EXIT"
 echo "route-graph exit code: $ROUTE_EXIT"
 echo "panic-return exit code: $PANIC_EXIT"
 echo "motion exit code: $MOTION_EXIT"
 echo "staging exit code: $STAGING_EXIT"
-if [ "$TEST_EXIT" -ne 0 ] || [ "$ROUTE_EXIT" -ne 0 ] || [ "$PANIC_EXIT" -ne 0 ] || [ "$MOTION_EXIT" -ne 0 ] || [ "$STAGING_EXIT" -ne 0 ]; then
+if [ "$TEST_EXIT" -ne 0 ] || [ "$ROUTE_EXIT" -ne 0 ] || [ "$PANIC_EXIT" -ne 0 ] || [ "$MOTION_EXIT" -ne 0 ] || [ "$STAGING_EXIT" -ne 0 ] || [ "$SETTINGS_EXIT" -ne 0 ]; then
   exit 1
 fi
 exit 0

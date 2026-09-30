@@ -1,0 +1,40 @@
+~ start
+Narrator: Welcome to Milka VN! 🥛 [#bg=milky_meadow, sfx=open]
+Narrator: A gentle breeze sweeps across the creamy meadow, carrying the sweet scent of fresh milk. [#sfx=confirm]
+
+Milka: "Nya~ Welcome traveler! I'm Milka-chan, your milky guide!" [#sprite=milka_chan_smile:center, anim=bounce, sfx=click]
+Milka: "I'm so excited to meet you today!"
+
+Milka: "This is just the beginning. You can write your own story now." [#sprite=milka_chan:center]
+Milka: "Replace my placeholder art with your own character sprites in 'assets/characters/'."
+
+- "Tell me about the backgrounds!"
+    Milka: "Look! This is the cozy café parlor background!" [#bg=cafe_parlor, sprite=milka_chan_smile:center, sfx=open]
+    Milka: "Replace these SVG placeholders with your own beautiful WebP backgrounds." [#sfx=confirm]
+    -> branch_continue
+
+- "What about animations?"
+    Milka: "Oh! Watch me shake with excitement!" [#sprite=milka_chan_surprised:center, anim=shake, sfx=error]
+    Milka: "And here's a cheerful bounce!" [#sprite=milka_chan_smile:center, anim=bounce, sfx=click]
+    Milka: "I can also nod thoughtfully~" [#anim=nod, sfx=confirm]
+    -> branch_continue
+
+- "Show me all the sound effects!"
+    Milka: "Let me play through all the preserved SFX!" [#sprite=milka_chan_smile:center, sfx=click]
+    Milka: "That's the save sound!" [#sfx=save]
+    Milka: "Menu open sound!" [#sfx=open]
+    Milka: "And close!" [#sfx=close]
+    Milka: "Finally, the confirmation chime!" [#sfx=confirm]
+    -> branch_continue
+
+~ branch_continue
+Milka: "Look, the starry night has arrived!" [#bg=starry_night, sprite=milka_chan_smile:center, sfx=open]
+
+Milka: "Now the stage is all yours." [#sprite=milka_chan:center]
+Milka: "Edit 'dialogue/milka.dialogue' to write your own story."
+Milka: "Add your characters to 'assets/characters/' and backgrounds to 'assets/backgrounds/'."
+
+Milka: "Thank you for choosing Milka VN! May your stories be as sweet as chocolate milk! ✨🥛" [#sprite=milka_chan_smile:center, anim=bounce, sfx=confirm]
+
+Narrator: [End of prologue — the stage is yours!]
+=> END

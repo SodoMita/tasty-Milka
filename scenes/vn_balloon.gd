@@ -154,57 +154,57 @@ const PRESENTATION_FORMAT := 1
 
 ## Settings
 @onready var settings_panel: PanelContainer = %SettingsPanel
-@onready var settings_scroll: ScrollContainer = %SettingsScroll
-@onready var text_speed_slider: HSlider = %TextSpeedSlider
-@onready var text_speed_value: Label = %TextSpeedValue
-@onready var text_size_slider: HSlider = %TextSizeSlider
-@onready var text_size_value: Label = %TextSizeValue
-@onready var skip_speed_slider: HSlider = %SkipSpeedSlider
-@onready var skip_speed_value: SpinBox = %SkipSpeedValue
-@onready var skip_mode_option: OptionButton = %SkipModeOption
-@onready var advance_key_button: Button = %AdvanceKeyButton
-@onready var skip_key_button: Button = %SkipKeyButton
-@onready var close_key_button: Button = %CloseKeyButton
-@onready var history_key_button: Button = %HistoryKeyButton
-@onready var quick_save_key_button: Button = %QuickSaveKeyButton
-@onready var quick_load_key_button: Button = %QuickLoadKeyButton
-@onready var pause_key_button: Button = %PauseKeyButton
-@onready var panic_key_button: Button = %PanicKeyButton
-@onready var auto_delay_slider: HSlider = %AutoDelaySlider
-@onready var auto_delay_value: Label = %AutoDelayValue
-@onready var ui_scale_slider: HSlider = %UIScaleSlider
-@onready var ui_scale_value: SpinBox = %UIScaleValue
-@onready var settings_margin: MarginContainer = %SettingsMargin
+@onready var settings_scroll: ScrollContainer = get_node("%SettingsPanel/%SettingsScroll")
+@onready var text_speed_slider: HSlider = get_node("%SettingsPanel/%TextSpeedSlider")
+@onready var text_speed_value: Label = get_node("%SettingsPanel/%TextSpeedValue")
+@onready var text_size_slider: HSlider = get_node("%SettingsPanel/%TextSizeSlider")
+@onready var text_size_value: Label = get_node("%SettingsPanel/%TextSizeValue")
+@onready var skip_speed_slider: HSlider = get_node("%SettingsPanel/%SkipSpeedSlider")
+@onready var skip_speed_value: SpinBox = get_node("%SettingsPanel/%SkipSpeedValue")
+@onready var skip_mode_option: OptionButton = get_node("%SettingsPanel/%SkipModeOption")
+@onready var advance_key_button: Button = get_node("%SettingsPanel/%AdvanceKeyButton")
+@onready var skip_key_button: Button = get_node("%SettingsPanel/%SkipKeyButton")
+@onready var close_key_button: Button = get_node("%SettingsPanel/%CloseKeyButton")
+@onready var history_key_button: Button = get_node("%SettingsPanel/%HistoryKeyButton")
+@onready var quick_save_key_button: Button = get_node("%SettingsPanel/%QuickSaveKeyButton")
+@onready var quick_load_key_button: Button = get_node("%SettingsPanel/%QuickLoadKeyButton")
+@onready var pause_key_button: Button = get_node("%SettingsPanel/%PauseKeyButton")
+@onready var panic_key_button: Button = get_node("%SettingsPanel/%PanicKeyButton")
+@onready var auto_delay_slider: HSlider = get_node("%SettingsPanel/%AutoDelaySlider")
+@onready var auto_delay_value: Label = get_node("%SettingsPanel/%AutoDelayValue")
+@onready var ui_scale_slider: HSlider = get_node("%SettingsPanel/%UIScaleSlider")
+@onready var ui_scale_value: SpinBox = get_node("%SettingsPanel/%UIScaleValue")
+@onready var settings_margin: MarginContainer = get_node("%SettingsPanel/%SettingsMargin")
 @onready var ui_root: Control = %UIRoot
-@onready var sprite_scale_slider: HSlider = %SpriteScaleSlider
-@onready var sprite_scale_value: Label = %SpriteScaleValue
-@onready var sprite_y_slider: HSlider = %SpriteYSlider
-@onready var sprite_y_value: Label = %SpriteYValue
-@onready var sync_voice_check: CheckBox = %SyncVoiceCheck
+@onready var sprite_scale_slider: HSlider = get_node("%SettingsPanel/%SpriteScaleSlider")
+@onready var sprite_scale_value: Label = get_node("%SettingsPanel/%SpriteScaleValue")
+@onready var sprite_y_slider: HSlider = get_node("%SettingsPanel/%SpriteYSlider")
+@onready var sprite_y_value: Label = get_node("%SettingsPanel/%SpriteYValue")
+@onready var sync_voice_check: CheckBox = get_node("%SettingsPanel/%SyncVoiceCheck")
 @onready var settings_close_button: Button = %SettingsCloseButton
-@onready var settings_vbox: VBoxContainer = %SettingsVBox
-@onready var portrait_check: CheckBox = %PortraitCheck
-@onready var language_option: OptionButton = %LanguageOption
+@onready var settings_vbox: VBoxContainer = get_node("%SettingsPanel/%SettingsVBox")
+@onready var portrait_check: CheckBox = get_node("%SettingsPanel/%PortraitCheck")
+@onready var language_option: OptionButton = get_node("%SettingsPanel/%LanguageOption")
 @onready var responses_center: CenterContainer = %ResponsesCenter
-@onready var fullscreen_check: CheckBox = %FullscreenCheck
-@onready var vsync_check: CheckBox = %VsyncCheck
-@onready var resolution_option: OptionButton = %ResolutionOption
-@onready var res_width_spin: SpinBox = %ResWidthSpin
-@onready var res_height_spin: SpinBox = %ResHeightSpin
-@onready var glyph_scale_option: OptionButton = %GlyphScaleOption
-@onready var game_filter_option: OptionButton = %GameFilterOption
-@onready var map_filter_option: OptionButton = %MapFilterOption
-@onready var master_vol_slider: HSlider = %MasterVolSlider
-@onready var master_vol_value: Label = %MasterVolValue
-@onready var music_vol_slider: HSlider = %MusicVolSlider
-@onready var music_vol_value: Label = %MusicVolValue
-@onready var voice_vol_slider: HSlider = %VoiceVolSlider
-@onready var voice_vol_value: Label = %VoiceVolValue
-@onready var sfx_vol_slider: HSlider = %SfxVolSlider
-@onready var sfx_vol_value: Label = %SfxVolValue
-@onready var procedural_music_check: CheckBox = %ProceduralMusicCheck
-@onready var typewriter_sfx_check: CheckBox = %TypewriterSfxCheck
-@onready var button_sfx_check: CheckBox = %ButtonSfxCheck
+@onready var fullscreen_check: CheckBox = get_node("%SettingsPanel/%FullscreenCheck")
+@onready var vsync_check: CheckBox = get_node("%SettingsPanel/%VsyncCheck")
+@onready var resolution_option: OptionButton = get_node("%SettingsPanel/%ResolutionOption")
+@onready var res_width_spin: SpinBox = get_node("%SettingsPanel/%ResWidthSpin")
+@onready var res_height_spin: SpinBox = get_node("%SettingsPanel/%ResHeightSpin")
+@onready var glyph_scale_option: OptionButton = get_node("%SettingsPanel/%GlyphScaleOption")
+@onready var game_filter_option: OptionButton = get_node("%SettingsPanel/%GameFilterOption")
+@onready var map_filter_option: OptionButton = get_node("%SettingsPanel/%MapFilterOption")
+@onready var master_vol_slider: HSlider = get_node("%SettingsPanel/%MasterVolSlider")
+@onready var master_vol_value: Label = get_node("%SettingsPanel/%MasterVolValue")
+@onready var music_vol_slider: HSlider = get_node("%SettingsPanel/%MusicVolSlider")
+@onready var music_vol_value: Label = get_node("%SettingsPanel/%MusicVolValue")
+@onready var voice_vol_slider: HSlider = get_node("%SettingsPanel/%VoiceVolSlider")
+@onready var voice_vol_value: Label = get_node("%SettingsPanel/%VoiceVolValue")
+@onready var sfx_vol_slider: HSlider = get_node("%SettingsPanel/%SfxVolSlider")
+@onready var sfx_vol_value: Label = get_node("%SettingsPanel/%SfxVolValue")
+@onready var procedural_music_check: CheckBox = get_node("%SettingsPanel/%ProceduralMusicCheck")
+@onready var typewriter_sfx_check: CheckBox = get_node("%SettingsPanel/%TypewriterSfxCheck")
+@onready var button_sfx_check: CheckBox = get_node("%SettingsPanel/%ButtonSfxCheck")
 
 ## Pause + panic
 @onready var pause_panel: PanelContainer = %PausePanel
@@ -217,6 +217,8 @@ var _panic_place: Dictionary = {}
 
 ## Bottom system row (wraps on narrow aspects / big UI scales)
 @onready var bottom_ui: Control = %BottomUI
+@onready var hide_ui_button: Button = %HideUIButton
+@onready var reveal_ui_button: Button = %RevealUIButton
 @onready var system_row: GridContainer = %SystemRow
 @onready var pause_button: Button = %PauseButton
 @onready var route_button: Button = %RouteButton
@@ -300,9 +302,10 @@ const CHOICE_PITCHES: Array[float] = [1.0, 1.12, 1.26, 1.33, 1.5]
 ## ignored (accidental-tap protection) and a swipe/move cancels so dragging to
 ## scroll still works. The ring appears after HOLD_APPEAR and closes the menu
 ## when released at/after HOLD_SECONDS.
-const HOLD_SECONDS: float = 0.55
-const HOLD_APPEAR: float = 0.12
-const HOLD_CANCEL_DIST: float = 10.0
+const HoldTiming = preload("res://scenes/ui/hold_timing.gd")
+const HOLD_SECONDS: float = HoldTiming.SECONDS
+const HOLD_APPEAR: float = HoldTiming.APPEAR
+const HOLD_CANCEL_DIST: float = HoldTiming.CANCEL_DIST
 
 var _hold_active: bool = false
 var _hold_elapsed: float = 0.0
@@ -557,6 +560,14 @@ func start(with_dialogue_resource: DialogueResource = null, cue: String = "", ex
 	if not cue.is_empty():
 		start_from_cue = cue
 	show()
+	# Title "Continue": resume the requested save slot instead of the cue.
+	var game_state := get_node_or_null("/root/GameState")
+	if game_state != null and int(game_state.get("pending_resume_slot")) >= 0:
+		var resume_slot := int(game_state.get("pending_resume_slot"))
+		game_state.pending_resume_slot = -1
+		if FileAccess.file_exists(_slot_path(resume_slot)):
+			load_from_slot(resume_slot)
+			return
 	# Ambient music under the conversation; tagged #music= lines override this.
 	if audio != null and audio.music_source == "" and not audio.has_music_request():
 		audio.play_theme(&"calm")
@@ -1384,17 +1395,9 @@ func _handle_pause_or_close(event: InputEvent) -> bool:
 
 ## Sliders are short by default and easy to miss. Volume keeps its 0-100 range.
 func _prepare_sliders() -> void:
-	var track := StyleBoxFlat.new()
-	track.bg_color = Color(0.12, 0.14, 0.22, 1)
-	track.corner_radius_top_left = 6
-	track.corner_radius_top_right = 6
-	track.corner_radius_bottom_right = 6
-	track.corner_radius_bottom_left = 6
-	track.content_margin_top = 14
-	track.content_margin_bottom = 14
-	var fill := track.duplicate() as StyleBoxFlat
-	fill.bg_color = Color(0.83, 0.68, 0.36, 1)
-	_style_sliders(settings_vbox, track, fill)
+	# Track, fill and droplet grabber come from the shared milk-glass theme
+	# (assets/ui/milk_glass_theme.tres), same as the title-screen settings menu.
+	_style_sliders(settings_vbox, null, null)
 	ui_scale_value.min_value = ui_scale_slider.min_value
 	ui_scale_value.max_value = ui_scale_slider.max_value
 	ui_scale_value.step = ui_scale_slider.step
@@ -1415,9 +1418,10 @@ func _style_sliders(node: Node, track: StyleBox, fill: StyleBox) -> void:
 		if child is HSlider:
 			var slider := child as HSlider
 			slider.custom_minimum_size.y = 44
-			slider.add_theme_stylebox_override("slider", track)
-			slider.add_theme_stylebox_override("grabber_area", fill)
-			slider.add_theme_stylebox_override("grabber_area_highlight", fill)
+			if track != null:
+				slider.add_theme_stylebox_override("slider", track)
+				slider.add_theme_stylebox_override("grabber_area", fill)
+				slider.add_theme_stylebox_override("grabber_area_highlight", fill)
 			slider.add_theme_constant_override("center_grabber", 1)
 		_style_sliders(child, track, fill)
 
@@ -1461,6 +1465,8 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 		return
 	if not is_instance_valid(balloon) or not balloon.is_visible_in_tree() or _panic_open():
+		return
+	if not bottom_ui.visible:
 		return
 	# Close and Pause are separate actions, so each can be rebound. They may
 	# both default to Esc. An open overlay closes and does not also pause.
@@ -1688,6 +1694,10 @@ func _save_settings() -> void:
 		"sfx_buttons": button_sfx_check.button_pressed,
 	}))
 	file.close()
+	# Keep the shared store (title-screen settings menu) in sync with this write.
+	var store := get_node_or_null("/root/SettingsStore")
+	if store != null:
+		store.load_settings()
 
 
 func _on_text_speed_changed(v: float) -> void:
@@ -1932,8 +1942,7 @@ const UI_TEXT_KEYS: Array = [
 	["SettingsHint", "Settings are saved automatically. Use Close or X to exit."],
 	["PauseTitle", "Paused"], ["ResumeButton", "Resume"], ["PauseHistoryButton", "History"],
 	["PauseSaveButton", "Save"], ["PauseLoadButton", "Load"], ["PauseSettingsButton", "Settings"],
-	["QuitButton", "Quit"], ["PanicTitle", "PHYS 201 - Quantum Mechanics II"],
-	["PanicBody", "Lecture 12: The time-independent Schroedinger equation. H psi = E psi, where H is the Hamiltonian operator. For a particle in a 1-D infinite well of width L the energy eigenvalues are E_n = n^2 h^2 / (8 m L^2). Reminder: problem set 4 is due Friday - problems 3.7, 3.9 and the derivation of the uncertainty principle for position and momentum."],
+	["QuitButton", "Quit"],
 	["HistoryTitle", "History"],
 	["HistoryHint", "Click a line to roll back to it - H or Esc closes"],
 ]
@@ -1944,7 +1953,11 @@ const UI_TEXT_KEYS: Array = [
 func _retranslate_dynamic() -> void:
 	for entry: Array in UI_TEXT_KEYS:
 		var n: Node = find_child(String(entry[0]), true, false)
-		if n != null and "text" in n:
+		if n is Button and (n as Button).theme_type_variation in [&"IconButton", &"IconButtonLarge"]:
+			# Icon actions keep their authored, auto-translated tooltips. Never
+			# turn them into text buttons when switching languages.
+			(n as Button).text = ""
+		elif n != null and "text" in n:
 			(n as Object).set("text", tr(String(entry[1])))
 	if is_instance_valid(skip_mode_option):
 		skip_mode_option.set_item_text(0, tr("Everything"))
@@ -2813,6 +2826,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		toggle_panic()
 		return
+	if not bottom_ui.visible:
+		return
 
 	# Handle these here as a fallback as well as in _input. Some embedded
 	# platforms route key events straight to unhandled_input after a focused
@@ -2914,6 +2929,8 @@ func _on_balloon_gui_input(event: InputEvent) -> void:
 		return
 	if _panic_open():
 		get_viewport().set_input_as_handled()
+		return
+	if not bottom_ui.visible:
 		return
 	if _try_system_actions(event):
 		return
@@ -3344,6 +3361,26 @@ func _resource_has_key(resource, key: String) -> bool:
 	return false
 
 
+## Hide the dialogue UI, not the stage. Keep a small reveal affordance outside
+## BottomUI so touch users can always restore the interface.
+func _on_hide_ui_pressed() -> void:
+	bottom_ui.hide()
+	reveal_ui_button.show()
+	auto_timer.stop()
+	skip_timer.stop()
+	_sfx("close")
+	reveal_ui_button.grab_focus()
+
+
+func _on_show_ui_pressed() -> void:
+	reveal_ui_button.hide()
+	bottom_ui.show()
+	_sfx("open")
+	balloon.grab_focus()
+	if auto_mode and is_waiting_for_input:
+		auto_timer.start(auto_delay)
+
+
 func _on_panic_pressed() -> void:
 	toggle_panic()
 
@@ -3375,6 +3412,20 @@ func _on_pause_settings_pressed() -> void:
 	dialogue_label.set_process(true)
 	_open_overlay(settings_panel)
 	text_speed_slider.grab_focus()
+
+
+func _on_pause_title_pressed() -> void:
+	# Clear pause's global bus mute before freeing the balloon. Otherwise the
+	# title and the next story would remain silent.
+	pause_panel.hide()
+	auto_timer.stop()
+	skip_timer.stop()
+	voice_player.stop()
+	_silence_audio(false)
+	var state := get_node_or_null("/root/GameState")
+	if state != null:
+		state.pending_resume_slot = -1
+	get_tree().change_scene_to_file("res://scenes/title_screen.tscn")
 
 
 func _on_quit_pressed() -> void:

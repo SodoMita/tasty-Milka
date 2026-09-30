@@ -1,3 +1,34 @@
+# Branch `vanilla-dfa6-milk-glass` (Vanilla-dfa6, from `daisy-milk-glass`, 2026-09-30) - UI only
+
+No dialogue words and no characters were added. What changed:
+- **One settings scene for title + dialogue bubble.** The balloon's authored settings panel now lives in
+  `scenes/ui/settings_menu.tscn` (+ `settings_menu.gd`, class `SettingsMenu`). `vn_balloon.tscn` instances it with
+  `drive_settings = false` (the balloon still wires every row; its lookups became `%SettingsPanel/%X`, and the old
+  `[connection]`s resolve into the instance). `title_screen.tscn` instances the same scene with `drive_settings = true`
+  (it drives itself through the `SettingsStore` autoload). Same rows, same keys, same `user://settings.json`.
+  The smaller title-only `scenes/ui/settings_panel.*` was removed.
+- **Shared look = `assets/ui/milk_glass_theme.tres`**, set on the balloon's `Balloon` control and on the title root.
+  Type variations: `MilkBubble` (dialogue box + title menu card), `MilkNamePlate`, `MilkPanel` (overlays),
+  `IconButton`, `IconButtonLarge`, `MilkHeader`. Sliders use a milk track, butter fill and droplet grabber; checkboxes
+  are glass; tooltips are themed. Palette entries live in `MilkGlass/colors/*`. Edit colour, alpha and radius once
+  here, and both scenes follow.
+- **SVG icon-only buttons** (`assets/ui/icons/*.svg`) on the system row, pause menu, save menu, settings close,
+  rotation and title menu. Icons use white strokes, tinted by the theme's `icon_*_color`. Button words moved to
+  `tooltip_text`, which is auto-translated.
+- The title is authored in `title_screen.tscn`, with no builder script.
+- Base bugs fixed:
+  - The float animation pinned the title block at y=0; it now floats around 130±6.
+  - The droplet ornaments covered the speaker name; they are now small, at the top right.
+  - Balloon code painted the sliders navy and honey at runtime; the theme styles them now.
+- **Tests:** `godot --headless res://tests/test_settings_menu.tscn` runs 16 checks and is added to `run_tests.sh`.
+  - Pre-existing and untouched: section 1 of `tests/test_vn_ui.gd` still loads `dialogue/intro.dialogue`, which was
+    deleted in b9fe85c. That suite stops there; its 43 earlier checks pass.
+- **Real run:** `tools/sway_capture.sh <title|title_settings|vn|vn_settings> out.png`. It runs sway (headless backend,
+  `WLR_RENDERER=pixman`), Godot 4.7.2 (Wayland, OpenGL on llvmpipe) and grim. The captures are
+  `docs/screenshots/*.webp` (the asset rule allows WebP only).
+
+---
+
 # READ THIS FIRST - current state (Chocola-7f3 + Chocola-9b2, 2026-09-29)
 
 The dated sections below are a log of what was believed at the time. Several early ones call test failures

@@ -225,8 +225,8 @@ func _draw_edges(nodes: Array, by_id: Dictionary) -> void:
 
 func _draw_node(node: Dictionary, here: bool = false) -> void:
 	var rect := Rect2(float(node.get("x", 0.0)), float(node.get("y", 0.0)), float(node.get("w", 230.0)), float(node.get("h", 120.0)))
-	var accent: Color = node.get("color", Color(0.2, 0.45, 0.5))
-	_solid(rect, Color(0.055, 0.08, 0.14, 0.96))
+	var accent: Color = node.get("color", Color(0.54, 0.53, 0.44))
+	_solid(rect, Color(0.996, 0.984, 0.95, 0.98))
 	_solid(Rect2(rect.position, Vector2(rect.size.x, 4.0)), accent)
 	var border := Color(accent.r, accent.g, accent.b, 0.9)
 	_solid(Rect2(rect.position, Vector2(rect.size.x, 1.5)), border)
@@ -234,14 +234,14 @@ func _draw_node(node: Dictionary, here: bool = false) -> void:
 	_solid(Rect2(rect.position, Vector2(1.5, rect.size.y)), border)
 	_solid(Rect2(rect.position + Vector2(rect.size.x - 1.5, 0), Vector2(1.5, rect.size.y)), border)
 	var title_w := rect.size.x - (44.0 if here else 24.0)
-	_text("title:%s" % node.get("id", ""), rect.position + Vector2(12, 10), Vector2(title_w, 22), Color.WHITE)
-	_text("sub:%s" % node.get("id", ""), rect.position + Vector2(12, 34), Vector2(rect.size.x - 24, 16), Color(0.68, 0.75, 0.84, 1))
+	_text("title:%s" % node.get("id", ""), rect.position + Vector2(12, 10), Vector2(title_w, 22), Color(0.23, 0.23, 0.19, 1))
+	_text("sub:%s" % node.get("id", ""), rect.position + Vector2(12, 34), Vector2(rect.size.x - 24, 16), Color(0.41, 0.40, 0.34, 1))
 	if here:
 		var pin := Rect2(rect.position + Vector2(rect.size.x - 26.0, 10.0), Vector2(14, 14))
-		_quad(pin, _atlas.shape_uv("STORY"), Color(1.0, 0.82, 0.28, 1))
+		_quad(pin, _atlas.shape_uv("STORY"), Color(0.78, 0.67, 0.34, 1))
 		var badge := _fitted_size("here_badge", rect.size.x - 24.0, 14.0)
 		if badge.x > 4.0:
-			_quad(Rect2(rect.position + Vector2(12.0, 50.0), badge), _atlas.uv_of("here_badge"), Color(1.0, 0.82, 0.28, 1))
+			_quad(Rect2(rect.position + Vector2(12.0, 50.0), badge), _atlas.uv_of("here_badge"), Color(0.78, 0.67, 0.34, 1))
 	var header_h := minf(64.0, rect.size.y)
 	header_hits.append({
 		"rect": Rect2(rect.position, Vector2(rect.size.x, header_h)),
@@ -259,7 +259,7 @@ func _draw_node(node: Dictionary, here: bool = false) -> void:
 
 func _draw_here(node: Dictionary) -> void:
 	var rect := Rect2(float(node.get("x", 0.0)), float(node.get("y", 0.0)), float(node.get("w", 230.0)), float(node.get("h", 120.0)))
-	var gold := Color(1.0, 0.82, 0.28, 1.0)
+	var gold := Color(0.78, 0.67, 0.34, 1.0)
 	var o := 6.0
 	var t := 3.0
 	var outer := Rect2(rect.position - Vector2(o, o), rect.size + Vector2(o * 2.0, o * 2.0))
@@ -285,12 +285,12 @@ func _draw_ports(node: Dictionary, side: String) -> void:
 		var tag_size := _fitted_size(tag_key, max_w, 14.0)
 		var tag_y := center.y - tag_size.y - 1.0 if has_cond else center.y - tag_size.y * 0.5
 		var tag_x := center.x - 12.0 - tag_size.x if is_output else float(node.get("x", 0.0)) + 24.0
-		_quad(Rect2(Vector2(tag_x, tag_y), tag_size), _atlas.uv_of(tag_key), Color(0.9, 0.93, 1, 1))
+		_quad(Rect2(Vector2(tag_x, tag_y), tag_size), _atlas.uv_of(tag_key), Color(0.29, 0.29, 0.24, 1))
 		if has_cond:
 			var cond_key := "cond:%s:%s:%d" % [node.get("id", ""), side, i]
 			var cond_size := _fitted_size(cond_key, max_w, 12.0)
 			var cond_x := center.x - 12.0 - cond_size.x if is_output else float(node.get("x", 0.0)) + 24.0
-			_quad(Rect2(Vector2(cond_x, center.y + 1.0), cond_size), _atlas.uv_of(cond_key), Color(0.96, 0.78, 0.42, 1))
+			_quad(Rect2(Vector2(cond_x, center.y + 1.0), cond_size), _atlas.uv_of(cond_key), Color(0.56, 0.48, 0.31, 1))
 		var other := str(port.get("target", "")) if is_output else str(port.get("source", ""))
 		if other == "":
 			continue
@@ -406,15 +406,15 @@ func _push(p: Vector2, uv: Vector2, color: Color) -> void:
 func _type_color(kind: String) -> Color:
 	match kind:
 		"STORY":
-			return Color(0.35, 0.82, 0.72, 1)
+			return Color(0.39, 0.55, 0.47, 1)
 		"CHOICE":
-			return Color(0.95, 0.72, 0.32, 1)
+			return Color(0.70, 0.55, 0.32, 1)
 		"BOOL":
-			return Color(0.78, 0.56, 0.95, 1)
+			return Color(0.59, 0.52, 0.65, 1)
 		"ENDING":
-			return Color(0.86, 0.42, 0.48, 1)
+			return Color(0.71, 0.42, 0.42, 1)
 		_:
-			return Color(0.62, 0.78, 0.96, 1)
+			return Color(0.49, 0.56, 0.62, 1)
 
 
 func _dist_to_segment(p: Vector2, a: Vector2, b: Vector2) -> float:

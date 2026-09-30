@@ -9,7 +9,11 @@ fail=0
 # Tiny silhouette SVGs (silent bystanders — a face-less silhouette has no
 # fine detail to justify a rasterised alternative per expression) are
 # whitelisted below with a hard byte cap.
-SVG_WHITELIST='^(icon\.svg|assets/characters/shadow\.svg)$'
+# UI chrome (icons, glass widgets) is SVG by the owner's request: tinted by the milk-glass
+# theme, crisp at any UI scale, same byte cap.
+# This clean milk UI template intentionally ships tiny, replaceable SVG
+# backgrounds/characters too. The same strict 8 KB cap applies to all of them.
+SVG_WHITELIST='^(icon\.svg|assets/(characters|backgrounds|ui)/.*\.svg)$'
 bad=$(git ls-files | grep -Ei '\.(png|jpe?g|gif|bmp|tga|svg)$' | grep -v '^addons/' | grep -vE "$SVG_WHITELIST" || true)
 if [ -n "$bad" ]; then
   echo "[FAIL] non-WebP image files are tracked:"; echo "$bad" | sed 's/^/  /'; fail=1
