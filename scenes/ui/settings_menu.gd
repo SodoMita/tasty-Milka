@@ -130,7 +130,10 @@ func _input(event: InputEvent) -> void:
 # --- load ---------------------------------------------------------------------
 
 func _load_from_store() -> void:
-	var data: Dictionary = SettingsStore.load_settings()
+	var store = _settings_store()
+	if store == null:
+		return
+	var data: Dictionary = store.load_settings()
 	_loading = true
 	for n: String in SLIDERS:
 		var key: String = SLIDERS[n][0]
@@ -234,8 +237,14 @@ func _on_key_button_pressed(button_name: String) -> void:
 # --- helpers ------------------------------------------------------------------
 
 func _store(values: Dictionary) -> void:
-	if not _loading:
-		SettingsStore.set_values(values)
+	var store = _settings_store()
+	if not _loading and store != null:
+		store.set_values(values)
+
+
+## The SettingsStore autoload (looked up, so the scene also loads in tools/tests).
+func _settings_store() -> Node:
+	return get_node_or_null(^"/root/SettingsStore")
 
 
 func _ctl(node_name: String) -> Control:
