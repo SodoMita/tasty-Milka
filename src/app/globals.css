@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+@keyframes bounce-soft {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-10px) scale(1.03); }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  20% { transform: translateX(-8px) rotate(-2deg); }
+  40% { transform: translateX(8px) rotate(2deg); }
+  60% { transform: translateX(-6px) rotate(-1deg); }
+  80% { transform: translateX(6px) rotate(1deg); }
+}
+@keyframes nod {
+  0%, 100% { transform: rotate(0); }
+  50% { transform: rotate(-4deg) translateY(4px); }
+}
+@keyframes float-up {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(255, 182, 193, 0.4); }
+  50% { box-shadow: 0 0 40px rgba(255, 182, 193, 0.8); }
+}
+@keyframes note-fall {
+  0% { transform: translateY(-100%); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0.3; }
+}
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1) rotate(180deg); }
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+@keyframes slide-swell {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(1.15); }
+}
+
+.anim-bounce { animation: bounce-soft 1.2s ease-in-out infinite; }
+.anim-shake { animation: shake 0.5s ease-in-out; }
+.anim-nod { animation: nod 0.8s ease-in-out; }
+.anim-float-up { animation: float-up 0.5s ease-out; }
+.anim-pulse-glow { animation: pulse-glow 1.6s ease-in-out infinite; }
+.anim-bob { animation: bob 2s ease-in-out infinite; }
+
+body {
+  font-family: ui-sans-serif, system-ui, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+  overflow-x: hidden;
+}
+
+.milka-speech {
+  font-family: "Comic Sans MS", "Chalkboard SE", ui-rounded, sans-serif;
+}
+
+.pixel-btn {
+  image-rendering: pixelated;
+  transition: transform 0.1s, filter 0.1s;
+}
+.pixel-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+}
+.pixel-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.pixel-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Scrollbar for dialogue */
+.dialogue-scroll::-webkit-scrollbar { width: 6px; }
+.dialogue-scroll::-webkit-scrollbar-track { background: transparent; }
+.dialogue-scroll::-webkit-scrollbar-thumb {
+  background: #c9a27a;
+  border-radius: 3px;
+}
