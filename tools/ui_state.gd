@@ -17,10 +17,15 @@ func _ready() -> void:
 			var menu := find_child("SettingsPanel", true, false)
 			if menu != null and menu.has_method("open"):
 				menu.call("open")
-		"vn_settings":
-			var button := get_tree().root.find_child("SettingsButton", true, false) as Button
+		"vn_settings", "vn_pause", "vn_map":
+			var names := {"vn_settings": "SettingsButton", "vn_pause": "PauseButton", "vn_map": "RouteButton"}
+			var button := get_tree().root.find_child(str(names[state]), true, false) as Button
 			if button != null:
 				button.pressed.emit()
+		"vn_panic":
+			add_child((load("res://scenes/panic_screen.tscn") as PackedScene).instantiate())
+		"title_ru":
+			TranslationServer.set_locale("ru")
 	var block := find_child("TitleBlock", true, false) as Control
 	if block != null:
 		print("TitleBlock rect: ", block.get_global_rect())

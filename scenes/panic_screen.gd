@@ -12,6 +12,9 @@ const DisplayScale = preload("res://scenes/display_scale.gd")
 var _base_font_sizes: Dictionary = {}
 var _source_title := ""
 var _source_body := ""
+var _touch_index := -1
+var _touch_last_y := 0.0
+@onready var _scroll: ScrollContainer = $PanicMargin/PanicScroll
 
 ## Place to resume after this scene replaces the game. Empty when the screen
 ## is only covering a game that is still loaded.
@@ -134,6 +137,34 @@ func _apply_text() -> void:
 		title.text = tr(_source_title)
 	if body != null and not _source_body.is_empty():
 		body.text = tr(_source_body)
+
+
+## Own article gestures before the host's dialogue shortcuts can consume them.
+## Transform viewport coordinates into the scroll's space for UI scale/rotation.
+## Scrollbars and keyboard focus still use ScrollContainer's normal behaviour.
+func _input(event: InputEvent) -> void:
+	if not is_node_ready() or not is_visible_in_tree():
+		return
+	var inverse := _scroll.get_global_transform_with_canvas().affine_inverse()
+	var bounds := Rect2(Vector2.ZERO, _scroll.size)
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN] and bounds.has_point(inverse * event.position):
+			var direction := -1 if event.button_index == MOUSE_BUTTON_WHEEL_UP else 1
+			_scroll.scroll_vertical += roundi(64.0 * maxf(event.factor, 1.0)) * direction
+			get_viewport().set_input_as_handled()
+	elif event is InputEventScreenTouch:
+		if event.pressed and _touch_index < 0 and bounds.has_point(inverse * event.position):
+			_touch_index = event.index
+			_touch_last_y = (inverse * event.position).y
+			get_viewport().set_input_as_handled()
+		elif not event.pressed and event.index == _touch_index:
+			_touch_index = -1
+			get_viewport().set_input_as_handled()
+	elif event is InputEventScreenDrag and event.index == _touch_index:
+		var y: float = (inverse * event.position).y
+		_scroll.scroll_vertical += roundi(_touch_last_y - y)
+		_touch_last_y = y
+		get_viewport().set_input_as_handled()
 
 
 func _unhandled_input(event: InputEvent) -> void:

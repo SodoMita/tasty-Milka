@@ -65,6 +65,31 @@ shadow_color = Color(0.2, 0.18, 0.14, 0.16)
 shadow_size = 24
 shadow_offset = Vector2(0, 8)
 
+[sub_resource type="StyleBoxFlat" id="map_scrim"]
+bg_color = Color(0.24, 0.22, 0.19, 0.42)
+corner_radius_top_left = 26
+corner_radius_top_right = 26
+corner_radius_bottom_right = 26
+corner_radius_bottom_left = 26
+corner_detail = 12
+
+[sub_resource type="StyleBoxFlat" id="map_canvas"]
+content_margin_left = 14.0
+content_margin_top = 14.0
+content_margin_right = 14.0
+content_margin_bottom = 14.0
+bg_color = Color(1, 0.992, 0.972, 0.32)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.72)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+corner_detail = 12
+
 [sub_resource type="StyleBoxFlat" id="icon_normal"]
 content_margin_left = 9.0
 content_margin_top = 9.0
@@ -506,6 +531,10 @@ MilkNamePlate/base_type = &"PanelContainer"
 MilkNamePlate/styles/panel = SubResource("nameplate")
 MilkPanel/base_type = &"PanelContainer"
 MilkPanel/styles/panel = SubResource("panel")
+MilkMapScrim/base_type = &"Panel"
+MilkMapScrim/styles/panel = SubResource("map_scrim")
+MilkMapCanvas/base_type = &"PanelContainer"
+MilkMapCanvas/styles/panel = SubResource("map_canvas")
 PanelContainer/styles/panel = SubResource("panel")
 PopupMenu/colors/font_color = Color(0.27, 0.26, 0.24, 1)
 PopupMenu/colors/font_hover_color = Color(0.2, 0.19, 0.17, 1)

@@ -90,7 +90,7 @@ clip_text = true
 clip_contents = true
 layout_mode = 2
 size_flags_vertical = 3
-theme_type_variation = &"MilkBubble"
+theme_type_variation = &"MilkMapCanvas"
 
 [node name="RouteGraphView" parent="Margin/VBox/GraphContainer" instance=ExtResource("2_view")]
 unique_name_in_owner = true
@@ -103,7 +103,7 @@ layout_mode = 2
 mouse_filter = 0
 z_index = 20
 
-[node name="Dim" type="ColorRect" parent="SpoilerPanel"]
+[node name="Dim" type="Panel" parent="SpoilerPanel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -111,7 +111,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 0
-color = Color(0.24, 0.22, 0.19, 0.42)
+theme_type_variation = &"MilkMapScrim"
 
 [node name="Center" type="CenterContainer" parent="SpoilerPanel"]
 layout_mode = 1

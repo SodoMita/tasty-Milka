@@ -17,7 +17,7 @@ if ! ls "$XDG_RUNTIME_DIR"/wayland-[0-9] > /dev/null 2>&1; then
 fi
 WAYLAND_DISPLAY=$(ls "$XDG_RUNTIME_DIR" | grep -E '^wayland-[0-9]+$' | head -1)
 export WAYLAND_DISPLAY
-"$GODOT" --display-driver wayland --rendering-driver opengl3 res://tools/ui_state.tscn -- "$STATE" $((WAIT + 3)) > /tmp/milk_godot.log 2>&1 &
+"$GODOT" --display-driver wayland --rendering-driver opengl3 --audio-driver Dummy res://tools/ui_state.tscn -- "$STATE" $((WAIT + 3)) > /tmp/milk_godot.log 2>&1 &
 PID=$!
 sleep "$WAIT"
 grim -o HEADLESS-1 "$OUT" && echo "captured $OUT"

@@ -65,6 +65,10 @@ func show_graph(resource = null, player: Dictionary = {}, glyph_scale: int = -1)
 		view.open_resource(resource, player)
 		if view.has_method("set_visited_only"):
 			view.set_visited_only(visited_only)
+		# The hidden container still has its previous/minimum size here. Fit
+		# after the layout pass, not into that tiny pre-show rectangle.
+		if view.has_method("fit_all"):
+			view.call_deferred("fit_all")
 	_refresh_here()
 
 

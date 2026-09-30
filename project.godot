@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Milka VN"
 run/main_scene="res://scenes/title_screen.tscn"
-config/features=PackedStringArray("4.5", "Forward Plus")
+config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [audio]
@@ -25,6 +25,7 @@ SettingsStore="*res://autoloads/settings_store.gd"
 GameState="*res://autoloads/game_state.gd"
 AudioDirector="*res://autoloads/audio_director.gd"
 DialogueManager="*res://addons/dialogue_manager/dialogue_manager.gd"
+BrowserSaveSync="*res://autoloads/browser_save_sync.gd"
 
 [dialogue_manager]
 
@@ -88,3 +89,8 @@ dialogue_panic={
 
 locale/translations=PackedStringArray("res://i18n/ru.po")
 locale/translations_pot_files=PackedStringArray("res://dialogue/milka.dialogue")
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
