@@ -8,6 +8,8 @@ const TEXTURES := {
 	"happy": preload("res://assets/characters/crema/happy.svg"),
 	"surprised": preload("res://assets/characters/crema/surprised.svg"),
 	"blink": preload("res://assets/characters/crema/blink.svg"),
+	"thinking": preload("res://assets/characters/crema/thinking.svg"),
+	"sad": preload("res://assets/characters/crema/sad.svg"),
 }
 
 @export var blink_interval_min: float = 2.2

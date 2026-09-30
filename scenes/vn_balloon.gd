@@ -1953,7 +1953,11 @@ const UI_TEXT_KEYS: Array = [
 func _retranslate_dynamic() -> void:
 	for entry: Array in UI_TEXT_KEYS:
 		var n: Node = find_child(String(entry[0]), true, false)
-		if n != null and "text" in n:
+		if n is Button and (n as Button).theme_type_variation in [&"IconButton", &"IconButtonLarge"]:
+			# Icon actions keep their authored, auto-translated tooltips. Never
+			# turn them into text buttons when switching languages.
+			(n as Button).text = ""
+		elif n != null and "text" in n:
 			(n as Object).set("text", tr(String(entry[1])))
 	if is_instance_valid(skip_mode_option):
 		skip_mode_option.set_item_text(0, tr("Everything"))
@@ -3408,6 +3412,20 @@ func _on_pause_settings_pressed() -> void:
 	dialogue_label.set_process(true)
 	_open_overlay(settings_panel)
 	text_speed_slider.grab_focus()
+
+
+func _on_pause_title_pressed() -> void:
+	# Clear pause's global bus mute before freeing the balloon. Otherwise the
+	# title and the next story would remain silent.
+	pause_panel.hide()
+	auto_timer.stop()
+	skip_timer.stop()
+	voice_player.stop()
+	_silence_audio(false)
+	var state := get_node_or_null("/root/GameState")
+	if state != null:
+		state.pending_resume_slot = -1
+	get_tree().change_scene_to_file("res://scenes/title_screen.tscn")
 
 
 func _on_quit_pressed() -> void:

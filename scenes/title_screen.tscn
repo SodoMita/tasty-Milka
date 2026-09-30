@@ -398,6 +398,23 @@ icon = ExtResource("14_quit")
 icon_alignment = 1
 expand_icon = true
 
+[node name="HowToPlayTitle" type="Label" parent="TitleBlock"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.38, 0.37, 0.32, 1)
+theme_override_font_sizes/font_size = 18
+text = "How to play"
+
+[node name="HowToPlay" type="Label" parent="TitleBlock"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.44, 0.43, 0.37, 0.95)
+theme_override_font_sizes/font_size = 14
+text = "Enter / Space / tap · Advance\nH / swipe up · History    Esc · Pause\nF5 · Quick save    F9 · Quick load    F12 · Field notes"
+autowrap_mode = 2
+
 [node name="Version" type="Label" parent="."]
 unique_name_in_owner = true
 layout_mode = 1

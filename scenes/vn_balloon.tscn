@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://cw7xa7i1i3uuk"]
 
+[ext_resource type="Texture2D" path="res://assets/ui/icons/home.svg" id="71_home"]
 [ext_resource type="Script" uid="uid://5mh2o8ti16ul" path="res://scenes/vn_balloon.gd" id="1_balloon"]
 [ext_resource type="PackedScene" uid="uid://ckvgyvclnwggo" path="res://addons/dialogue_manager/nodes/dialogue_label/dialogue_label.tscn" id="2_dlabel"]
 [ext_resource type="Script" uid="uid://bb52rsfwhkxbn" path="res://addons/dialogue_manager/nodes/responses_menu/dialogue_responses_menu.gd" id="3_menu"]
@@ -770,9 +771,9 @@ theme_type_variation = &"MilkPanel"
 [node name="PauseMargin" type="MarginContainer" parent="Balloon/UIRoot/PausePanel" unique_id=1420933988]
 layout_mode = 2
 theme_override_constants/margin_left = 480
-theme_override_constants/margin_top = 90
+theme_override_constants/margin_top = 48
 theme_override_constants/margin_right = 480
-theme_override_constants/margin_bottom = 90
+theme_override_constants/margin_bottom = 48
 
 [node name="PauseVBox" type="VBoxContainer" parent="Balloon/UIRoot/PausePanel/PauseMargin" unique_id=20507623]
 layout_mode = 2
@@ -839,6 +840,17 @@ size_flags_horizontal = 4
 tooltip_text = "Settings"
 theme_type_variation = &"IconButtonLarge"
 icon = ExtResource("70_settings")
+icon_alignment = 1
+expand_icon = true
+
+[node name="PauseTitleButton" type="Button" parent="Balloon/UIRoot/PausePanel/PauseMargin/PauseVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(64, 64)
+size_flags_horizontal = 4
+tooltip_text = "Back to title"
+theme_type_variation = &"IconButtonLarge"
+icon = ExtResource("71_home")
 icon_alignment = 1
 expand_icon = true
 
@@ -1085,3 +1097,5 @@ bus = &"Voice"
 [connection signal="timeout" from="ToastTimer" to="." method="_on_toast_timeout"]
 [connection signal="timeout" from="AutoTimer" to="." method="_on_auto_timeout"]
 [connection signal="timeout" from="SkipTimer" to="." method="_on_skip_timeout"]
+
+[connection signal="pressed" from="Balloon/UIRoot/PausePanel/PauseMargin/PauseVBox/PauseTitleButton" to="." method="_on_pause_title_pressed"]
