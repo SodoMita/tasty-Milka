@@ -1,3 +1,19 @@
+# Maple neko-p6i2 - branch `maple-p6i2-milk-glass` (2026-09-30, off daisy-milk-glass)
+
+- One shared look resource: `assets/ui/milk_glass_theme.tres` (variations `DialogueBox`, `NamePlate`,
+  `OverlayPanel`, `IconButton`, `TitleButton`, `GhostButton`, `TitleLabel`). `vn_balloon.tscn` lost all inline
+  StyleBox/Theme sub-resources; title, balloon, overlays and `scenes/ui/settings_panel.tscn` all reference the theme.
+- Every button is icon-only (`assets/ui/icons/*.svg`, white strokes tinted by theme `icon_*_color`) with a translated
+  `tooltip_text`; `_retranslate_dynamic` writes tooltips (not text) for icon buttons; `tests/test_vn_ui.gd` i18n checks
+  now read the tooltip. New ru strings appended to `i18n/ru.po`.
+- Pause buttons moved into `PauseVBox/PauseRow` (HBox); the `[connection]` paths were updated accordingly.
+- `scenes/title_screen.tscn` hand-authored: `DialogueBox`-styled panel, 4 round `TitleButton`s, `%Hint` label mirrors the
+  hovered tooltip (`title_screen.gd`), droplets + Crema kept.
+- Verify: `godot --headless --path . --script res://tools/probe_milk_ui.gd` (57 checks). Render under sway+pixman:
+  `tools/capture_milk.gd` (see README). `tests/test_vn_ui.gd` still loads the removed `intro.dialogue` - pre-existing.
+
+---
+
 # READ THIS FIRST - current state (Chocola-7f3 + Chocola-9b2, 2026-09-29)
 
 The dated sections below are a log of what was believed at the time. Several early ones call test failures
