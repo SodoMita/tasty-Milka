@@ -999,7 +999,8 @@ func run() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	check(alive() and TranslationServer.get_locale() == "ru", "language option switches the locale to Russian")
-	check(alive() and balloon.save_button.text == "Сохранить", "authored UI strings follow the locale")
+	check(alive() and balloon.save_button.text == "" and balloon.atr(balloon.save_button.tooltip_text) == "Сохранить",
+		"icon-only buttons carry no text; their tooltips follow the locale")
 	check(alive() and balloon.skip_mode_option.get_item_text(0) == "Всё", "runtime option items follow the locale")
 	var cyr := false
 	for ch: String in balloon.dialogue_label.text:
@@ -1023,7 +1024,7 @@ func run() -> void:
 	balloon.language_option.item_selected.emit(0)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	check(alive() and TranslationServer.get_locale() == "en" and balloon.save_button.text == "Save",
+	check(alive() and TranslationServer.get_locale() == "en" and balloon.atr(balloon.save_button.tooltip_text) == "Save",
 		"switching back restores English")
 
 	# Sprite scale & Y offset are settings of their own, separate from UI scale

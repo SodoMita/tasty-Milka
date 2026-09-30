@@ -458,3 +458,15 @@ msgstr "Класс (3D)"
 
 msgid "classroom_3d"
 msgstr "Класс (3D)"
+
+msgid "Previous choice"
+msgstr "Предыдущий выбор"
+
+msgid "Next choice"
+msgstr "Следующий выбор"
+
+msgid "Begin the story"
+msgstr "Начать историю"
+
+msgid "Continue"
+msgstr "Продолжить"

@@ -12,6 +12,7 @@ extends Control
 @onready var settings_panel: Control = $SettingsPanel
 @onready var subtitle: Label = %Subtitle
 @onready var version: Label = %Version
+@onready var hint: Label = %Hint
 
 
 func _ready() -> void:
@@ -24,6 +25,11 @@ func _ready() -> void:
 	quit_button.pressed.connect(_on_quit_pressed)
 	for button: Button in [start_button, continue_button, settings_button, quit_button]:
 		button.mouse_entered.connect(func() -> void: _play_sfx("click"))
+		# Icon-only buttons: the hovered/focused button's tooltip doubles as a hint line.
+		button.mouse_entered.connect(func() -> void: _show_hint(button))
+		button.focus_entered.connect(func() -> void: _show_hint(button))
+		button.mouse_exited.connect(func() -> void: _show_hint(null))
+		button.focus_exited.connect(func() -> void: _show_hint(null))
 	start_button.mouse_entered.connect(func() -> void: crema.set_expression("happy"))
 	start_button.mouse_exited.connect(func() -> void: crema.set_expression("neutral"))
 	continue_button.mouse_entered.connect(func() -> void: crema.set_expression("surprised"))
@@ -39,13 +45,14 @@ func _apply_settings() -> void:
 		store.apply_globals()
 
 
+## Buttons carry no text (SVG icons only); their tooltips are translated on show.
 func _translate_labels() -> void:
 	subtitle.text = tr(subtitle.text)
 	version.text = tr(version.text)
-	start_button.text = tr(start_button.text)
-	continue_button.text = tr(continue_button.text)
-	settings_button.text = tr(settings_button.text)
-	quit_button.text = tr(quit_button.text)
+
+
+func _show_hint(button: Button) -> void:
+	hint.text = atr(button.tooltip_text) if button != null else " "
 
 
 func _on_start_pressed() -> void:
