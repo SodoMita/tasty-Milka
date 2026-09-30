@@ -1,16 +1,26 @@
 name: Release
 
-# Adapted from klima-gem's build/* pipeline. Pushes to a build/* branch
-# (or a manual dispatch, or a v* tag) produce a Web export deployed to
-# GitHub Pages, plus Linux + Windows desktop bundles attached to a
-# GitHub Release. No itch secret required in this repo yet — add
-# BUTLER_API_KEY later and uncomment the itch job.
+# Milka VN release pipeline (same shape as klima-gem's build/* pipeline).
+#
+# Pushes to a `build/*` branch (or a manual dispatch, or a `v*` tag) produce:
+#   1. a Web export deployed to GitHub Pages -> https://sodomita.github.io/tasty-Milka/
+#   2. the same Web export pushed to itch.io  -> https://delatel.itch.io/tasty-milka (html5 channel)
+#   3. Linux + Windows desktop bundles pushed to itch.io (linux/windows channels)
+#   4. a GitHub Release carrying the web zip and both desktop bundles
+#
+# Secrets: BUTLER_API_KEY (itch.io API key used by butler). Without it the
+# itch job is skipped with a warning and the Pages + Release jobs still run.
 
 on:
   push:
     branches: ["build/**"]
     tags: ["v*"]
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      publish_itch:
+        description: "Push the build to itch.io"
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -24,6 +34,9 @@ concurrency:
 env:
   GODOT_VERSION: "4.7-stable"
   GODOT_BIN: /tmp/godot-bin/godot
+  ITCH_TARGET: delatel/tasty-milka
+  PAGES_URL: https://sodomita.github.io/tasty-Milka/
+  ITCH_URL: https://delatel.itch.io/tasty-milka
 
 jobs:
   build:
@@ -87,10 +100,11 @@ jobs:
           if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
             VERSION="${GITHUB_REF_NAME#v}"
           else
-            VERSION="${BASE}-dev.${GITHUB_RUN_NUMBER}"
+            VERSION="${BASE}-build.${GITHUB_RUN_NUMBER}"
           fi
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Milka VN release version: $VERSION"
 
       - name: Import project resources
         shell: bash
@@ -112,15 +126,15 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p build/linux
-          timeout --foreground 900 "$GODOT_BIN" --headless --export-release "Linux" build/linux/vn-dialogue-demo.x86_64
-          chmod +x build/linux/vn-dialogue-demo.x86_64 || true
+          timeout --foreground 900 "$GODOT_BIN" --headless --export-release "Linux" build/linux/tasty-milka.x86_64
+          chmod +x build/linux/tasty-milka.x86_64 || true
 
       - name: Export Windows bundle
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p build/windows
-          timeout --foreground 900 "$GODOT_BIN" --headless --export-release "Windows Desktop" build/windows/vn-dialogue-demo.exe
+          timeout --foreground 900 "$GODOT_BIN" --headless --export-release "Windows Desktop" build/windows/tasty-milka.exe
 
       - name: Pack web (COI service worker + version stamp)
         shell: bash
@@ -132,8 +146,7 @@ jobs:
 
       # Boots the packed web export in headless Chromium on a server WITHOUT
       # COOP/COEP headers (like GitHub Pages): the service worker must isolate
-      # the page and Godot must start as a threaded build. Reported, but it
-      # never blocks a release (continue-on-error) - the screenshot is attached.
+      # the page and Godot must start as a threaded build.
       - name: Web smoke test (cross-origin isolation + boot)
         continue-on-error: true
         timeout-minutes: 8
@@ -162,9 +175,9 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p dist
-          (cd build/web && zip -qr "../../dist/vn-dialogue-demo-web-${VERSION}.zip" .)
-          (cd build/linux && zip -qr "../../dist/vn-dialogue-demo-linux-${VERSION}.zip" .)
-          (cd build/windows && zip -qr "../../dist/vn-dialogue-demo-windows-${VERSION}.zip" .)
+          (cd build/web && zip -qr "../../dist/tasty-milka-web-${VERSION}.zip" .)
+          (cd build/linux && zip -qr "../../dist/tasty-milka-linux-${VERSION}.zip" .)
+          (cd build/windows && zip -qr "../../dist/tasty-milka-windows-${VERSION}.zip" .)
           ls -lh dist
 
       - uses: actions/upload-artifact@v4
@@ -196,6 +209,7 @@ jobs:
     name: Deploy to GitHub Pages
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
@@ -211,16 +225,66 @@ jobs:
       - id: deploy
         uses: actions/deploy-pages@v4
 
+  itch:
+    name: Publish to itch.io
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check butler credentials
+        id: creds
+        shell: bash
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: |
+          if [ -n "${BUTLER_API_KEY:-}" ]; then
+            echo "have_key=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "have_key=false" >> "$GITHUB_OUTPUT"
+            echo "::warning title=itch.io skipped::BUTLER_API_KEY secret is not set. Add it to publish ${ITCH_URL}."
+          fi
+
+      - name: Download bundles
+        if: steps.creds.outputs.have_key == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          pattern: "*-build"
+          path: bundles
+
+      - name: Install butler
+        if: steps.creds.outputs.have_key == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL -o butler.zip https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default
+          unzip -oq butler.zip
+          chmod +x butler
+          ./butler -V
+
+      - name: butler push (html5, linux, windows)
+        if: steps.creds.outputs.have_key == 'true'
+        shell: bash
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+          VERSION: ${{ needs.build.outputs.version }}
+        run: |
+          set -euo pipefail
+          ./butler push bundles/web-build "${ITCH_TARGET}:html5" --userversion "${VERSION}"
+          ./butler push bundles/linux-build "${ITCH_TARGET}:linux" --userversion "${VERSION}"
+          ./butler push bundles/windows-build "${ITCH_TARGET}:windows" --userversion "${VERSION}"
+          echo "itch.io: ${ITCH_URL} (version ${VERSION})"
+
   release:
     name: GitHub Release
-    needs: [build, pages]
-    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [build, pages, itch]
+    if: always() && needs.build.result == 'success' && needs.pages.result == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
         with:
           name: release-zips
           path: dist
+
       - name: Publish release
         shell: bash
         env:
@@ -229,9 +293,9 @@ jobs:
           TAG: ${{ needs.build.outputs.tag }}
         run: |
           set -euo pipefail
-          NOTES="$(printf 'vn_dialogue_demo %s\n\nPlay in the browser via GitHub Pages (build/* pushes).\nBuilt from %s (%s) by the release pipeline.\n' "$VERSION" "$GITHUB_SHA" "$GITHUB_REF_NAME")"
+          NOTES="$(printf 'Milka VN %s\n\nPlay in the browser: %s\nitch.io: %s\n\nBuilt from %s (%s) by the release pipeline.\n' "$VERSION" "$PAGES_URL" "$ITCH_URL" "$GITHUB_SHA" "$GITHUB_REF_NAME")"
           if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             gh release upload "$TAG" dist/*.zip --clobber --repo "$GITHUB_REPOSITORY"
           else
-            gh release create "$TAG" dist/*.zip --title "$TAG" --notes "$NOTES" --repo "$GITHUB_REPOSITORY"
+            gh release create "$TAG" dist/*.zip --title "Milka VN $VERSION" --notes "$NOTES" --repo "$GITHUB_REPOSITORY"
           fi

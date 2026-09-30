@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: vn_dialogue_demo 1.15\n"
+"Project-Id-Version: Milka VN 1.16\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"

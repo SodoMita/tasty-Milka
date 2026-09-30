@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Stamp a vn_dialogue_demo export with its release identity.
+"""Stamp a Milka VN export with its release identity.
 
 Writes <build_dir>/version.json and injects a small version badge plus the
 repo link into the exported web player so any release is identifiable from
@@ -15,7 +15,7 @@ import pathlib
 import re
 import sys
 
-REPO_URL = "https://github.com/SodoMita/vn_dialogue_demo"
+REPO_URL = "https://github.com/SodoMita/tasty-Milka"
 
 
 def main(argv: list[str]) -> int:
@@ -26,7 +26,7 @@ def main(argv: list[str]) -> int:
 
     build_dir.mkdir(parents=True, exist_ok=True)
     stamp = {
-        "game": "vn_dialogue_demo",
+        "game": "tasty-milka",
         "version": version,
         "commit": commit,
         "branch": branch,

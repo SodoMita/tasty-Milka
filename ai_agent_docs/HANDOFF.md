@@ -1,3 +1,25 @@
+## 2026-09-30 — Hecker-cat-7qz: release pipeline init (itch.io + GitHub Pages)
+
+Branch `hecker-7qz-milka-release`, deployed from `build/hecker-7qz-milka`.
+
+* `.github/workflows/release.yml` now matches klima-gem's `build/*` pipeline:
+  **web export -> GitHub Pages**, **web/linux/windows -> itch.io** via butler,
+  **web zip + both desktop bundles -> GitHub Release**.
+  `ITCH_TARGET=delatel/tasty-milka` → <https://delatel.itch.io/tasty-milka>.
+  `BUTLER_API_KEY` is optional: without it the `itch` job warns and skips while
+  Pages + the GitHub Release still publish.
+* Bundle names unified: `tasty-milka-web/linux/windows-<version>.zip`,
+  `build/linux/tasty-milka.x86_64`, `build/windows/tasty-milka.exe`
+  (preset `export_path` updated too). `version.txt` -> `1.17.0-milka`,
+  build versions read `<base>-build.<run_number>`.
+* `scripts/stamp_release.py` stamps `game: tasty-milka` and the real repo URL
+  (`SodoMita/tasty-Milka`), so the in-browser badge links home.
+* README gained a **Play** table (itch / Pages / Releases) and `docs/WEB_BUILD.md`
+  gained a **Destinations** table explaining the deploy-pages-from-artifact flow.
+* Pages was enabled on the repo (`build_type: workflow`) through the GitHub API.
+
+No scene, script or dialogue content was touched.
+
 # Branch `vanilla-dfa6-milk-glass` (Vanilla-dfa6, from `daisy-milk-glass`, 2026-09-30) - UI only
 
 No dialogue words and no characters were added. What changed:

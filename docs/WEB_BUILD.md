@@ -2,9 +2,21 @@
 
 Pushing to a `build/**` branch (or a `v*` tag, or a manual dispatch) runs
 `.github/workflows/release.yml`: it exports **Web**, **Linux** and **Windows**
-with Godot 4.7, packs the web export, deploys it to GitHub Pages and attaches
-the bundles to a GitHub Release. `godot-ci.yml` runs `run_tests.sh` on pushes to
-`main`, `chocola-*` and `remi-*`.
+with Godot 4.7, packs the web export, deploys it to GitHub Pages, pushes all
+three bundles to <https://delatel.itch.io/tasty-milka> (`delatel/tasty-milka` via
+butler, needs the `BUTLER_API_KEY` secret) and attaches them to a GitHub Release.
+`godot-ci.yml` runs `run_tests.sh` on pushes to `main`, `chocola-*` and `remi-*`.
+
+## Destinations
+
+| Channel | URL |
+| --- | --- |
+| itch.io html5 / linux / windows | <https://delatel.itch.io/tasty-milka> |
+| GitHub Pages (web) | <https://sodomita.github.io/tasty-Milka/> |
+
+Pages is deployed with `actions/deploy-pages` from the `web-build` artifact, so the
+site content is always the branch's own export; there is no committed `gh-pages`
+tree to keep in sync.
 
 ## Why a service worker
 

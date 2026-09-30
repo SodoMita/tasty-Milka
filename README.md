@@ -6,6 +6,26 @@ All demo music and sample story assets have been purged so you can write and cre
 
 ---
 
+## ▶️ Play
+
+| Where | Link |
+| --- | --- |
+| **itch.io** (web, Linux, Windows) | <https://delatel.itch.io/tasty-milka> |
+| **GitHub Pages** (web, threaded build) | <https://sodomita.github.io/tasty-Milka/> |
+| **GitHub Releases** (zip bundles) | <https://github.com/SodoMita/tasty-Milka/releases> |
+
+Both web destinations are the exact same export: `variant/thread_support=true` needs
+`SharedArrayBuffer`, so `web/coi-serviceworker.js` is packed next to `index.html` and
+installs the COOP/COEP headers on hosts (GitHub Pages, itch) that do not send them.
+The first load reloads once after registering the worker — that is expected.
+
+Pushing to any `build/**` branch runs `.github/workflows/release.yml`, which exports
+**Web + Linux + Windows**, deploys the web build to GitHub Pages, pushes all three to
+`delatel/tasty-milka` on itch.io via butler (`BUTLER_API_KEY` secret), and attaches the
+zips to a GitHub Release. See `docs/WEB_BUILD.md`.
+
+---
+
 ## 🍼 Features
 
 - **🥛 Milk Droplet Themed UI**:
