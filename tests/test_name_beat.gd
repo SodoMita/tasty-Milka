@@ -155,6 +155,23 @@ func _test_rhythm_visuals_and_controls() -> void:
 	game.call("hold_one_button", 0.62)
 	_check("1-button keyboard hold performs slide churn", int(game.get("_slides")) > slides_before_key and int(game.get("_score")) > score_before_hold)
 
+	# 4. Verify Mobile Touch & Drag accessibility
+	var touch_down := InputEventScreenTouch.new()
+	touch_down.pressed = true
+	touch_down.position = Vector2(600.0, 330.0)
+	var score_before_touch: int = int(game.get("_score"))
+	game.call("_on_gui_input", touch_down)
+	_check("mobile screen touch taps cookie", int(game.get("_score")) > score_before_touch)
+	var slides_before_drag: int = int(game.get("_slides"))
+	var touch_drag := InputEventScreenDrag.new()
+	touch_drag.position = Vector2(680.0, 330.0)
+	game.call("_on_gui_input", touch_drag)
+	var touch_up := InputEventScreenTouch.new()
+	touch_up.pressed = false
+	touch_up.position = Vector2(680.0, 330.0)
+	game.call("_on_gui_input", touch_up)
+	_check("mobile screen drag triggers slide churn", int(game.get("_slides")) > slides_before_drag)
+
 	game.queue_free()
 	await get_tree().process_frame
 

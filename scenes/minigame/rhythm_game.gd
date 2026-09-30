@@ -363,6 +363,15 @@ func _on_gui_input(event: InputEvent) -> void:
 	elif event is InputEventMouseMotion:
 		var mm: InputEventMouseMotion = event
 		_motion(mm.position)
+	elif event is InputEventScreenTouch:
+		var st: InputEventScreenTouch = event
+		if st.pressed:
+			_press(st.position)
+		else:
+			_release(st.position)
+	elif event is InputEventScreenDrag:
+		var sd: InputEventScreenDrag = event
+		_motion(sd.position)
 
 ## 1-button keyboard (or accessibility switch) press: taps click immediately,
 ## holding the same button down smoothly sweeps the slide churn.
