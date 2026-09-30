@@ -13,7 +13,7 @@ type Phase =
   | "rhythm-result"
   | "ending";
 
-type MilkaMood = "neutral" | "smile" | "surprised" | "worried" | "happy" | "thinking" | "celebrate";
+type MilkaMood = "neutral" | "smile" | "surprised" | "worried" | "happy" | "thinking" | "celebrate" | "wink";
 
 interface DialogueLine {
   who: "milka" | "narrator";
@@ -30,9 +30,10 @@ function MilkaSprite({ mood, animClass = "" }: { mood: MilkaMood; animClass?: st
       ? { rx: 6, ry: 8 }
       : mood === "worried"
       ? { rx: 5, ry: 2 }
-      : mood === "happy" || mood === "celebrate"
+      : mood === "happy" || mood === "celebrate" || mood === "wink"
       ? { rx: 6, ry: 1 }
       : { rx: 4, ry: 5 };
+  const winking = mood === "wink";
   const mouth =
     mood === "happy" || mood === "celebrate"
       ? "M 85 130 Q 100 148 115 130"
@@ -66,12 +67,22 @@ function MilkaSprite({ mood, animClass = "" }: { mood: MilkaMood; animClass?: st
         {/* ahoge */}
         <path d="M 100 55 Q 108 35 115 45 Q 108 48 103 60 Z" fill="#a87a4a" />
         {/* eyes */}
-        <ellipse cx="82" cy="110" rx={eyeShape.rx} ry={eyeShape.ry} fill="#3a2a1f" />
-        <ellipse cx="118" cy="110" rx={eyeShape.rx} ry={eyeShape.ry} fill="#3a2a1f" />
-        {eyeShape.ry > 2 && (
+        {winking ? (
           <>
-            <circle cx="84" cy="108" r="2" fill="white" />
+            <path d="M 76 110 Q 82 116 88 110" stroke="#3a2a1f" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+            <ellipse cx="118" cy="110" rx="4" ry="5" fill="#3a2a1f" />
             <circle cx="120" cy="108" r="2" fill="white" />
+          </>
+        ) : (
+          <>
+            <ellipse cx="82" cy="110" rx={eyeShape.rx} ry={eyeShape.ry} fill="#3a2a1f" />
+            <ellipse cx="118" cy="110" rx={eyeShape.rx} ry={eyeShape.ry} fill="#3a2a1f" />
+            {eyeShape.ry > 2 && (
+              <>
+                <circle cx="84" cy="108" r="2" fill="white" />
+                <circle cx="120" cy="108" r="2" fill="white" />
+              </>
+            )}
           </>
         )}
         {/* cheeks */}
@@ -226,9 +237,11 @@ function RhythmGame({ onFinish }: { onFinish: (score: number, total: number, com
   const [feedback, setFeedback] = useState<{ lane: number; text: string; color: string; id: number } | null>(null);
   const [progress, setProgress] = useState(0);
   const [slidePrompt, setSlidePrompt] = useState<{ id: number; lane: number; dir: "left" | "right" } | null>(null);
+  const [nowMs, setNowMs] = useState(0);
   const startRef = useRef<number>(0);
   const rafRef = useRef<number | null>(null);
   const totalNotesRef = useRef(0);
+  const notesRef = useRef<Note[]>([]);
   const activePointers = useRef<Map<number, { startX: number; lane: number; noteId: number }>>(new Map());
 
   // Generate pattern
@@ -257,14 +270,18 @@ function RhythmGame({ onFinish }: { onFinish: (score: number, total: number, com
   const SONG_LEN = pattern[pattern.length - 1].time + 1500;
 
   useEffect(() => {
-    setNotes(pattern.map((n) => ({ ...n, hit: false })));
+    const initial = pattern.map((n) => ({ ...n, hit: false as const }));
+    setNotes(initial);
+    notesRef.current = initial;
   }, [pattern]);
 
   useEffect(() => {
     if (!running) return;
     startRef.current = performance.now();
+    setNowMs(0);
     const loop = (now: number) => {
       const elapsed = now - startRef.current;
+      setNowMs(elapsed);
       setProgress(Math.min(1, elapsed / SONG_LEN));
       // Auto-miss expired notes
       setNotes((prev) => {
@@ -276,6 +293,7 @@ function RhythmGame({ onFinish }: { onFinish: (score: number, total: number, com
           }
           return n;
         });
+        notesRef.current = next;
         if (missTriggered) {
           setCombo(0);
         }
@@ -287,7 +305,7 @@ function RhythmGame({ onFinish }: { onFinish: (score: number, total: number, com
         // finalize
         setRunning(false);
         setTimeout(() => {
-          const hitCount = notes.filter((n) => n.hit === true).length;
+          const hitCount = notesRef.current.filter((n) => n.hit === true).length;
           onFinish(hitCount, totalNotesRef.current, maxCombo);
         }, 500);
       }
@@ -309,7 +327,9 @@ function RhythmGame({ onFinish }: { onFinish: (score: number, total: number, com
         const n = prev[i];
         if (n.hit !== false || n.lane !== lane) continue;
         const win = n.type === "slide" ? HIT_WINDOW_SLIDE : HIT_WINDOW_TAP;
-        if (n.type !== kind) continue;
+        // Keyboard/tap can also hit slide notes but can't get PERFECT
+        if (n.type === "slide" && kind !== "slide" && kind !== "tap") continue;
+        if (n.type === "tap" && kind !== "tap") continue;
         const diff = Math.abs(now - n.time);
         if (diff < win && diff < bestDiff) {
           bestDiff = diff;
@@ -317,17 +337,20 @@ function RhythmGame({ onFinish }: { onFinish: (score: number, total: number, com
         }
       }
       if (bestIdx === -1) return prev;
+      const hitNote = prev[bestIdx];
       const newNotes = [...prev];
       newNotes[bestIdx] = { ...newNotes[bestIdx], hit: true };
       let judge = "PERFECT";
       let color = "#ffdf6b";
       let add = 100;
-      if (bestDiff > 100) {
+      // Taps on slide notes cap at GOOD
+      const capped = hitNote.type === "slide" && kind === "tap";
+      if (bestDiff > 70 || capped) {
         judge = "GOOD";
         color = "#b0e57c";
-        add = 60;
+        add = capped ? 50 : 60;
       }
-      if (bestDiff > 180) {
+      if (bestDiff > 150) {
         judge = "OK";
         color = "#9fd5ff";
         add = 30;
@@ -340,6 +363,7 @@ function RhythmGame({ onFinish }: { onFinish: (score: number, total: number, com
       });
       setFeedback({ lane, text: judge, color, id: Date.now() });
       setTimeout(() => setFeedback(null), 400);
+      notesRef.current = newNotes;
       return newNotes;
     });
   }
@@ -502,13 +526,13 @@ function RhythmGame({ onFinish }: { onFinish: (score: number, total: number, com
           {/* notes */}
           {notes.map((n) => {
             if (n.hit === true || n.hit === "miss") {
-              // still show for a moment? hide
               return null;
             }
-            const now = performance.now() - startRef.current;
+            const now = nowMs;
             const travelMs = 2000;
             const delta = n.time - now;
             if (delta > travelMs) return null;
+            if (delta < -300) return null;
             const posPct = 100 - (delta / travelMs) * 100;
             const isSlide = n.type === "slide";
             return (
@@ -583,7 +607,7 @@ export default function MilkaGame() {
       ],
       "rhythm-intro": [
         { who: "milka", text: `It's called "Milky Mix!" — a r-rhythm game? You have to tap and slide in time with the milky beat!`, mood: "surprised" },
-        { who: "milka", text: `Don't worry, ${niceName}! Even if you miss notes, I'll still share my chocolate milk with you. Probably.`, mood: "wink" as any },
+        { who: "milka", text: `Don't worry, ${niceName}! Even if you miss notes, I'll still share my chocolate milk with you. Probably.`, mood: "wink" },
         { who: "milka", text: `Ready? Let's start! 🥛🥁`, mood: "celebrate" },
       ],
       rhythm: [],
