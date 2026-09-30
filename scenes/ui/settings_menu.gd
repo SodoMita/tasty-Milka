@@ -172,7 +172,7 @@ func _hits_interactive(parent: Control, point: Vector2) -> bool:
 		if not child is Control or not (child as Control).visible or child == hold_indicator:
 			continue
 		var ctl := child as Control
-		if ctl.mouse_filter != MOUSE_FILTER_IGNORE and (ctl is BaseButton or ctl is Range or ctl is LineEdit 				or ctl is TextEdit or ctl is ItemList or ctl is Tree) and ctl.get_global_rect().has_point(point):
+		if ctl.mouse_filter != MOUSE_FILTER_IGNORE and (ctl is BaseButton or ctl is Range or ctl is LineEdit 				or ctl is TextEdit or ctl is ItemList or ctl is Tree) and Rect2(Vector2.ZERO, ctl.size).has_point(ctl.get_global_transform().affine_inverse() * point):
 			return true
 		if _hits_interactive(ctl, point):
 			return true
@@ -399,6 +399,7 @@ func _select_resolution_item(w: int, h: int) -> void:
 
 
 func _sync_rotation(deg: int) -> void:
+	deg = preload("res://scenes/display_rotation.gd").normalize(deg)
 	for n: String in ROTATIONS:
 		var b := _ctl(n) as BaseButton
 		if b != null:

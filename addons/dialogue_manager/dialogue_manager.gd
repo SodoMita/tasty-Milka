@@ -247,7 +247,10 @@ func get_line(resource: DialogueResource, key: String, extra_game_states: Array)
 	if not resource.lines.has(key):
 		assert(false, DMConstants.translate(&"errors.key_not_found").format({ key = key }))
 
-	var data: Dictionary = resource.lines.get(key)
+	# Runtime resolution adds data.resource below. Never add that reference to
+	# the compiled dictionary: resource -> lines -> resource leaks on shutdown
+	# and keeps resolved tags/text alive between playthroughs.
+	var data: Dictionary = resource.lines.get(key).duplicate(true)
 
 	# Inject some debugger information into the game states.
 	_inject_state("debugger", {

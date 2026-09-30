@@ -1,6 +1,8 @@
 extends Control
-## All visuals and help text are authored in title_screen.tscn, never built here.
+## Visuals are authored in title_screen.tscn. This script wires actions and
+## reflows those existing nodes when the shared display settings change.
 
+const DisplayRotation = preload("res://scenes/display_rotation.gd")
 const LABEL_KEYS := {
 	"Subtitle": "a milk-soft visual novel",
 	"Version": "v0.1.0 · milk-glass UI · placeholder art",
@@ -14,8 +16,10 @@ const LABEL_KEYS := {
 @onready var quit_button: Button = %QuitButton
 @onready var crema: Node2D = %Crema
 @onready var ambient: AnimationPlayer = $Ambient
-@onready var settings_panel: Control = $SettingsPanel
+@onready var settings_panel: SettingsMenu = $SettingsPanel
+@onready var title_block: VBoxContainer = $TitleBlock
 var _leaving := false
+var _layout_queued := false
 
 
 func _ready() -> void:
@@ -33,12 +37,18 @@ func _ready() -> void:
 		button.mouse_exited.connect(_reset_expression)
 		button.focus_exited.connect(_reset_expression)
 	settings_panel.closed.connect(_reset_expression)
+	get_viewport().size_changed.connect(_queue_display_layout)
+	var store := get_node_or_null("/root/SettingsStore")
+	if store != null:
+		store.settings_changed.connect(_on_shared_setting_changed)
+	_apply_display_layout()
 	_play_sfx("open")
 
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
 		_translate_labels()
+		_queue_display_layout()
 
 
 func _apply_settings() -> void:
@@ -47,8 +57,50 @@ func _apply_settings() -> void:
 		store.apply_globals()
 
 
+func _on_shared_setting_changed(key: String, _value: Variant) -> void:
+	if key in ["rotation", "ui_scale", "force_portrait", "res_w", "res_h"]:
+		_queue_display_layout()
+
+
+func _queue_display_layout() -> void:
+	if _layout_queued or not is_node_ready():
+		return
+	_layout_queued = true
+	call_deferred("_apply_display_layout")
+
+
+func _apply_display_layout() -> void:
+	_layout_queued = false
+	if not is_node_ready():
+		return
+	var store := get_node_or_null("/root/SettingsStore")
+	var data: Dictionary = store.data if store != null else {}
+	var angle := DisplayRotation.normalize(int(data.get("rotation", 0)))
+	var window_size := get_viewport().get_visible_rect().size
+	DisplayRotation.apply_control(self, window_size, angle)
+	var factor := clampf(float(data.get("ui_scale", 1.0)), 0.5, 2.5)
+	# Settings inherit the title's rotation, never a second quarter turn.
+	DisplayRotation.apply_control(settings_panel, size, 0, factor)
+	var portrait := bool(data.get("force_portrait", false)) or settings_panel.size.y > settings_panel.size.x or settings_panel.size.x < 740.0
+	for child: Node in settings_panel.get_node("%SettingsVBox").get_children():
+		if child is BoxContainer:
+			(child as BoxContainer).vertical = portrait
+			if child.get_child_count() > 0 and child.get_child(0) is Label:
+				(child.get_child(0) as Label).custom_minimum_size.x = 0.0 if portrait else 170.0
+	var margin := settings_panel.get_node("%SettingsMargin") as MarginContainer
+	for side: String in ["left", "right"]:
+		margin.add_theme_constant_override("margin_" + side, roundi(32.0 / factor))
+	for side: String in ["top", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, roundi(40.0 / factor))
+	settings_panel._sync_rotation(angle)
+	# Keep the authored floating animation's Y track; reflow only its X axis.
+	var tall := size.y > size.x
+	title_block.position.x = maxf(24.0, (size.x - title_block.size.x) * 0.5) if tall else maxf(24.0, size.x * 0.075)
+	crema.position = Vector2(size.x * (0.5 if tall else 0.703125), size.y * (0.77 if tall else 0.777778))
+
+
 func _translate_labels() -> void:
-	# Always use the English source keys, so EN -> RU -> EN is reversible.
+	# Source keys keep EN -> RU -> EN reversible.
 	for node_name: String in LABEL_KEYS:
 		var label := get_node("%" + node_name) as Label
 		label.text = tr(str(LABEL_KEYS[node_name]))
@@ -107,8 +159,8 @@ func _on_quit_pressed() -> void:
 
 
 func _play_sfx(sfx_name: String) -> void:
-	var ad = get_node_or_null("/root/AudioDirector")
-	if ad and ad.has_method("play_sfx"):
+	var ad := get_node_or_null("/root/AudioDirector")
+	if ad != null and ad.has_method("play_sfx"):
 		ad.play_sfx(sfx_name)
 
 

@@ -2,6 +2,7 @@ class_name VNBalloon extends CanvasLayer
 const RouteTravel = preload("res://scenes/route_graph/route_graph_travel.gd")
 const PanicScript = preload("res://scenes/panic_screen.gd")
 const DisplayScale = preload("res://scenes/display_scale.gd")
+const DisplayRotation = preload("res://scenes/display_rotation.gd")
 ## A classical visual-novel balloon for Dialogue Manager.
 ##
 ## The whole UI (background stage, sprite slots, name plate, dialogue box,
@@ -568,9 +569,8 @@ func start(with_dialogue_resource: DialogueResource = null, cue: String = "", ex
 		if FileAccess.file_exists(_slot_path(resume_slot)):
 			load_from_slot(resume_slot)
 			return
-	# Ambient music under the conversation; tagged #music= lines override this.
-	if audio != null and audio.music_source == "" and not audio.has_music_request():
-		audio.play_theme(&"calm")
+# The clean starter has no implicit demo score. Story #music= tags
+	# can still request audio explicitly without allocating an idle playback.
 	dialogue_line = await dialogue_resource.get_next_dialogue_line(start_from_cue, temporary_game_states)
 
 
@@ -2016,9 +2016,10 @@ func _on_rot_270_pressed() -> void:
 
 
 func _set_rotation(d: int) -> void:
-	rotation_deg = d
-	_apply_rotation()
+	rotation_deg = DisplayRotation.normalize(d)
 	_reflow_settings()
+	_layout_responses()
+	(settings_panel as SettingsMenu)._sync_rotation(rotation_deg)
 	_save_settings()
 
 
@@ -2043,19 +2044,12 @@ func _apply_viewport_resize() -> void:
 
 
 func _apply_rotation() -> void:
-	var win: Vector2 = get_viewport().get_visible_rect().size
-	var r: float = deg_to_rad(float(rotation_deg))
-	var swapped: bool = rotation_deg == 90 or rotation_deg == 270
-	# Rotation also flips the logical resolution's X and Y: the stage and UI
-	# lay out in the flipped space and the layer transform turns it on screen,
-	# so the rotated view fills the window exactly -- no letterbox gaps.
-	var logical: Vector2 = Vector2(win.y, win.x) if swapped else win
-	balloon.anchor_right = 0.0
-	balloon.anchor_bottom = 0.0
-	balloon.size = logical
-	var t := Transform2D().rotated(r)
-	t.origin = (win * 0.5) - (t * (logical * 0.5))
-	transform = t
+	var win := get_viewport().get_visible_rect().size
+	rotation_deg = DisplayRotation.normalize(rotation_deg)
+	balloon.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+	balloon.pivot_offset = Vector2.ZERO
+	balloon.size = DisplayRotation.logical_size(win, rotation_deg)
+	transform = DisplayRotation.canvas_transform(win, rotation_deg)
 
 
 ## Size the choices band to the menu and park it just above the dialogue box,
