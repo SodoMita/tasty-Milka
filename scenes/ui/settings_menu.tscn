@@ -9,6 +9,9 @@
 [ext_resource type="Texture2D" path="res://assets/ui/icons/rot_180.svg" id="4_rot_180"]
 [ext_resource type="Texture2D" path="res://assets/ui/icons/rot_270.svg" id="4_rot_270"]
 
+[sub_resource type="ButtonGroup" id="ButtonGroup_rotation"]
+allow_unpress = false
+
 [node name="SettingsPanel" type="PanelContainer" unique_id=1633811280]
 script = ExtResource("1_menu")
 visible = false
@@ -449,6 +452,9 @@ theme_override_font_sizes/font_size = 17
 text = "Rotation"
 
 [node name="Rot0Button" type="Button" parent="SettingsMargin/SettingsScroll/SettingsVBox/RotationRow" unique_id=1245860327]
+unique_name_in_owner = true
+toggle_mode = true
+button_group = SubResource("ButtonGroup_rotation")
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
@@ -460,6 +466,9 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="Rot90Button" type="Button" parent="SettingsMargin/SettingsScroll/SettingsVBox/RotationRow" unique_id=2082816303]
+unique_name_in_owner = true
+toggle_mode = true
+button_group = SubResource("ButtonGroup_rotation")
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
@@ -471,6 +480,9 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="Rot180Button" type="Button" parent="SettingsMargin/SettingsScroll/SettingsVBox/RotationRow" unique_id=523727031]
+unique_name_in_owner = true
+toggle_mode = true
+button_group = SubResource("ButtonGroup_rotation")
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
@@ -482,6 +494,9 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="Rot270Button" type="Button" parent="SettingsMargin/SettingsScroll/SettingsVBox/RotationRow" unique_id=859838960]
+unique_name_in_owner = true
+toggle_mode = true
+button_group = SubResource("ButtonGroup_rotation")
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1

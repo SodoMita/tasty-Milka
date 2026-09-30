@@ -203,11 +203,11 @@ func _target(p: Dictionary, a: Variant, restoring: bool, stored: Variant) -> Dic
 			var v2: Vector2 = from + Vector2(b[0], b[1])
 			dest = [v2.x, v2.y]
 		return _from_record({"kind": "pos", "pos": dest})
-	var name: String = p.place
+	var resource_name: String = p.place
 	if three:
-		var mark: Node3D = _find_marker(name)
+		var mark: Node3D = _find_marker(resource_name)
 		if mark == null:
-			return {"ok": false, "error": "no single marker '%s' under Marks" % name}
+			return {"ok": false, "error": "no single marker '%s' under Marks" % resource_name}
 		# Markers place with their FULL transform: position, rotation and
 		# scale, expressed in the actor parent's space (so a transformed
 		# parent is honoured too).
@@ -218,12 +218,12 @@ func _target(p: Dictionary, a: Variant, restoring: bool, stored: Variant) -> Dic
 		var q: Quaternion = local.basis.get_rotation_quaternion()
 		var sc: Vector3 = local.basis.get_scale()
 		var yaw := rad_to_deg(mark.global_transform.basis.get_euler().y)
-		return _from_record({"kind": "marker", "name": name,
+		return _from_record({"kind": "marker", "name": resource_name,
 				"pos": [local.origin.x, local.origin.y, local.origin.z],
 				"rot": [q.x, q.y, q.z, q.w], "scale": [sc.x, sc.y, sc.z], "yaw": yaw})
-	if _anchor(name) == null:
-		return {"ok": false, "error": "no 2D anchor '%s'" % name}
-	return _from_record({"kind": "anchor", "name": name})
+	if _anchor(resource_name) == null:
+		return {"ok": false, "error": "no 2D anchor '%s'" % resource_name}
+	return _from_record({"kind": "anchor", "name": resource_name})
 
 
 func _from_record(r: Dictionary) -> Dictionary:
@@ -254,10 +254,10 @@ func _from_record(r: Dictionary) -> Dictionary:
 	return {"ok": true, "resolved": r.duplicate(), "pos": pos, "yaw": r.get("yaw"), "rot": rot, "scale": scl}
 
 
-func _anchor(name: String) -> Control:
-	if anchors_2d == null or name == "":
+func _anchor(resource_name: String) -> Control:
+	if anchors_2d == null or resource_name == "":
 		return null
-	return anchors_2d.get_node_or_null(NodePath(name)) as Control
+	return anchors_2d.get_node_or_null(NodePath(resource_name)) as Control
 
 
 func _anchor_pos(anchor: Control) -> Vector2:
@@ -273,16 +273,16 @@ func anchor_names() -> PackedStringArray:
 	return out
 
 
-func _find_marker(name: String) -> Node3D:
+func _find_marker(resource_name: String) -> Node3D:
 	if _stage_root == null:
 		return null
 	var marks := _stage_root.get_node_or_null("Marks")
 	if marks == null:
 		return null
-	var found: Array = marks.find_children(name, "Node3D", true, false)
+	var found: Array = marks.find_children(resource_name, "Node3D", true, false)
 	if found.size() != 1:
 		if found.size() > 1:
-			push_warning("StageActors: duplicate marker '%s'" % name)
+			push_warning("StageActors: duplicate marker '%s'" % resource_name)
 		return null
 	return found[0] as Node3D
 
@@ -426,8 +426,8 @@ func _resolve_place_record(parsed: Dictionary, shadow_place: Variant, shadow: Di
 			var v2: Vector2 = (base as Vector2) + Vector2(b[0], b[1])
 			dest = [v2.x, v2.y]
 		return {"ok": true, "record": {"kind": "pos", "pos": dest}}
-	var name: String = str(parsed.place)
-	if name == "":
+	var resource_name: String = str(parsed.place)
+	if resource_name == "":
 		return {"ok": true, "record": {}}
 	if three:
 		var stage_name: String = str(shadow.get("_stage", current_stage))
@@ -436,16 +436,16 @@ func _resolve_place_record(parsed: Dictionary, shadow_place: Variant, shadow: Di
 		var m: Node3D = null
 		var probe_root: Node3D = null
 		if live_ok:
-			m = _find_marker(name)
+			m = _find_marker(resource_name)
 		else:
 			# Branch travels through another 3D stage: instantiate that scene
 			# once (cached) and query its Marks so records still carry the
 			# computed endpoint. The instance never enters the tree so it is
 			# invisible; it is freed by [method _drop_probe_stages] on reset.
-			m = _find_marker_in_scene(stage_name, name)
+			m = _find_marker_in_scene(stage_name, resource_name)
 			probe_root = _probe_stage_cache.get(stage_name)
 		if m == null:
-			return {"ok": false, "error": "no single marker '%s' under Marks" % name}
+			return {"ok": false, "error": "no single marker '%s' under Marks" % resource_name}
 		var world_t: Transform3D
 		if live_ok:
 			world_t = m.global_transform
@@ -469,13 +469,13 @@ func _resolve_place_record(parsed: Dictionary, shadow_place: Variant, shadow: Di
 		var q: Quaternion = local.basis.get_rotation_quaternion()
 		var sc: Vector3 = local.basis.get_scale()
 		var yaw := rad_to_deg(world_t.basis.get_euler().y)
-		return {"ok": true, "record": {"kind": "marker", "name": name,
+		return {"ok": true, "record": {"kind": "marker", "name": resource_name,
 				"pos": [local.origin.x, local.origin.y, local.origin.z],
 				"rot": [q.x, q.y, q.z, q.w],
 				"scale": [sc.x, sc.y, sc.z], "yaw": yaw}}
-	if _anchor(name) == null:
-		return {"ok": false, "error": "no 2D anchor '%s'" % name}
-	return {"ok": true, "record": {"kind": "anchor", "name": name}}
+	if _anchor(resource_name) == null:
+		return {"ok": false, "error": "no 2D anchor '%s'" % resource_name}
+	return {"ok": true, "record": {"kind": "anchor", "name": resource_name}}
 
 
 func _record_position(rec: Variant, three: bool) -> Variant:
@@ -501,8 +501,6 @@ func _resolve_show_record(parsed: Dictionary, shadow: Dictionary) -> Dictionary:
 	var id: String = parsed.actor
 	if RESERVED.has(id):
 		return {"ok": false, "resolved": {}, "shadow": shadow}
-	var three: bool = _branch_is_3d(shadow)
-	var live_ok: bool = _branch_matches_live(shadow)
 	var existing: Variant = shadow.get(id)
 	var out: Dictionary = {}
 	var look_key := ""
@@ -543,8 +541,6 @@ func _resolve_move_record(parsed: Dictionary, shadow: Dictionary) -> Dictionary:
 	var existing: Variant = shadow.get(id)
 	if existing == null:
 		return {"ok": false, "resolved": {}, "shadow": shadow}
-	var three: bool = _branch_is_3d(shadow)
-	var live_ok: bool = _branch_matches_live(shadow)
 	var r: Dictionary = _resolve_place_record(parsed, existing.get("place"), shadow)
 	if not r.ok:
 		return {"ok": false, "resolved": {}, "shadow": shadow}
@@ -561,8 +557,6 @@ func _resolve_hide_record(parsed: Dictionary, shadow: Dictionary) -> Dictionary:
 	var existing: Variant = shadow.get(id)
 	if existing == null:
 		return {"ok": false, "resolved": {}, "shadow": shadow}
-	var three: bool = _branch_is_3d(shadow)
-	var live_ok: bool = _branch_matches_live(shadow)
 	var has_place: bool = parsed.place != "" or parsed.coords != null
 	var out: Dictionary = {}
 	if has_place:
@@ -862,9 +856,9 @@ func _free_actor(a: Dictionary) -> void:
 	# (finish_restore would otherwise reattach after re-#show).
 	var aid: String = str(a.id)
 	_pending_videos = _pending_videos.filter(func(v: Dictionary) -> bool: return str(v.get("on", "")) != aid)
-	for name: String in _videos.keys():
-		if str(_videos[name].get("on", "")) == aid:
-			_stop_video(name)
+	for resource_name: String in _videos.keys():
+		if str(_videos[resource_name].get("on", "")) == aid:
+			_stop_video(resource_name)
 	if is_instance_valid(a.root):
 		director.kill_node(a.root)
 		director.kill_node(a.body)
@@ -926,25 +920,25 @@ func _apply_anim(p: Dictionary, restoring: bool) -> Dictionary:
 #region Video
 
 
-func _video_stream(name: String) -> VideoStream:
-	if videos.has(name):
-		return videos[name]
+func _video_stream(resource_name: String) -> VideoStream:
+	if videos.has(resource_name):
+		return videos[resource_name]
 	for ext: String in ["ogv", "tres"]:
-		var path := "res://assets/video/%s.%s" % [name, ext]
+		var path := "res://assets/video/%s.%s" % [resource_name, ext]
 		if ResourceLoader.exists(path):
 			return load(path) as VideoStream
 	return null
 
 
 func _apply_video(p: Dictionary, restoring: bool) -> Dictionary:
-	var name: String = p.name
+	var resource_name: String = p.name
 	if bool(p.stop):
-		_stop_video(name)
-		_pending_videos = _pending_videos.filter(func(v: Dictionary) -> bool: return v.name != name)
+		_stop_video(resource_name)
+		_pending_videos = _pending_videos.filter(func(v: Dictionary) -> bool: return v.name != resource_name)
 		return _accept({})
-	var stream := _video_stream(name)
+	var stream := _video_stream(resource_name)
 	if stream == null:
-		return _reject(p.tag, "no video '%s'" % name)
+		return _reject(p.tag, "no video '%s'" % resource_name)
 	var on := str(p.opts.get("on", ""))
 	if on != "" and not actors.has(on):
 		return _reject(p.tag, "no actor '%s' to play the video on" % on)
@@ -952,18 +946,18 @@ func _apply_video(p: Dictionary, restoring: bool) -> Dictionary:
 	if restoring:
 		# Non-looping videos are omitted on restore; looping ones start once
 		# after reconstruction (finish_restore), never during it.
-		_pending_videos = _pending_videos.filter(func(v: Dictionary) -> bool: return v.name != name)
+		_pending_videos = _pending_videos.filter(func(v: Dictionary) -> bool: return v.name != resource_name)
 		if loop:
-			_pending_videos.append({"name": name, "stream": stream, "on": on, "volume": p.opts.get("volume")})
+			_pending_videos.append({"name": resource_name, "stream": stream, "on": on, "volume": p.opts.get("volume")})
 		return _accept({})
-	_start_video(name, stream, on, loop, p.opts.get("volume"))
+	_start_video(resource_name, stream, on, loop, p.opts.get("volume"))
 	return _accept({})
 
 
-func _start_video(name: String, stream: VideoStream, on: String, loop: bool, volume: Variant) -> void:
-	_stop_video(name)
+func _start_video(resource_name: String, stream: VideoStream, on: String, loop: bool, volume: Variant) -> void:
+	_stop_video(resource_name)
 	var player := VideoStreamPlayer.new()
-	player.name = "Video_%s" % name
+	player.name = "Video_%s" % resource_name
 	player.stream = stream
 	player.loop = loop
 	player.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -979,7 +973,7 @@ func _start_video(name: String, stream: VideoStream, on: String, loop: bool, vol
 		player.expand = true
 		player.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	player.play()
-	_videos[name] = {"player": player, "loop": loop, "on": on}
+	_videos[resource_name] = {"player": player, "loop": loop, "on": on}
 	if on != "":
 		var a: Dictionary = actors[on]
 		var tex := player.get_video_texture()
@@ -988,19 +982,19 @@ func _start_video(name: String, stream: VideoStream, on: String, loop: bool, vol
 		elif a.body is TextureRect:
 			(a.body as TextureRect).texture = tex
 	if not loop:
-		player.finished.connect(_on_video_finished.bind(name, player))
+		player.finished.connect(_on_video_finished.bind(resource_name, player))
 
 
-func _on_video_finished(name: String, player: VideoStreamPlayer) -> void:
-	if _videos.has(name) and _videos[name].player == player:
-		_stop_video(name)
+func _on_video_finished(resource_name: String, player: VideoStreamPlayer) -> void:
+	if _videos.has(resource_name) and _videos[resource_name].player == player:
+		_stop_video(resource_name)
 
 
-func _stop_video(name: String) -> void:
-	if not _videos.has(name):
+func _stop_video(resource_name: String) -> void:
+	if not _videos.has(resource_name):
 		return
-	var v: Dictionary = _videos[name]
-	_videos.erase(name)
+	var v: Dictionary = _videos[resource_name]
+	_videos.erase(resource_name)
 	if is_instance_valid(v.player):
 		v.player.stop()
 		v.player.queue_free()
@@ -1020,19 +1014,19 @@ func video_names() -> Array:
 
 
 func _apply_stage(p: Dictionary) -> Dictionary:
-	var name: String = p.name
-	if name == current_stage:
+	var resource_name: String = p.name
+	if resource_name == current_stage:
 		return _accept({})
 	var root: Node3D = null
-	if name != "2d":
-		root = _load_stage(name)
+	if resource_name != "2d":
+		root = _load_stage(resource_name)
 		if root == null:
-			return _reject(p.tag, "no stage scene '%s'" % name)
+			return _reject(p.tag, "no stage scene '%s'" % resource_name)
 	_clear_stage()
 	if _stage_root != null and _stage_root.get_parent() != null:
 		_stage_root.get_parent().remove_child(_stage_root)
 	_stage_root = root
-	current_stage = name
+	current_stage = resource_name
 	if root != null:
 		viewport.add_child(root)
 		viewport_container.show()
@@ -1041,16 +1035,16 @@ func _apply_stage(p: Dictionary) -> Dictionary:
 			(cam[0] as Camera3D).make_current()
 	else:
 		viewport_container.hide()
-	stage_cleared.emit(name)
+	stage_cleared.emit(resource_name)
 	return _accept({})
 
 
-func _load_stage(name: String) -> Node3D:
-	if _stage_cache.has(name) and is_instance_valid(_stage_cache[name]):
-		return _stage_cache[name]
-	var packed: PackedScene = stage_scenes.get(name)
+func _load_stage(resource_name: String) -> Node3D:
+	if _stage_cache.has(resource_name) and is_instance_valid(_stage_cache[resource_name]):
+		return _stage_cache[resource_name]
+	var packed: PackedScene = stage_scenes.get(resource_name)
 	if packed == null:
-		var path := "res://scenes/stages/%s.tscn" % name
+		var path := "res://scenes/stages/%s.tscn" % resource_name
 		if ResourceLoader.exists(path):
 			packed = load(path)
 	if packed == null:
@@ -1058,7 +1052,7 @@ func _load_stage(name: String) -> Node3D:
 	var root := packed.instantiate() as Node3D
 	if root == null:
 		return null
-	_stage_cache[name] = root
+	_stage_cache[resource_name] = root
 	return root
 
 
@@ -1070,8 +1064,8 @@ func _clear_stage() -> void:
 	for a: Dictionary in _ghosts:
 		_free_actor(a)
 	_ghosts.clear()
-	for name: String in _videos.keys():
-		_stop_video(name)
+	for resource_name: String in _videos.keys():
+		_stop_video(resource_name)
 	_pending_videos.clear()
 	focus_id = ""
 
@@ -1106,8 +1100,8 @@ func finish_restore() -> void:
 
 
 func _exit_tree() -> void:
-	for name: String in _videos.keys():
-		_stop_video(name)
+	for resource_name: String in _videos.keys():
+		_stop_video(resource_name)
 	for key: String in _stage_cache:
 		var root = _stage_cache[key]
 		if is_instance_valid(root) and root.get_parent() == null:
