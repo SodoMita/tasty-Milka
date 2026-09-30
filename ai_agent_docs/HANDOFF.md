@@ -1,3 +1,46 @@
+# Maple [q9] — branch `maple-q9-milk-glass` (2026-09-30)
+
+My own version of the milk UI. Godot only, no web code, and no look restated
+inside any scene — the settings live in one resource:
+
+- `maple_ui/milk_style.gd` + `maple_ui/milk_style.tres` — **the settings**.
+  The dialogue bubble and the title screen both load this same `.tres`, so the
+  two can never drift: palette, glass geometry, layout offsets, type scale and
+  motion timings are all here. Swap the resource and everything follows.
+- `maple_ui/glass_panel.gd` — transparent milk-glass pane: translucent fill,
+  cream rim, top meniscus highlight, droplet tail at the speaker.
+- `maple_ui/icon_button.gd` + `maple_ui/icons/*.svg` — **icon-only** buttons
+  (10 hand-drawn SVG glyphs). No text ever sits on a button face; the meaning
+  travels in `tooltip_text`, so it translates.
+- `maple_ui/dialogue_bubble.tscn` — shallow glass anchored bottom-left with a
+  drip tail, plus a floating vertical icon rail at the right edge
+  (advance / auto / quick save / backlog / settings).
+- `maple_ui/title_screen.tscn` — the *same* glass lockup and the same icon
+  chips, menu stacked on the same left axis; empty glass field on the right.
+- `maple_ui/demo/maple_demo.tscn` — title -> dialogue demo with an animated
+  placeholder actor (bob + blink + expression swap). Its four lines are quoted
+  from `dialogue/milka.dialogue`; **no new dialogue words were written**.
+
+Run it:
+
+    godot --path . res://maple_ui/demo/maple_demo.tscn
+
+Screenshot it the way the human asked (sway, pixman software renderer):
+
+    GODOT=<godot 4.7 binary> bash maple_ui/tools/sway_capture.sh
+    # -> docs/screenshots/maple_title.png, maple_dialogue.png,
+    #    maple_bubble_detail.png, maple_sway_desktop.png
+
+To adopt it as the game UI: point `run/main_scene` at
+`res://maple_ui/title_screen.tscn`, and instantiate `maple_ui/dialogue_bubble.tscn`
+wherever the balloon is shown (it exposes `show_line(speaker, text)`,
+`advance()`, and emits `action_requested(id)` / `line_finished`).
+`scenes/vn_balloon.tscn` and the rest of the project are untouched. Art and
+story stay the human's — the demo art (`assets/characters/crema`,
+`assets/backgrounds/milky_meadow.svg`) only stands in.
+
+---
+
 # READ THIS FIRST - current state (Chocola-7f3 + Chocola-9b2, 2026-09-29)
 
 The dated sections below are a log of what was believed at the time. Several early ones call test failures
