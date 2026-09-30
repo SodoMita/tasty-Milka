@@ -1,0 +1,18 @@
+~ start
+Narrator: The morning light pools across the meadow. Somewhere, a milk bottle clinks against a gate. [#bg=milky_meadow]
+Milka: "Nya~ Good morning! I'm Milka, and this is where your story starts." [#sprite=milka_chan_smile:center, anim=bounce, sfx=click]
+Narrator: Everything on this screen is a placeholder - a human writes the real lines over mine. [#sfx=open]
+
+- "Where does the story go?"
+    Milka: "Anywhere you like. Branches, choices and quiet afternoons all live here." [#sprite=milka_chan:center]
+    -> rooftop
+
+- "What should I replace first?"
+    Milka: "The art in assets/characters, the backgrounds, and every word of this file." [#sprite=milka_chan_surprised:center, anim=shake, sfx=error]
+    -> rooftop
+
+~ rooftop
+Narrator: Wind over the chain-link fence. The valley below is white with fog. [#bg=starry_night]
+Milka: "See? Told you the view was worth the stairs." [#sprite=milka_chan_smile:center, anim=nod, sfx=confirm]
+Narrator: Same time tomorrow?
+Milka: "Nya~ Don't be late." [#sprite=milka_chan:center]

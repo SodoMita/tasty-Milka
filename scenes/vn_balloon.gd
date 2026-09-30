@@ -424,6 +424,7 @@ func _ready() -> void:
 	if is_instance_valid(panic_screen):
 		panic_screen.hide()
 	hold_indicator.hide()
+	_apply_milk_glass()
 	_bind_hold_panels()
 	if is_instance_valid(route_graph_panel):
 		route_graph_panel.hide()
@@ -1949,10 +1950,24 @@ const UI_TEXT_KEYS: Array = [
 
 ## Strings the engine can't auto-translate (option items, runtime titles)
 ## are re-set from the .po whenever the locale changes.
+## Shared milk-glass look: the bubble borrows its glass, plate and icon
+## language from assets/ui/milk_ui_settings.tres - the same resource the
+## title screen uses, so the two scenes can never drift apart.
+func _apply_milk_glass() -> void:
+	MilkGlass.panel(dialogue_box)
+	MilkGlass.plate(name_plate)
+	MilkGlass.dress_all(self, MilkGlass.BALLOON_CHROME)
+
+
 func _retranslate_dynamic() -> void:
 	for entry: Array in UI_TEXT_KEYS:
 		var n: Node = find_child(String(entry[0]), true, false)
-		if n != null and "text" in n:
+		if n == null:
+			continue
+		if MilkGlass.BALLOON_CHROME.has(String(entry[0])):
+			MilkGlass.dress_icon_button(n, String(entry[1]))
+			continue
+		if "text" in n:
 			(n as Object).set("text", tr(String(entry[1])))
 	if is_instance_valid(skip_mode_option):
 		skip_mode_option.set_item_text(0, tr("Everything"))

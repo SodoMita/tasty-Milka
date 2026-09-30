@@ -15,6 +15,7 @@ extends Control
 
 
 func _ready() -> void:
+	_apply_milk_glass()
 	ambient.play("ambient")
 	_apply_settings()
 	_translate_labels()
@@ -39,13 +40,24 @@ func _apply_settings() -> void:
 		store.apply_globals()
 
 
+## The title screen carries no scene builder: everything is authored in
+## title_screen.tscn. It only borrows the shared milk-glass settings
+## (assets/ui/milk_ui_settings.tres) that the dialogue bubble uses too.
+func _apply_milk_glass() -> void:
+	theme = MilkGlass.settings().build_theme()
+	MilkGlass.dress_all(self, MilkGlass.TITLE_MENU)
+	# The entry point is the one chip in butter, so the eye lands on it.
+	MilkGlass.settings()
+	start_button.add_theme_stylebox_override(&"normal", MilkGlass.settings().chip_style(&"pressed"))
+
+
 func _translate_labels() -> void:
 	subtitle.text = tr(subtitle.text)
 	version.text = tr(version.text)
-	start_button.text = tr(start_button.text)
-	continue_button.text = tr(continue_button.text)
-	settings_button.text = tr(settings_button.text)
-	quit_button.text = tr(quit_button.text)
+	for button: Button in [start_button, continue_button, settings_button, quit_button]:
+		if button.tooltip_text.is_empty():
+			continue
+		button.tooltip_text = tr(button.tooltip_text)
 
 
 func _on_start_pressed() -> void:

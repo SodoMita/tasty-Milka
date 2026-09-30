@@ -19,6 +19,21 @@
 [ext_resource type="Resource" path="res://characters/shadow.tres" id="28_def_shadow"]
 [ext_resource type="Resource" path="res://characters/milka_chan.tres" id="36_def_milka"]
 [ext_resource type="Texture2D" path="res://assets/ui/milk_droplet.svg" id="40_drop"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/ic_quick_save.svg" id="100_ic_quick_save"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/ic_quick_load.svg" id="101_ic_quick_load"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/ic_save.svg" id="102_ic_save"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/ic_load.svg" id="103_ic_load"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/ic_auto.svg" id="104_ic_auto"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/ic_skip.svg" id="105_ic_skip"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/ic_prev.svg" id="106_ic_prev"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/ic_next.svg" id="107_ic_next"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/ic_history.svg" id="108_ic_history"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/ic_settings.svg" id="109_ic_settings"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/ic_panic.svg" id="110_ic_panic"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/ic_pause.svg" id="111_ic_pause"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/ic_map.svg" id="112_ic_map"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/ic_plus.svg" id="113_ic_plus"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/ic_close.svg" id="114_ic_close"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_box"]
 bg_color = Color(1, 1, 1, 0.62)
@@ -556,7 +571,10 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_hist_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/hover = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/focus = SubResource("StyleBoxFlat_hist_hot")
-text = "QS"
+icon = ExtResource("100_ic_quick_save")
+text = ""
+tooltip_text = "Quick save"
+expand_icon = true
 
 [node name="QLButton" type="Button" parent="Balloon/UIRoot/BottomUI/SystemRow" unique_id=1594483682]
 unique_name_in_owner = true
@@ -571,7 +589,10 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_hist_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/hover = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/focus = SubResource("StyleBoxFlat_hist_hot")
-text = "QL"
+icon = ExtResource("101_ic_quick_load")
+text = ""
+tooltip_text = "Quick load"
+expand_icon = true
 
 [node name="SaveButton" type="Button" parent="Balloon/UIRoot/BottomUI/SystemRow" unique_id=562194273]
 unique_name_in_owner = true
@@ -586,7 +607,10 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_hist_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/hover = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/focus = SubResource("StyleBoxFlat_hist_hot")
-text = "Save"
+icon = ExtResource("102_ic_save")
+text = ""
+tooltip_text = "Save"
+expand_icon = true
 
 [node name="LoadButton" type="Button" parent="Balloon/UIRoot/BottomUI/SystemRow" unique_id=2002455767]
 unique_name_in_owner = true
@@ -601,7 +625,10 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_hist_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/hover = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/focus = SubResource("StyleBoxFlat_hist_hot")
-text = "Load"
+icon = ExtResource("103_ic_load")
+text = ""
+tooltip_text = "Load"
+expand_icon = true
 
 [node name="AutoButton" type="Button" parent="Balloon/UIRoot/BottomUI/SystemRow" unique_id=1605303054]
 unique_name_in_owner = true
@@ -616,7 +643,10 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_hist_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/hover = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/focus = SubResource("StyleBoxFlat_hist_hot")
-text = "Auto"
+icon = ExtResource("104_ic_auto")
+text = ""
+tooltip_text = "Auto"
+expand_icon = true
 
 [node name="SkipButton" type="Button" parent="Balloon/UIRoot/BottomUI/SystemRow" unique_id=1946669672]
 unique_name_in_owner = true
@@ -631,7 +661,10 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_hist_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/hover = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/focus = SubResource("StyleBoxFlat_hist_hot")
-text = "Skip"
+icon = ExtResource("105_ic_skip")
+text = ""
+tooltip_text = "Skip"
+expand_icon = true
 
 [node name="PrevChoiceButton" type="Button" parent="Balloon/UIRoot/BottomUI/SystemRow" unique_id=1104557728]
 unique_name_in_owner = true
@@ -646,7 +679,10 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_hist_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/hover = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/focus = SubResource("StyleBoxFlat_hist_hot")
-text = "< Choice"
+icon = ExtResource("106_ic_prev")
+text = ""
+tooltip_text = "< Choice"
+expand_icon = true
 
 [node name="NextChoiceButton" type="Button" parent="Balloon/UIRoot/BottomUI/SystemRow" unique_id=1141050072]
 unique_name_in_owner = true
@@ -661,7 +697,10 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_hist_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/hover = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/focus = SubResource("StyleBoxFlat_hist_hot")
-text = "Choice >"
+icon = ExtResource("107_ic_next")
+text = ""
+tooltip_text = "Choice >"
+expand_icon = true
 
 [node name="LogButton" type="Button" parent="Balloon/UIRoot/BottomUI/SystemRow" unique_id=535022381]
 unique_name_in_owner = true
@@ -676,7 +715,10 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_hist_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/hover = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/focus = SubResource("StyleBoxFlat_hist_hot")
-text = "Log"
+icon = ExtResource("108_ic_history")
+text = ""
+tooltip_text = "Log"
+expand_icon = true
 
 [node name="SettingsButton" type="Button" parent="Balloon/UIRoot/BottomUI/SystemRow" unique_id=406317563]
 unique_name_in_owner = true
@@ -691,7 +733,10 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_hist_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/hover = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/focus = SubResource("StyleBoxFlat_hist_hot")
-text = "Set"
+icon = ExtResource("109_ic_settings")
+text = ""
+tooltip_text = "Set"
+expand_icon = true
 
 [node name="PanicButton" type="Button" parent="Balloon/UIRoot/BottomUI/SystemRow" unique_id=1658958581]
 unique_name_in_owner = true
@@ -706,7 +751,10 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_hist_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/hover = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/focus = SubResource("StyleBoxFlat_hist_hot")
-text = "Panic"
+icon = ExtResource("110_ic_panic")
+text = ""
+tooltip_text = "Panic"
+expand_icon = true
 
 [node name="PauseButton" type="Button" parent="Balloon/UIRoot/BottomUI/SystemRow" unique_id=901028320]
 unique_name_in_owner = true
@@ -721,7 +769,10 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_hist_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/hover = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/focus = SubResource("StyleBoxFlat_hist_hot")
-text = "Pause"
+icon = ExtResource("111_ic_pause")
+text = ""
+tooltip_text = "Pause"
+expand_icon = true
 
 
 [node name="RouteButton" type="Button" parent="Balloon/UIRoot/BottomUI/SystemRow"]
@@ -737,7 +788,10 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_hist_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/hover = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/focus = SubResource("StyleBoxFlat_hist_hot")
-text = "Map"
+icon = ExtResource("112_ic_map")
+text = ""
+tooltip_text = "Map"
+expand_icon = true
 
 [node name="ResponsesCenter" type="CenterContainer" parent="Balloon/UIRoot/BottomUI" unique_id=1165762510]
 unique_name_in_owner = true
@@ -806,7 +860,10 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(44, 40)
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
-text = "X"
+icon = ExtResource("114_ic_close")
+text = ""
+tooltip_text = "Close"
+expand_icon = true
 
 [node name="NewSlotButton" type="Button" parent="Balloon/UIRoot/SaveMenuPanel/SaveMenuMargin/SaveMenuVBox" unique_id=644364752]
 unique_name_in_owner = true
@@ -821,7 +878,10 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_hist_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/hover = SubResource("StyleBoxFlat_hist_hot")
 theme_override_styles/focus = SubResource("StyleBoxFlat_hist_hot")
-text = "+ New slot"
+icon = ExtResource("113_ic_plus")
+text = ""
+tooltip_text = "+ New slot"
+expand_icon = true
 
 [node name="SlotScroll" type="ScrollContainer" parent="Balloon/UIRoot/SaveMenuPanel/SaveMenuMargin/SaveMenuVBox" unique_id=2085541489]
 layout_mode = 2
@@ -2072,7 +2132,10 @@ offset_bottom = 52.0
 grow_horizontal = 0
 theme_override_colors/font_color = Color(0.3, 0.29, 0.24, 1)
 theme_override_font_sizes/font_size = 22
-text = "X"
+icon = ExtResource("114_ic_close")
+text = ""
+tooltip_text = "Close"
+expand_icon = true
 
 [node name="MotionDirector" type="Node" parent="."]
 unique_name_in_owner = true

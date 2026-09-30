@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="MilkUISettings" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://assets/ui/milk_ui_settings.gd" id="1_settings"]
+
+[resource]
+script = ExtResource("1_settings")
+surface = Color(0.984, 0.968, 0.937, 1)
+glass = Color(1, 1, 1, 0.3)
+glass_hover = Color(1, 1, 1, 0.55)
+glass_pressed = Color(1, 0.96, 0.8, 0.8)
+rim = Color(0.56, 0.54, 0.47, 0.5)
+rim_strong = Color(0.42, 0.4, 0.33, 0.9)
+butter = Color(0.949, 0.902, 0.69, 0.92)
+butter_strong = Color(0.937, 0.851, 0.463, 1)
+ink = Color(0.298, 0.282, 0.243, 0.95)
+quiet = Color(0.541, 0.514, 0.467, 1)
+corner_radius = 24
+chip_radius = 18
+plate_radius = 14
+border_width = 2
+content_margin = 24
+content_margin_y = 12
+chip_size = 44
+plate_overlap = Vector2(-18, -18)
+body_size = 20
+chrome_size = 15
+plate_size = 22
+plate_tracking = 1.6
+rise_px = 12.0
+fade_in = 0.32
+typewriter_cps = 32.0
+caret_blink = 1.06
+reduced_motion = false
