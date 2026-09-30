@@ -50,8 +50,8 @@ extends Resource
 ## Bubble distance from the bottom-left corner of the screen.
 @export var bubble_offset: Vector2 = Vector2(56.0, 48.0)
 ## Droplet tail that points at the speaker.
-@export var tail_length: float = 30.0
-@export var tail_width: float = 34.0
+@export var tail_length: float = 26.0
+@export var tail_width: float = 42.0
 ## The floating icon rail sits at the right edge, unattached to the bubble.
 @export var rail_offset: Vector2 = Vector2(40.0, 0.0)
 @export var rail_gap: float = 12.0
