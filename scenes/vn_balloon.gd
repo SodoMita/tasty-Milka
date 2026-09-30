@@ -217,6 +217,8 @@ var _panic_place: Dictionary = {}
 
 ## Bottom system row (wraps on narrow aspects / big UI scales)
 @onready var bottom_ui: Control = %BottomUI
+@onready var hide_ui_button: Button = %HideUIButton
+@onready var reveal_ui_button: Button = %RevealUIButton
 @onready var system_row: GridContainer = %SystemRow
 @onready var pause_button: Button = %PauseButton
 @onready var route_button: Button = %RouteButton
@@ -1464,6 +1466,8 @@ func _input(event: InputEvent) -> void:
 		return
 	if not is_instance_valid(balloon) or not balloon.is_visible_in_tree() or _panic_open():
 		return
+	if not bottom_ui.visible:
+		return
 	# Close and Pause are separate actions, so each can be rebound. They may
 	# both default to Esc. An open overlay closes and does not also pause.
 	# Backspace stays with SpinBox/LineEdit unless Close is rebound to it.
@@ -1938,8 +1942,7 @@ const UI_TEXT_KEYS: Array = [
 	["SettingsHint", "Settings are saved automatically. Use Close or X to exit."],
 	["PauseTitle", "Paused"], ["ResumeButton", "Resume"], ["PauseHistoryButton", "History"],
 	["PauseSaveButton", "Save"], ["PauseLoadButton", "Load"], ["PauseSettingsButton", "Settings"],
-	["QuitButton", "Quit"], ["PanicTitle", "PHYS 201 - Quantum Mechanics II"],
-	["PanicBody", "Lecture 12: The time-independent Schroedinger equation. H psi = E psi, where H is the Hamiltonian operator. For a particle in a 1-D infinite well of width L the energy eigenvalues are E_n = n^2 h^2 / (8 m L^2). Reminder: problem set 4 is due Friday - problems 3.7, 3.9 and the derivation of the uncertainty principle for position and momentum."],
+	["QuitButton", "Quit"],
 	["HistoryTitle", "History"],
 	["HistoryHint", "Click a line to roll back to it - H or Esc closes"],
 ]
@@ -2819,6 +2822,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		toggle_panic()
 		return
+	if not bottom_ui.visible:
+		return
 
 	# Handle these here as a fallback as well as in _input. Some embedded
 	# platforms route key events straight to unhandled_input after a focused
@@ -2920,6 +2925,8 @@ func _on_balloon_gui_input(event: InputEvent) -> void:
 		return
 	if _panic_open():
 		get_viewport().set_input_as_handled()
+		return
+	if not bottom_ui.visible:
 		return
 	if _try_system_actions(event):
 		return
@@ -3348,6 +3355,26 @@ func _resource_has_key(resource, key: String) -> bool:
 		var bare := key.split("@")[-1]
 		return resource.lines.has(bare) or resource.cues.has(bare)
 	return false
+
+
+## Hide the dialogue UI, not the stage. Keep a small reveal affordance outside
+## BottomUI so touch users can always restore the interface.
+func _on_hide_ui_pressed() -> void:
+	bottom_ui.hide()
+	reveal_ui_button.show()
+	auto_timer.stop()
+	skip_timer.stop()
+	_sfx("close")
+	reveal_ui_button.grab_focus()
+
+
+func _on_show_ui_pressed() -> void:
+	reveal_ui_button.hide()
+	bottom_ui.show()
+	_sfx("open")
+	balloon.grab_focus()
+	if auto_mode and is_waiting_for_input:
+		auto_timer.start(auto_delay)
 
 
 func _on_panic_pressed() -> void:

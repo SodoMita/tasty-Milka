@@ -55,7 +55,7 @@ func open_resource(resource = null, player: Dictionary = {}) -> void:
 	if resource != null:
 		dialogue_resource = resource
 	elif dialogue_resource == null:
-		var loaded = load("res://dialogue/intro.dialogue")
+		var loaded = load("res://dialogue/milka.dialogue")
 		if loaded != null:
 			dialogue_resource = loaded
 	player_state = player
@@ -118,7 +118,7 @@ func _rebuild() -> void:
 			"title_source": "No routes",
 			"title_dialogue": false,
 			"subtitle": "0 in / 0 out",
-			"color": Color("#475569"),
+			"color": Color("#799187"),
 			"x": 40.0,
 			"y": 40.0,
 			"w": 240.0,

@@ -23,7 +23,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.98, 0.98, 0.96, 1)
+color = Color(0.997, 0.992, 0.967, 1)
 
 [node name="PanicMargin" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -52,18 +52,38 @@ mouse_filter = 2
 
 [node name="PanicTitle" type="Label" parent="PanicMargin/PanicScroll/PanicVBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_colors/font_color = Color(0.22, 0.23, 0.19, 1)
 theme_override_fonts/font = ExtResource("2_bold")
 theme_override_font_sizes/font_size = 30
-text = "PHYS 201 - Quantum Mechanics II"
+text = "Field notes · The lives of cows"
 autowrap_mode = 2
 
 [node name="PanicBody" type="Label" parent="PanicMargin/PanicScroll/PanicVBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.15, 0.15, 0.15, 1)
+theme_override_colors/font_color = Color(0.27, 0.28, 0.24, 1)
 theme_override_fonts/font = ExtResource("3_serif")
 theme_override_font_sizes/font_size = 18
-text = "Lecture 12: The time-independent Schroedinger equation. H psi = E psi, where H is the Hamiltonian operator. For a particle in a 1-D infinite well of width L the energy eigenvalues are E_n = n^2 h^2 / (8 m L^2). Reminder: problem set 4 is due Friday - problems 3.7, 3.9 and the derivation of the uncertainty principle for position and momentum."
+text = "A FIELD GUIDE TO COWS
+
+01  WHAT IS A COW?
+Cattle (Bos taurus) are domesticated bovines. In everyday speech, “cow” often means any member of the species, but technically a cow is an adult female that has calved; a heifer is a female that has not yet calved. A bull is an adult male, and a steer is a castrated male. Cattle are social herd animals. They remember familiar individuals, spend time grooming one another, and usually prefer to rest near trusted companions.
+
+02  A RUMINANT'S FOUR COMPARTMENTS
+Cattle eat grasses and other plants rich in cellulose, which a mammal cannot digest on its own. Their stomach has four compartments: the rumen, reticulum, omasum, and abomasum. The rumen is a warm fermentation chamber populated by bacteria, archaea, protozoa, and fungi. These microbes break down plant fibers and produce volatile fatty acids, an important source of energy for the animal. The reticulum helps sort feed; the omasum absorbs water and nutrients; the abomasum is the acid-secreting “true stomach.” Cows regurgitate partially digested feed as cud, chew it again, and swallow it. This remastication makes plant matter easier for microbes to process. A relaxed cow may spend several hours a day chewing cud.
+
+03  HOW MILK IS MADE
+Milk is produced in the udder after calving. Each of the four udder quarters contains its own glandular tissue and teat. Tiny clusters of secretory cells called alveoli assemble milk from nutrients carried in the blood. The first milk after birth is colostrum, rich in antibodies that help protect the calf. The hormone oxytocin triggers milk letdown by contracting cells around the alveoli. Clean bedding, gentle handling, adequate water, balanced feed, and prompt veterinary care support both udder health and animal welfare. Milk yield varies widely with breed, nutrition, stage of lactation, and the individual cow.
+
+04  THE LIFE OF A HERD
+Cattle use sight, sound, scent, and touch to communicate. A calf learns its mother's voice and smell. Ears, tail, posture, and distance from others can all signal comfort or stress. Cattle have panoramic vision but a blind spot directly behind them; they may be startled by sudden movements or sharp contrasts. They prefer calm, predictable handling. Rest matters: cows commonly lie down for many hours each day, and comfortable dry space is important for health. They also need continuous access to clean water; a lactating animal can drink a great deal, especially in warm weather.
+
+05  MORE THAN BLACK AND WHITE
+There are many cattle breeds, with different coat colors, body types, and adaptations. Holsteins are often black-and-white, Jerseys are smaller and frequently fawn-colored, and Highland cattle have long coats suited to cold, wet weather. Horns are not exclusive to bulls: depending on breed and management, both males and females may grow them. A cow's unique pattern of markings can help people tell individuals apart. Every herd is made up of distinct animals rather than interchangeable silhouettes.
+
+06  CARE AND THE PLANET
+Good husbandry includes appropriate feed, shade or shelter, room to move, social contact, and veterinary attention. Farming choices also affect land, water, and climate. Ruminant digestion produces methane; manure management and feed production can add further emissions. Responsible land management, healthier herds, and improved practices can reduce impacts, though there is no single solution for every region. Understanding cattle means considering their needs as living animals alongside the ecosystems and communities around them.
+
+END OF FIELD NOTES  ·  Scroll to revisit a section. Close to return to the story."
 autowrap_mode = 2
 
 [node name="PanicCloseButton" type="Button" parent="."]

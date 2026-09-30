@@ -1,6 +1,6 @@
 extends Control
-## Boss screen. Edit this scene (layout, colors, text) without touching the
-## balloon. Closing it loads the game scene back at the line that was showing.
+## Educational cow field guide. Edit this scene (layout, colors, article text)
+## without touching the balloon. Closing it loads the game scene back at the line that was showing.
 ## When this scene replaces the game it is not inside the scaled UI, so it
 ## reapplies the saved resolution, UI scale, and rotation itself.
 
@@ -10,6 +10,8 @@ signal dismissed
 const DisplayScale = preload("res://scenes/display_scale.gd")
 
 var _base_font_sizes: Dictionary = {}
+var _source_title := ""
+var _source_body := ""
 
 ## Place to resume after this scene replaces the game. Empty when the screen
 ## is only covering a game that is still loaded.
@@ -49,6 +51,13 @@ static func return_to_game(tree: SceneTree) -> void:
 
 
 func _ready() -> void:
+	# Cache scene-authored source text so locale changes never overwrite the article.
+	var title := get_node_or_null("PanicMargin/PanicScroll/PanicVBox/PanicTitle") as Label
+	var body := get_node_or_null("PanicMargin/PanicScroll/PanicVBox/PanicBody") as Label
+	if title != null:
+		_source_title = title.text
+	if body != null:
+		_source_body = body.text
 	_apply_text()
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	# Overlay panic sits in the balloon's already-rotated canvas. Only the
@@ -119,12 +128,12 @@ func _apply_saved_rotation(deg: int) -> void:
 
 
 func _apply_text() -> void:
-	var title := get_node_or_null("PanicMargin/PanicScroll/PanicVBox/PanicTitle")
-	var body := get_node_or_null("PanicMargin/PanicScroll/PanicVBox/PanicBody")
-	if title != null and "text" in title:
-		title.text = tr("PHYS 201 - Quantum Mechanics II")
-	if body != null and "text" in body:
-		body.text = tr("Lecture 12: The time-independent Schroedinger equation. H psi = E psi, where H is the Hamiltonian operator. For a particle in a 1-D infinite well of width L the energy eigenvalues are E_n = n^2 h^2 / (8 m L^2). Reminder: problem set 4 is due Friday - problems 3.7, 3.9 and the derivation of the uncertainty principle for position and momentum.")
+	var title := get_node_or_null("PanicMargin/PanicScroll/PanicVBox/PanicTitle") as Label
+	var body := get_node_or_null("PanicMargin/PanicScroll/PanicVBox/PanicBody") as Label
+	if title != null and not _source_title.is_empty():
+		title.text = tr(_source_title)
+	if body != null and not _source_body.is_empty():
+		body.text = tr(_source_body)
 
 
 func _unhandled_input(event: InputEvent) -> void:

@@ -74,7 +74,7 @@ static func compile(resource, prefix: String = "", laid_out: bool = true) -> Dic
 			cname,
 			"START" if is_start else "ROUTE",
 			cname.capitalize(),
-			Color("#16A34A") if is_start else Color("#0F766E"),
+			Color("#738C71") if is_start else Color("#799187"),
 			"cue"
 		)
 		# First cue of this file. compile_many keeps the flag only on the first file.
@@ -85,7 +85,7 @@ static func compile(resource, prefix: String = "", laid_out: bool = true) -> Dic
 	for gid in choice_groups.keys():
 		var source := _choice_source(lines, line_key, gid)
 		var title := _choice_title_from(source, gid)
-		var node := _make("choice_%s" % gid, "CHOICE", title, Color("#D97706"), "%d options" % choice_groups[gid].size())
+		var node := _make("choice_%s" % gid, "CHOICE", title, Color("#A88653"), "%d options" % choice_groups[gid].size())
 		# Full dialogue msgid. Display translates it, then shortens.
 		if source == "":
 			node["title_source"] = "Choice %s"
@@ -97,7 +97,7 @@ static func compile(resource, prefix: String = "", laid_out: bool = true) -> Dic
 		nodes.append(node)
 		by_id[node.id] = node
 
-	var end_node := _make("END", "ENDING", "END", Color("#9F1239"), "ending")
+	var end_node := _make("END", "ENDING", "END", Color("#AE7376"), "ending")
 	nodes.append(end_node)
 	by_id["END"] = end_node
 

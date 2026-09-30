@@ -27,6 +27,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/icons/load.svg" id="70_load"]
 [ext_resource type="Texture2D" path="res://assets/ui/icons/next_choice.svg" id="70_next_choice"]
 [ext_resource type="Texture2D" path="res://assets/ui/icons/panic.svg" id="70_panic"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/panic_red.svg" id="70_panic_red"]
 [ext_resource type="Texture2D" path="res://assets/ui/icons/pause.svg" id="70_pause"]
 [ext_resource type="Texture2D" path="res://assets/ui/icons/play.svg" id="70_play"]
 [ext_resource type="Texture2D" path="res://assets/ui/icons/plus.svg" id="70_plus"]
@@ -474,6 +475,16 @@ offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 0
 
+[node name="HideUIButton" type="Button" parent="Balloon/UIRoot/BottomUI/SystemRow"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(44, 44)
+tooltip_text = "Hide UI"
+theme_type_variation = &"IconButton"
+icon = ExtResource("70_panic")
+icon_alignment = 1
+expand_icon = true
+
 [node name="QSButton" type="Button" parent="Balloon/UIRoot/BottomUI/SystemRow" unique_id=1021612450]
 unique_name_in_owner = true
 layout_mode = 2
@@ -580,7 +591,11 @@ layout_mode = 2
 custom_minimum_size = Vector2(44, 44)
 tooltip_text = "Panic"
 theme_type_variation = &"IconButton"
-icon = ExtResource("70_panic")
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+icon = ExtResource("70_panic_red")
 icon_alignment = 1
 expand_icon = true
 
@@ -601,6 +616,25 @@ custom_minimum_size = Vector2(44, 44)
 tooltip_text = "Route map"
 theme_type_variation = &"IconButton"
 icon = ExtResource("70_route")
+icon_alignment = 1
+expand_icon = true
+
+[node name="RevealUIButton" type="Button" parent="Balloon/UIRoot"]
+unique_name_in_owner = true
+visible = false
+z_index = 5
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 14.0
+offset_top = -58.0
+offset_right = 58.0
+offset_bottom = -14.0
+grow_vertical = 0
+tooltip_text = "Show UI"
+theme_type_variation = &"IconButton"
+icon = ExtResource("70_panic")
 icon_alignment = 1
 expand_icon = true
 
@@ -987,6 +1021,8 @@ unique_name_in_owner = true
 bus = &"Voice"
 
 [connection signal="gui_input" from="Balloon" to="." method="_on_balloon_gui_input"]
+[connection signal="pressed" from="Balloon/UIRoot/BottomUI/SystemRow/HideUIButton" to="." method="_on_hide_ui_pressed"]
+[connection signal="pressed" from="Balloon/UIRoot/RevealUIButton" to="." method="_on_show_ui_pressed"]
 [connection signal="pressed" from="Balloon/UIRoot/BottomUI/SystemRow/QSButton" to="." method="_on_quick_save_pressed"]
 [connection signal="pressed" from="Balloon/UIRoot/BottomUI/SystemRow/QLButton" to="." method="_on_quick_load_pressed"]
 [connection signal="pressed" from="Balloon/UIRoot/BottomUI/SystemRow/SaveButton" to="." method="_on_save_menu_pressed"]

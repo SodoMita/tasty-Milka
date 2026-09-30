@@ -6,6 +6,9 @@ extends PanelContainer
 
 signal travel_requested(target: Dictionary)
 
+const VISITED_ICON = preload("res://assets/ui/icons/visited.svg")
+const REVEALED_ICON = preload("res://assets/ui/icons/panic.svg")
+
 @onready var view: Control = %RouteGraphView
 @onready var close_btn: Button = %CloseButton
 @onready var here_label: Label = %HereLabel
@@ -137,8 +140,9 @@ func _set_visited_only(on: bool) -> void:
 func _sync_toggle_look() -> void:
 	if visited_toggle == null:
 		return
-	visited_toggle.text = tr("Visited only") if visited_only else tr("Full map")
-	visited_toggle.modulate = Color(1.0, 0.85, 0.5) if visited_only else Color(1.0, 0.72, 0.45)
+	visited_toggle.tooltip_text = tr("Visited only") if visited_only else tr("Full map")
+	visited_toggle.icon = VISITED_ICON if visited_only else REVEALED_ICON
+	visited_toggle.modulate = Color(1.0, 0.95, 0.81) if visited_only else Color.WHITE
 
 
 func _refresh_here() -> void:
@@ -159,14 +163,14 @@ func _apply_texts() -> void:
 	if hint_label:
 		hint_label.text = tr("Drag to pan  ·  Pinch or wheel to zoom  ·  Port → other side  ·  Edge → furthest of its two nodes  ·  Header → play there")
 	if close_btn:
-		close_btn.text = tr("Close")
+		close_btn.tooltip_text = tr("Close")
 	if spoiler_title:
 		spoiler_title.text = tr("Spoilers ahead")
 	if spoiler_body:
 		spoiler_body.text = tr("Turning this off shows the whole story map, including paths you have not visited.")
 	if spoiler_confirm:
-		spoiler_confirm.text = tr("Show spoilers")
+		spoiler_confirm.tooltip_text = tr("Show spoilers")
 	if spoiler_cancel:
-		spoiler_cancel.text = tr("Keep hidden")
+		spoiler_cancel.tooltip_text = tr("Keep hidden")
 	_sync_toggle_look()
 	_refresh_here()
