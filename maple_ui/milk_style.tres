@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="MapleMilkStyle" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://maple_ui/milk_style.gd" id="1_style"]
+
+[resource]
+script = ExtResource("1_style")
+surface = Color(0.984, 0.965, 0.925, 1)
+glass = Color(1, 0.992, 0.972, 0.72)
+glass_edge = Color(0.878, 0.792, 0.655, 1)
+glass_shadow = Color(0.23, 0.17, 0.12, 0.22)
+highlight = Color(1, 1, 1, 0.85)
+ink = Color(0.231, 0.165, 0.133, 0.96)
+quiet = Color(0.663, 0.584, 0.518, 1)
+butter = Color(0.98, 0.878, 0.522, 1)
+caramel = Color(0.788, 0.541, 0.292, 1)
+glass_radius = 28
+chip_radius = 16
+rim_width = 2
+padding = Vector2(34, 26)
+scrim = 0.12
+bubble_width = 720
+bubble_offset = Vector2(56, 48)
+tail_length = 30
+tail_width = 34
+rail_offset = Vector2(40, 0)
+rail_gap = 12
+chip_size = 52
+icon_size = 26
+body_size = 21
+name_size = 19
+chrome_size = 14
+name_tracking = 1.4
+line_gap = 6
+type_cps = 34
+swell_time = 0.34
+hover_time = 0.14
+reduced_motion = false

@@ -1,0 +1,158 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://maple_ui/title_screen.gd" id="1_title"]
+[ext_resource type="Script" path="res://maple_ui/glass_panel.gd" id="2_glass"]
+[ext_resource type="Script" path="res://maple_ui/icon_button.gd" id="3_btn"]
+[ext_resource type="Script" path="res://maple_ui/droplet_field.gd" id="5_drops"]
+[ext_resource type="Resource" path="res://maple_ui/milk_style.tres" id="4_style"]
+[ext_resource type="Texture2D" path="res://maple_ui/icons/ic_play.svg" id="10_play"]
+[ext_resource type="Texture2D" path="res://maple_ui/icons/ic_continue.svg" id="11_continue"]
+[ext_resource type="Texture2D" path="res://maple_ui/icons/ic_settings.svg" id="12_settings"]
+[ext_resource type="Texture2D" path="res://maple_ui/icons/ic_quit.svg" id="13_quit"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/milky_meadow.svg" id="30_bg"]
+[ext_resource type="FontFile" path="res://assets/fonts/DejaVuSerif.ttf" id="20_serif"]
+[ext_resource type="FontFile" path="res://assets/fonts/DejaVuSerif-Bold.ttf" id="21_serifb"]
+[ext_resource type="Texture2D" path="res://maple_ui/icons/ic_mute.svg" id="14_mute"]
+
+[node name="TitleScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_title")
+
+[node name="Backdrop" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("30_bg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Wash" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 0.992, 0.972, 0.42)
+
+[node name="DropletField" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("5_drops")
+style = ExtResource("4_style")
+
+[node name="Lockup" type="Control" parent="."]
+layout_mode = 0
+offset_right = 520.0
+offset_bottom = 190.0
+mouse_filter = 2
+script = ExtResource("2_glass")
+style = ExtResource("4_style")
+alpha_scale = 0.92
+tail_anchor = 1
+
+[node name="Title" type="Label" parent="Lockup"]
+layout_mode = 0
+offset_left = 34.0
+offset_top = 30.0
+offset_right = 486.0
+offset_bottom = 92.0
+mouse_filter = 2
+theme_override_fonts/font = ExtResource("21_serifb")
+theme_override_font_sizes/font_size = 52
+theme_override_colors/font_color = Color(0.231, 0.165, 0.133, 0.96)
+text = "MILKA VN"
+horizontal_alignment = 1
+
+[node name="Rule" type="ColorRect" parent="Lockup"]
+layout_mode = 0
+offset_left = 190.0
+offset_top = 100.0
+offset_right = 330.0
+offset_bottom = 103.0
+mouse_filter = 2
+color = Color(0.98, 0.878, 0.522, 1)
+
+[node name="Subtitle" type="Label" parent="Lockup"]
+layout_mode = 0
+offset_left = 34.0
+offset_top = 112.0
+offset_right = 486.0
+offset_bottom = 158.0
+mouse_filter = 2
+theme_override_fonts/font = ExtResource("20_serif")
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.663, 0.584, 0.518, 1)
+text = "a milk-glass interface"
+horizontal_alignment = 1
+
+[node name="Menu" type="Control" parent="."]
+layout_mode = 0
+offset_right = 52.0
+offset_bottom = 320.0
+
+[node name="Start" type="Button" parent="Menu"]
+layout_mode = 0
+tooltip_text = "New game"
+mouse_filter = 0
+script = ExtResource("3_btn")
+style = ExtResource("4_style")
+icon_tex = ExtResource("10_play")
+action_id = &"start"
+scale_hint = 1.1
+
+[node name="Continue" type="Button" parent="Menu"]
+layout_mode = 0
+tooltip_text = "Continue"
+mouse_filter = 0
+script = ExtResource("3_btn")
+style = ExtResource("4_style")
+icon_tex = ExtResource("11_continue")
+action_id = &"continue"
+scale_hint = 1.1
+
+[node name="Settings" type="Button" parent="Menu"]
+layout_mode = 0
+tooltip_text = "Settings"
+mouse_filter = 0
+script = ExtResource("3_btn")
+style = ExtResource("4_style")
+icon_tex = ExtResource("12_settings")
+action_id = &"settings"
+scale_hint = 1.1
+
+[node name="Quit" type="Button" parent="Menu"]
+layout_mode = 0
+tooltip_text = "Quit"
+mouse_filter = 0
+script = ExtResource("3_btn")
+style = ExtResource("4_style")
+icon_tex = ExtResource("13_quit")
+action_id = &"quit"
+scale_hint = 1.1
+
+[node name="Mute" type="Button" parent="."]
+layout_mode = 0
+offset_right = 52.0
+offset_bottom = 52.0
+tooltip_text = "Mute"
+mouse_filter = 0
+script = ExtResource("3_btn")
+style = ExtResource("4_style")
+icon_tex = ExtResource("14_mute")
+action_id = &"mute"
