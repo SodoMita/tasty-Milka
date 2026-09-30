@@ -243,25 +243,25 @@ static func _prefix_for(resource, index: int) -> String:
 
 
 static func _apply_prefix(nodes: Array, prefix: String) -> void:
-	var remap := {}
+	var id_map := {}
 	for node in nodes:
 		var old_id := str(node.id)
 		if _is_ending(node):
-			remap[old_id] = old_id
+			id_map[old_id] = old_id
 			continue
 		var new_id := "%s/%s" % [prefix, old_id]
-		remap[old_id] = new_id
+		id_map[old_id] = new_id
 		node["raw_id"] = old_id
 		node.id = new_id
 	for node in nodes:
 		for outp in node.outputs:
 			var target := str(outp.get("target", ""))
-			if remap.has(target):
-				outp.target = remap[target]
+			if id_map.has(target):
+				outp.target = id_map[target]
 		for inp in node.inputs:
 			var source := str(inp.get("source", ""))
-			if remap.has(source):
-				inp.source = remap[source]
+			if id_map.has(source):
+				inp.source = id_map[source]
 
 
 static func _is_ending(node) -> bool:

@@ -64,17 +64,16 @@ func open_resource(resource = null, player: Dictionary = {}) -> void:
 	_fit_if_needed()
 
 
-func set_glyph_scale(scale: int, rebuild: bool = true) -> void:
-	var next := clampi(scale, 1, 4)
+func set_glyph_scale(glyph_factor: int, rebuild: bool = true) -> void:
+	var next := clampi(glyph_factor, 1, 4)
 	var changed := next != glyph_scale
 	glyph_scale = next
 	if rebuild and changed and not full_nodes.is_empty():
 		_upload()
 
 
-func set_map_filter(index: int, rebuild: bool = true) -> void:
+func set_map_filter(index: int, _rebuild_mesh: bool = true) -> void:
 	var next := clampi(index, 0, FILTER_HINTS.size() - 1)
-	var changed := next != map_filter
 	map_filter = next
 	_apply_map_shader()
 	if atlas != null and atlas.has_method("set_mipmaps"):
@@ -281,8 +280,8 @@ func _focus_here() -> void:
 		view = Vector2(1100, 620)
 	var screen := (center + pan) * zoom
 	var margin := 72.0
-	var visible := screen.x > margin and screen.y > margin and screen.x < view.x - margin and screen.y < view.y - margin
-	if visible and zoom >= 0.45:
+	var within_view := screen.x > margin and screen.y > margin and screen.x < view.x - margin and screen.y < view.y - margin
+	if within_view and zoom >= 0.45:
 		return
 	if zoom < 0.55:
 		zoom = 0.55

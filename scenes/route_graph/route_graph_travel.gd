@@ -5,7 +5,7 @@ extends RefCounted
 
 
 const CompilerScript = preload("res://scenes/route_graph/route_graph_compiler.gd")
-const DMConstants = preload("res://addons/dialogue_manager/constants.gd")
+const DialogueConstants = preload("res://addons/dialogue_manager/constants.gd")
 
 const STEP_LIMIT := 400
 
@@ -77,7 +77,7 @@ static func _walk(resource, key: String, wanted: Dictionary, history: Array, his
 		return {"ok": false, "blocked": false, "diverged": false, "lines": [], "line": null}
 	if key != "" and (seen.has(key) or seen.has(CompilerScript._bare_id(key))):
 		return {"ok": false, "blocked": false, "diverged": false, "lines": [], "line": null}
-	var line: DialogueLine = await resource.get_next_dialogue_line(key, extra_states, DMConstants.MutationBehaviour.Wait)
+	var line: DialogueLine = await resource.get_next_dialogue_line(key, extra_states, DialogueConstants.MutationBehaviour.Wait)
 	if line == null:
 		return {"ok": false, "blocked": false, "diverged": false, "lines": [], "line": null}
 	var lid := str(line.id)
@@ -153,7 +153,7 @@ static func _order_responses(resource, line: DialogueLine, recorded: String, gam
 		var next_id := str(response.next_id)
 		var landed := ""
 		if next_id != "" and not _is_end(next_id):
-			var peeked: DialogueLine = await resource.get_next_dialogue_line(next_id, extra_states, DMConstants.MutationBehaviour.Wait)
+			var peeked: DialogueLine = await resource.get_next_dialogue_line(next_id, extra_states, DialogueConstants.MutationBehaviour.Wait)
 			if peeked != null:
 				landed = str(peeked.id)
 		var historical: bool = recorded != "" and (landed == recorded or CompilerScript._bare_id(landed) == CompilerScript._bare_id(recorded) or next_id == recorded or CompilerScript._bare_id(next_id) == CompilerScript._bare_id(recorded))

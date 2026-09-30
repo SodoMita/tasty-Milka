@@ -1,12 +1,11 @@
 extends SceneTree
-## Enable compiler warnings as errors only for this check; normal game settings
-## and vendored addon warning policies are not changed or suppressed.
+## Invoked by check_scripts.py using an isolated project with Godot 4.7's
+## enabled warning levels promoted to errors. Game warning policy is unchanged.
 
 var failures := 0
 
 
 func _init() -> void:
-	ProjectSettings.set_setting("debug/gdscript/warnings/treat_warnings_as_errors", true)
 	for directory: String in ["res://autoloads", "res://scenes"]:
 		_check_directory(directory)
 	print("First-party compiler check: %d failure(s)" % failures)

@@ -986,20 +986,20 @@ func _restore_stage(entry: Dictionary) -> void:
 
 
 func _restore_presentation(cursor: int) -> void:
-	var start := cursor
-	while start >= 0 and history[start].has("pfmt"):
-		start -= 1
+	var first_entry := cursor
+	while first_entry >= 0 and history[first_entry].has("pfmt"):
+		first_entry -= 1
 	motion.reset_all()
 	stage_actors.reset_all()
-	if start >= 0:
-		_restore_legacy_snapshot(history[start])
+	if first_entry >= 0:
+		_restore_legacy_snapshot(history[first_entry])
 	else:
 		_set_background("")
 		_set_sprite("none:left")
 		_set_sprite("none:right")
 		_current_focus = ""
 		_set_focus("")
-	for i: int in range(start + 1, cursor + 1):
+	for i: int in range(first_entry + 1, cursor + 1):
 		var records: Variant = history[i].get("motion", [])
 		if records is not Array:
 			continue
@@ -2318,7 +2318,7 @@ func _refresh_master_mute() -> void:
 			_audio_silenced or master_vol_slider.value <= 0.0)
 
 
-func _on_master_vol_changed(v: float) -> void:
+func _on_master_vol_changed(_v: float) -> void:
 	_apply_volumes()
 	_update_slider_value_labels()
 	_save_settings()
@@ -3141,10 +3141,10 @@ func _travel_stage() -> Dictionary:
 
 
 
-## Seed a resolver + empty shadow onto [param seed] (defaults to a fresh
+## Seed a resolver + empty shadow onto [param stage_seed] (defaults to a fresh
 ## dict). Used by full-restart replays where no live actors carry over.
-func _travel_stage_seed(seed: Dictionary = {}) -> Dictionary:
-	var out: Dictionary = seed.duplicate(true)
+func _travel_stage_seed(stage_seed: Dictionary = {}) -> Dictionary:
+	var out: Dictionary = stage_seed.duplicate(true)
 	out["_resolver"] = Callable(stage_actors, "resolve_record")
 	out["_shadow"] = {"_stage": stage_actors.current_stage}
 	return out

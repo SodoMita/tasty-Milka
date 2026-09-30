@@ -371,7 +371,10 @@ func _update_value_label(slider_name: String) -> void:
 		return
 	var fmt: String = SLIDERS[slider_name][2]
 	var v := _range_value(slider_name)
-	label.text = fmt % (roundi(v) if fmt.contains("%d") else v)
+	if fmt.contains("%d"):
+		label.text = fmt % roundi(v)
+	else:
+		label.text = fmt % v
 
 
 func _option_index(values: Array, stored: Variant) -> int:

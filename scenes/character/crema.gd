@@ -18,6 +18,7 @@ const TEXTURES := {
 @onready var sprite: Sprite2D = $Sprite
 @onready var anim: AnimationPlayer = $AnimationPlayer
 @onready var blink_timer: Timer = $BlinkTimer
+@onready var blink_end_timer: Timer = $BlinkEndTimer
 
 var _expression: String = "neutral"
 
@@ -25,6 +26,7 @@ var _expression: String = "neutral"
 func _ready() -> void:
 	anim.animation_finished.connect(_on_animation_finished)
 	blink_timer.timeout.connect(_on_blink_timer_timeout)
+	blink_end_timer.timeout.connect(_on_blink_end_timer_timeout)
 	anim.play("idle")
 	_schedule_blink()
 
@@ -53,9 +55,14 @@ func _schedule_blink() -> void:
 func _on_blink_timer_timeout() -> void:
 	if _expression == "neutral":
 		sprite.texture = TEXTURES["blink"]
-		await get_tree().create_timer(0.13).timeout
-		if _expression == "neutral":
-			sprite.texture = TEXTURES["neutral"]
+		blink_end_timer.start()
+	else:
+		_schedule_blink()
+
+
+func _on_blink_end_timer_timeout() -> void:
+	if _expression == "neutral":
+		sprite.texture = TEXTURES["neutral"]
 	_schedule_blink()
 
 
