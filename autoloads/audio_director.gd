@@ -71,22 +71,6 @@ var _next_bar: float = 0.0
 var _bar_index: int = 0
 var _queue: Array[Dictionary] = []
 
-## Voices as parallel arrays: kind 0 pad, 1 pluck, 2 bass.
-var _v_px := PackedFloat64Array()
-var _v_py := PackedFloat64Array()
-var _v_dx := PackedFloat64Array()
-var _v_dy := PackedFloat64Array()
-var _v_t := PackedFloat64Array()
-var _v_dur := PackedFloat64Array()
-var _v_atk := PackedFloat64Array()
-var _v_rel := PackedFloat64Array()
-var _v_peak := PackedFloat64Array()
-var _v_tau := PackedFloat64Array()
-var _v_gl := PackedFloat64Array()
-var _v_gr := PackedFloat64Array()
-var _v_kind := PackedFloat64Array()
-var _voice_count: int = 0
-
 ## Crossfade gain + last theme.
 var _gain: float = 0.0
 var _gain_target: float = 0.0
@@ -292,7 +276,7 @@ func _play_stream_on_pool(stream: AudioStream, pitch: float) -> void:
 		p.pitch_scale = pitch
 		p.play()
 
-func _play_synth_sfx(sfx_name: String, pitch: float) -> void:
+func _play_synth_sfx(_sfx_name: String, _pitch: float) -> void:
 	# Fallback synth for custom blips
 	pass
 

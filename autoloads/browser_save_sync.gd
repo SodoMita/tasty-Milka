@@ -66,8 +66,14 @@ func _completed(result: int, code: int, _headers: PackedStringArray, bytes: Pack
 	var settings: Dictionary = remote.get("settings", {}) if remote.get("settings", {}) is Dictionary else {}
 	if not settings.is_empty() and not FileAccess.file_exists("user://settings.json"):
 		_write("user://settings.json", settings)
-		SettingsStore.load_settings()
-		SettingsStore.apply_globals()
+		var store := get_node_or_null("/root/SettingsStore")
+		if store != null:
+			store.load_settings()
+			store.apply_globals()
+			# A backup can arrive after the title's _ready. Notify its layout
+			# listeners so restored rotation/scale apply without re-entering.
+			for key: String in settings:
+				store.settings_changed.emit(key, settings[key])
 	var saves: Dictionary = remote.get("saves", {}) if remote.get("saves", {}) is Dictionary else {}
 	DirAccess.make_dir_recursive_absolute("user://saves")
 	for file_name: String in saves:

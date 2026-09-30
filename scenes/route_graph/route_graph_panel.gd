@@ -46,9 +46,9 @@ func _ready() -> void:
 	_sync_toggle_look()
 
 
-func set_glyph_scale(scale: int, rebuild: bool = true) -> void:
+func set_glyph_scale(glyph_factor: int, rebuild: bool = true) -> void:
 	if view != null and is_instance_valid(view) and view.has_method("set_glyph_scale"):
-		view.set_glyph_scale(scale, rebuild)
+		view.set_glyph_scale(glyph_factor, rebuild)
 
 
 func set_map_filter(index: int, rebuild: bool = true) -> void:

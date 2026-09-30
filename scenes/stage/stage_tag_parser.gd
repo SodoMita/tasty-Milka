@@ -97,7 +97,9 @@ static func parse(tag: String) -> Dictionary:
 				return _fail(tag, "empty option")
 			var ieq := item.find("=")
 			var k := (item.substr(0, ieq) if ieq >= 0 else item).strip_edges()
-			var v: Variant = item.substr(ieq + 1).strip_edges() if ieq >= 0 else true
+			var v: Variant = true
+			if ieq >= 0:
+				v = item.substr(ieq + 1).strip_edges()
 			if k == "":
 				return _fail(tag, "option without a name")
 			if opts.has(k):

@@ -253,13 +253,16 @@ func _split_options(spec: String) -> Array:
 			if pair == "":
 				continue
 			var kv: PackedStringArray = pair.split("=", true, 1)
-			opts[kv[0].strip_edges()] = kv[1].strip_edges() if kv.size() == 2 else true
+			if kv.size() == 2:
+				opts[kv[0].strip_edges()] = kv[1].strip_edges()
+			else:
+				opts[kv[0].strip_edges()] = true
 	return [main, opts]
 
 
 ## Map a friendly property name onto the node's real property path.
-func _resolve_property(node: Node, name: String) -> String:
-	match name:
+func _resolve_property(node: Node, property_name: String) -> String:
+	match property_name:
 		"x":
 			return "position:x"
 		"y":
@@ -267,7 +270,7 @@ func _resolve_property(node: Node, name: String) -> String:
 		"z":
 			return "position:z" if node is Node3D else ""
 		"position", "scale", "modulate", "self_modulate", "global_position":
-			return name if node is CanvasItem or node is Node3D else ""
+			return property_name if node is CanvasItem or node is Node3D else ""
 		"alpha":
 			return "modulate:a" if node is CanvasItem else ""
 		"self_alpha":
@@ -281,16 +284,16 @@ func _resolve_property(node: Node, name: String) -> String:
 				return "rotation_degrees"
 			return ""
 		"rx", "ry", "rz":
-			return "rotation_degrees:%s" % name.substr(1) if node is Node3D else ""
+			return "rotation_degrees:%s" % property_name.substr(1) if node is Node3D else ""
 		"sx", "sy", "sz":
-			return "scale:%s" % name.substr(1)
+			return "scale:%s" % property_name.substr(1)
 		"gx":
 			return "global_position:x"
 		"gy":
 			return "global_position:y"
 		"gz":
 			return "global_position:z" if node is Node3D else ""
-	var dotted: String = name.replace(".", ":")
+	var dotted: String = property_name.replace(".", ":")
 	var head: String = dotted.get_slice(":", 0)
 	if head in node or node.get(head) != null:
 		return dotted
@@ -413,7 +416,7 @@ func _apply_tween(tag: String, instant: bool, ignore_delay: bool = false) -> boo
 	var trans_name: String = fields[3].strip_edges() if fields.size() > 3 else ""
 	var ease_name: String = fields[4].strip_edges() if fields.size() > 4 else ""
 	var trans: int = int(TRANSITIONS.get(trans_name if trans_name != "" else "quad", Tween.TRANS_QUAD))
-	var ease: int = int(EASES.get(ease_name if ease_name != "" else "out", Tween.EASE_OUT))
+	var ease_type: int = int(EASES.get(ease_name if ease_name != "" else "out", Tween.EASE_OUT))
 	_cancel_overlapping(node, prop)
 	var tween: Tween = create_tween()
 	var delay: float = 0.0 if ignore_delay else maxf(float(opts.get("delay", 0.0)), 0.0)
@@ -422,9 +425,9 @@ func _apply_tween(tag: String, instant: bool, ignore_delay: bool = false) -> boo
 	# Absolute tween from the on-screen value to the logical destination:
 	# relative tags resolved against the logical base above, so an
 	# interrupted chain of relative moves still ends where replay puts it.
-	tween.tween_property(node, prop, to, duration).set_trans(trans).set_ease(ease)
+	tween.tween_property(node, prop, to, duration).set_trans(trans).set_ease(ease_type)
 	if yoyo or loops != 1:
-		tween.tween_property(node, prop, base, duration).set_trans(trans).set_ease(ease)
+		tween.tween_property(node, prop, base, duration).set_trans(trans).set_ease(ease_type)
 		tween.set_loops(loops)
 		_logical[key] = base
 	else:
