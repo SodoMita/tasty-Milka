@@ -60,7 +60,16 @@ const KEY_BUTTONS := {
 	"PanicKeyButton": &"dialogue_panic",
 }
 
+const HoldTiming = preload("res://scenes/ui/hold_timing.gd")
+
 @onready var close_button: Button = %MenuCloseButton
+@onready var hold_indicator: HoldIndicator = %TitleHoldIndicator
+
+var _hold_active := false
+var _hold_elapsed := 0.0
+var _hold_from := Vector2.ZERO
+var _hold_local := Vector2.ZERO
+
 
 var _listening: StringName = &""
 var _loading := false
@@ -69,9 +78,11 @@ var _loading := false
 func _ready() -> void:
 	# In-game the balloon owns the floating close button and every row.
 	close_button.visible = drive_settings
+	hold_indicator.hide_ring()
 	if not drive_settings:
 		return
 	close_button.pressed.connect(close)
+	gui_input.connect(_on_empty_press)
 	for n: String in SLIDERS:
 		_connect(n, &"value_changed", _on_slider_changed.bind(n))
 	for n: String in CHECKS:
@@ -92,6 +103,7 @@ func _ready() -> void:
 
 
 func open() -> void:
+	_cancel_hold()
 	if drive_settings:
 		_load_from_store()
 	show()
@@ -101,6 +113,7 @@ func open() -> void:
 
 
 func close() -> void:
+	_cancel_hold()
 	if _listening != &"":
 		_listening = &""
 		_refresh_key_labels()
@@ -115,6 +128,19 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if drive_settings and _hold_active:
+		if event is InputEventMouseMotion and (event as InputEventMouseMotion).position.distance_to(_hold_from) > HoldTiming.CANCEL_DIST:
+			_cancel_hold()
+		elif event is InputEventScreenDrag and (event as InputEventScreenDrag).position.distance_to(_hold_from) > HoldTiming.CANCEL_DIST:
+			_cancel_hold()
+		elif event is InputEventMouseButton:
+			var mb := event as InputEventMouseButton
+			if not mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT:
+				if _hold_elapsed >= HoldTiming.SECONDS:
+					get_viewport().set_input_as_handled()
+					_finish_hold()
+				else:
+					_cancel_hold()
 	if _listening == &"" or not visible:
 		return
 	var key := event as InputEventKey
@@ -125,6 +151,70 @@ func _input(event: InputEvent) -> void:
 	_listening = &""
 	_refresh_key_labels()
 	_store({"key_bindings": _serialize_key_bindings()})
+
+
+## Same timing, cancellation and ring/sound feedback as vn_balloon.gd.
+## On title only; in-game the balloon handles the same scene's gui_input.
+func _on_empty_press(event: InputEvent) -> void:
+	if not drive_settings or not visible or _listening != &"":
+		return
+	if event is InputEventMouseButton:
+		var mb := event as InputEventMouseButton
+		if mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT and not _hits_interactive(self, get_global_transform() * mb.position):
+			_hold_local = mb.position
+			_hold_from = get_global_transform_with_canvas() * mb.position
+			_hold_elapsed = 0.0
+			_hold_active = true
+
+
+func _hits_interactive(parent: Control, point: Vector2) -> bool:
+	for child: Node in parent.get_children():
+		if not child is Control or not (child as Control).visible or child == hold_indicator:
+			continue
+		var ctl := child as Control
+		if ctl.mouse_filter != MOUSE_FILTER_IGNORE and (ctl is BaseButton or ctl is Range or ctl is LineEdit 				or ctl is TextEdit or ctl is ItemList or ctl is Tree) and ctl.get_global_rect().has_point(point):
+			return true
+		if _hits_interactive(ctl, point):
+			return true
+	return false
+
+
+func _process(delta: float) -> void:
+	if not drive_settings or not visible or not _hold_active:
+		return
+	_hold_elapsed += delta
+	if _hold_elapsed >= HoldTiming.APPEAR:
+		if not hold_indicator.visible:
+			var point := get_global_transform() * _hold_local
+			hold_indicator.show_at(hold_indicator.get_global_transform().affine_inverse() * point)
+			if _hold_sound_enabled():
+				get_node("/root/AudioDirector").hold_start()
+		hold_indicator.progress = clampf(_hold_elapsed / HoldTiming.SECONDS, 0.0, 1.0)
+		if _hold_sound_enabled():
+			get_node("/root/AudioDirector").hold_progress(hold_indicator.progress)
+		if _hold_elapsed >= HoldTiming.SECONDS:
+			_finish_hold()
+
+
+func _hold_sound_enabled() -> bool:
+	var store := _settings_store()
+	return get_node_or_null("/root/AudioDirector") != null and (store == null or bool(store.get_value("sfx_buttons", true)))
+
+
+func _cancel_hold() -> void:
+	_hold_active = false
+	hold_indicator.hide_ring()
+	var audio := get_node_or_null("/root/AudioDirector")
+	if audio != null:
+		audio.hold_stop()
+
+
+func _finish_hold() -> void:
+	if not _hold_active:
+		return
+	_cancel_hold()
+	close()
+
 
 
 # --- load ---------------------------------------------------------------------

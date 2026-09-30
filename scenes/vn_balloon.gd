@@ -300,9 +300,10 @@ const CHOICE_PITCHES: Array[float] = [1.0, 1.12, 1.26, 1.33, 1.5]
 ## ignored (accidental-tap protection) and a swipe/move cancels so dragging to
 ## scroll still works. The ring appears after HOLD_APPEAR and closes the menu
 ## when released at/after HOLD_SECONDS.
-const HOLD_SECONDS: float = 0.55
-const HOLD_APPEAR: float = 0.12
-const HOLD_CANCEL_DIST: float = 10.0
+const HoldTiming = preload("res://scenes/ui/hold_timing.gd")
+const HOLD_SECONDS: float = HoldTiming.SECONDS
+const HOLD_APPEAR: float = HoldTiming.APPEAR
+const HOLD_CANCEL_DIST: float = HoldTiming.CANCEL_DIST
 
 var _hold_active: bool = false
 var _hold_elapsed: float = 0.0
