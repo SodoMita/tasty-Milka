@@ -1952,7 +1952,10 @@ const UI_TEXT_KEYS: Array = [
 func _retranslate_dynamic() -> void:
 	for entry: Array in UI_TEXT_KEYS:
 		var n: Node = find_child(String(entry[0]), true, false)
-		if n != null and "text" in n:
+		if n is Button and (n as Button).icon != null:
+			# Icon-only milk-glass buttons: the label lives in the tooltip.
+			(n as Button).tooltip_text = tr(String(entry[1]))
+		elif n != null and "text" in n:
 			(n as Object).set("text", tr(String(entry[1])))
 	if is_instance_valid(skip_mode_option):
 		skip_mode_option.set_item_text(0, tr("Everything"))
