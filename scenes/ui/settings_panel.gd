@@ -45,6 +45,8 @@ func close() -> void:
 
 
 func _refresh_from_store() -> void:
+	if not is_inside_tree():
+		return
 	var store := _store()
 	if store == null:
 		return
@@ -61,7 +63,9 @@ func _refresh_from_store() -> void:
 
 
 func _store() -> Node:
-	return get_node_or_null("/root/SettingsStore")
+	if not is_inside_tree():
+		return null
+	return get_tree().root.get_node_or_null("SettingsStore")
 
 
 func _store_set(key: String, value: Variant) -> void:
@@ -72,7 +76,8 @@ func _store_set(key: String, value: Variant) -> void:
 
 func _on_settings_changed(_key: String, _value: Variant) -> void:
 	# Someone else (the in-game panel) changed a setting: stay in sync.
-	_refresh_from_store()
+	if is_inside_tree():
+		_refresh_from_store()
 
 
 func _on_language_selected(index: int) -> void:

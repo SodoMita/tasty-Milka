@@ -458,3 +458,9 @@ msgstr "Класс (3D)"
 
 msgid "classroom_3d"
 msgstr "Класс (3D)"
+
+msgid "Your name"
+msgstr "Ваше имя"
+
+msgid "Type your name here"
+msgstr "Введите своё имя"

@@ -152,14 +152,17 @@ Edit `dialogue/milka.dialogue` or create a new `.dialogue` file. Use these tags:
 The game starts with `scenes/title_screen.tscn` — a fully scene-authored main
 menu (no scene-builder script; `title_screen.gd` only wires buttons):
 
-- transparent white milk-glass buttons over a warm white/grey sky with honey
-  glints and soft grey milk waves (white/grey/yellowish palette)
+- transparent white milk-glass buttons over a warm white/grey sky with pale butter
+  accents and soft grey milk waves (white/grey/yellowish palette)
 - milk droplets that gently fall and sway (12 s ambient loop, all in-scene)
 - SVG ornaments everywhere: droplet trio divider, corner droplet clusters
 - Crema, the animated milk-droplet character (idle breathing + blinking + expressions)
+- a clearly visible player-name `LineEdit` on the title screen (pre-filled,
+  click-to-edit, Enter submits); Start saves it to `GameState.player_name` and
+  `user://settings.json` for story content to use
 - shared `assets/ui/milk_glass_theme.tres` theme for Buttons/Panels
 
-Screenshots: `docs/screenshots/`.
+Screenshots: `docs/screenshots/` (including `title_input.png`).
 
 ## ⚙️ Settings (shared between title and game)
 `scenes/ui/settings_panel.tscn` is a milk-glass settings dialog used by the

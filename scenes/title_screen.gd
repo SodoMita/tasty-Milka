@@ -12,13 +12,19 @@ extends Control
 @onready var settings_panel: Control = $SettingsPanel
 @onready var subtitle: Label = %Subtitle
 @onready var version: Label = %Version
+@onready var player_name_label: Label = %PlayerNameLabel
+@onready var player_name_input: LineEdit = %PlayerNameInput
 
 
 func _ready() -> void:
 	_apply_milk_glass()
 	ambient.play("ambient")
 	_apply_settings()
+	_restore_player_name()
 	_translate_labels()
+	player_name_input.text_submitted.connect(_on_player_name_submitted)
+	player_name_input.focus_exited.connect(_persist_player_name)
+	player_name_input.call_deferred("grab_focus")
 	start_button.pressed.connect(_on_start_pressed)
 	continue_button.pressed.connect(_on_continue_pressed)
 	settings_button.pressed.connect(_on_settings_pressed)
@@ -30,6 +36,9 @@ func _ready() -> void:
 	continue_button.mouse_entered.connect(func() -> void: crema.set_expression("surprised"))
 	continue_button.mouse_exited.connect(func() -> void: crema.set_expression("neutral"))
 	settings_panel.closed.connect(func() -> void: crema.set_expression("neutral"))
+	var settings_store := get_node_or_null("/root/SettingsStore")
+	if settings_store != null and settings_store.has_signal("settings_changed"):
+		settings_store.settings_changed.connect(_on_shared_setting_changed)
 	_play_sfx("open")
 
 
@@ -54,6 +63,8 @@ func _apply_milk_glass() -> void:
 func _translate_labels() -> void:
 	subtitle.text = tr(subtitle.text)
 	version.text = tr(version.text)
+	player_name_label.text = tr("Your name")
+	player_name_input.placeholder_text = tr("Type your name here")
 	for button: Button in [start_button, continue_button, settings_button, quit_button]:
 		if button.tooltip_text.is_empty():
 			continue
@@ -61,10 +72,49 @@ func _translate_labels() -> void:
 
 
 func _on_start_pressed() -> void:
+	_persist_player_name()
+	player_name_input.release_focus()
+	start_button.disabled = true
 	_play_sfx("confirm")
 	crema.greet()
 	await get_tree().create_timer(0.55).timeout
 	get_tree().change_scene_to_file("res://scenes/vn_scene.tscn")
+
+
+func _on_player_name_submitted(_submitted_text: String) -> void:
+	_on_start_pressed()
+
+
+func _restore_player_name() -> void:
+	var game_state := get_node_or_null("/root/GameState")
+	var fallback := "Protagonist"
+	if game_state != null and not str(game_state.player_name).strip_edges().is_empty():
+		fallback = str(game_state.player_name)
+	var settings_store := get_node_or_null("/root/SettingsStore")
+	var saved_name := fallback
+	if settings_store != null and settings_store.has_method("get_value"):
+		saved_name = str(settings_store.get_value("player_name", fallback))
+	if saved_name.strip_edges().is_empty():
+		saved_name = fallback
+	player_name_input.text = saved_name
+
+
+func _persist_player_name() -> void:
+	var entered_name := player_name_input.text.strip_edges()
+	if entered_name.is_empty():
+		entered_name = "Protagonist"
+		player_name_input.text = entered_name
+	var game_state := get_node_or_null("/root/GameState")
+	if game_state != null:
+		game_state.player_name = entered_name
+	var settings_store := get_node_or_null("/root/SettingsStore")
+	if settings_store != null and settings_store.has_method("set_value"):
+		settings_store.set_value("player_name", entered_name)
+
+
+func _on_shared_setting_changed(key: String, _value: Variant) -> void:
+	if key == "language":
+		_translate_labels()
 
 
 ## Continue: resume the newest save slot, or start fresh when none exist.

@@ -1580,6 +1580,10 @@ func _load_settings() -> void:
 		language = "ru" if String(data.language) == "ru" else "en"
 	else:
 		language = "ru" if TranslationServer.get_locale().left(2) == "ru" else "en"
+	if data.has("player_name"):
+		var name_state := get_node_or_null("/root/GameState")
+		if name_state != null:
+			name_state.player_name = str(data.player_name)
 	language_option.selected = 1 if language == "ru" else 0
 	TranslationServer.set_locale(language)
 	var close_migrated := _load_key_bindings(data.get("key_bindings", {}), not bool(data.get("close_key_migrated", false)))
@@ -1665,7 +1669,9 @@ func _save_settings() -> void:
 	var file: FileAccess = FileAccess.open(_settings_path, FileAccess.WRITE)
 	if file == null:
 		return
+	var name_state := get_node_or_null("/root/GameState")
 	file.store_string(JSON.stringify({
+		"player_name": str(name_state.player_name) if name_state != null else "Protagonist",
 		"key_bindings": _serialize_key_bindings(),
 		"text_speed": text_speed_slider.value,
 		"text_size": text_size_slider.value,

@@ -63,8 +63,13 @@ echo "== Running milk-glass UI check =="
 MILK_EXIT=${PIPESTATUS[0]}
 
 echo
+echo "== Running title player-name input check =="
+"$GODOT" --headless --path . --script res://tests/test_title_name_input.gd 2>&1 | tee /tmp/vn_name_input.log
+NAME_INPUT_EXIT=${PIPESTATUS[0]}
+
+echo
 echo "== Scanning logs for runtime errors =="
-grep -nE "SCRIPT ERROR|Parse Error|ERROR:" /tmp/vn_test.log /tmp/vn_route.log /tmp/vn_import.log /tmp/vn_panic.log /tmp/vn_motion.log /tmp/vn_staging.log /tmp/vn_milk.log | grep -v "errors_panel" || echo "  no script/parse errors found"
+grep -nE "SCRIPT ERROR|Parse Error|ERROR:" /tmp/vn_test.log /tmp/vn_route.log /tmp/vn_import.log /tmp/vn_panic.log /tmp/vn_motion.log /tmp/vn_staging.log /tmp/vn_milk.log /tmp/vn_name_input.log | grep -v "errors_panel" || echo "  no script/parse errors found"
 
 echo
 echo "ui exit code: $TEST_EXIT"
@@ -72,7 +77,9 @@ echo "route-graph exit code: $ROUTE_EXIT"
 echo "panic-return exit code: $PANIC_EXIT"
 echo "motion exit code: $MOTION_EXIT"
 echo "staging exit code: $STAGING_EXIT"
-if [ "$TEST_EXIT" -ne 0 ] || [ "$ROUTE_EXIT" -ne 0 ] || [ "$PANIC_EXIT" -ne 0 ] || [ "$MOTION_EXIT" -ne 0 ] || [ "$STAGING_EXIT" -ne 0 ] || [ "$MILK_EXIT" -ne 0 ]; then
+echo "milk-glass exit code: $MILK_EXIT"
+echo "title name-input exit code: $NAME_INPUT_EXIT"
+if [ "$TEST_EXIT" -ne 0 ] || [ "$ROUTE_EXIT" -ne 0 ] || [ "$PANIC_EXIT" -ne 0 ] || [ "$MOTION_EXIT" -ne 0 ] || [ "$STAGING_EXIT" -ne 0 ] || [ "$MILK_EXIT" -ne 0 ] || [ "$NAME_INPUT_EXIT" -ne 0 ]; then
   exit 1
 fi
 exit 0
