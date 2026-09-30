@@ -18,6 +18,11 @@ Pages is deployed with `actions/deploy-pages` from the `web-build` artifact, so 
 site content is always the branch's own export; there is no committed `gh-pages`
 tree to keep in sync.
 
+The `github-pages` environment has a deployment branch policy listing `build/*`,
+`main` and `v*`-tag refs, so every pipeline branch may deploy. Without it Actions
+rejects the job with *"Branch ... is not allowed to deploy to github-pages due to
+environment protection rules"*.
+
 ## Why a service worker
 
 The web export is threaded (`variant/thread_support=true`) so the audio worklet
