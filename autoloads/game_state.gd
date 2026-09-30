@@ -2,13 +2,15 @@
 ## Dialogue files use `using GameState` to reference these members directly.
 extends Node
 
+const Lore = preload("res://autoloads/name_lore.gd")
+
 @export var player_name: String = "Protagonist"
 @export var chapter: int = 1
 @export var story_seed: int = 1
 
 var custom_flags: Dictionary = {}
 
-## How the player wrote their name (see NameLore.analyze).
+## How the player wrote their name (see Lore.analyze).
 var name_traits: Dictionary = {}
 
 ## Last rhythm minigame result (see scenes/minigame/rhythm_game.gd).
@@ -44,7 +46,7 @@ func set_player_name(new_name: String) -> void:
 	if clean.is_empty():
 		clean = "Traveler"
 	player_name = clean
-	name_traits = NameLore.analyze(clean)
+	name_traits = Lore.analyze(clean)
 
 ## Dialogue helper: `if GameState.name_is("has_emoji")`.
 func name_is(trait_name: String) -> bool:

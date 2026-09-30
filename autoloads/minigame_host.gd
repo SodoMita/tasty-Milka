@@ -21,7 +21,9 @@ func play_rhythm(notes: int = 18) -> void:
 	var result: Dictionary = await game.finished
 	is_playing = false
 	last_result = result
-	GameState.record_rhythm_result(result)
+	var game_state: Node = get_tree().root.get_node_or_null("GameState")
+	if game_state != null and game_state.has_method("record_rhythm_result"):
+		game_state.record_rhythm_result(result)
 	minigame_finished.emit(result)
 
 func score() -> int:

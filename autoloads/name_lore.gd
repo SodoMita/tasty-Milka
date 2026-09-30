@@ -11,7 +11,7 @@ const MATH_SYMBOLS: String = "+-*/=<>^%~"
 const SPECIAL_SYMBOLS: String = "!@#$&()[]{}|\\:;\"'?,.`_"
 
 ## Returns a dictionary of boolean traits plus a few counts.
-func analyze(raw_name: String) -> Dictionary:
+static func analyze(raw_name: String) -> Dictionary:
 	var player_name: String = raw_name.strip_edges()
 	var letters: int = 0
 	var digits: int = 0
@@ -91,7 +91,7 @@ func analyze(raw_name: String) -> Dictionary:
 	return traits
 
 ## Short list of what Milka noticed, used by the input hint line.
-func notes(raw_name: String) -> PackedStringArray:
+static func notes(raw_name: String) -> PackedStringArray:
 	var traits: Dictionary = analyze(raw_name)
 	var list: PackedStringArray = []
 	if bool(traits["starts_lowercase"]):
@@ -113,7 +113,7 @@ func notes(raw_name: String) -> PackedStringArray:
 	return list
 
 ## Human readable validation message, empty when the name may be used.
-func validation_error(raw_name: String) -> String:
+static func validation_error(raw_name: String) -> String:
 	var player_name: String = raw_name.strip_edges()
 	if player_name.length() < MIN_LENGTH:
 		return "Milka is waiting for at least one character."
@@ -121,7 +121,7 @@ func validation_error(raw_name: String) -> String:
 		return "That is longer than %d characters. Milka cannot breathe." % MAX_LENGTH
 	return ""
 
-func _is_letter(code: int) -> bool:
+static func _is_letter(code: int) -> bool:
 	if code >= 65 and code <= 90:
 		return true
 	if code >= 97 and code <= 122:
@@ -134,7 +134,7 @@ func _is_letter(code: int) -> bool:
 		return true
 	return false
 
-func _is_math_unicode(code: int) -> bool:
+static func _is_math_unicode(code: int) -> bool:
 	if code >= 0x2200 and code <= 0x22FF:
 		return true
 	if code == 0xB1 or code == 0xD7 or code == 0xF7:
@@ -143,7 +143,7 @@ func _is_math_unicode(code: int) -> bool:
 		return true
 	return false
 
-func _is_emoji(code: int) -> bool:
+static func _is_emoji(code: int) -> bool:
 	if code >= 0x1F000 and code <= 0x1FAFF:
 		return true
 	if code >= 0x2600 and code <= 0x27BF:

@@ -4,6 +4,8 @@ extends CanvasLayer
 
 signal name_confirmed(player_name: String)
 
+const Lore = preload("res://autoloads/name_lore.gd")
+
 const SUGGESTIONS: PackedStringArray = [
 	"Traveler", "Sonya", "Mikhail", "Lumi", "Vasya", "Anouk", "Kira",
 ]
@@ -14,7 +16,7 @@ const SUGGESTIONS: PackedStringArray = [
 @onready var _surprise: Button = $Root/Center/Panel/Rows/Buttons/Surprise
 
 func _ready() -> void:
-	_field.max_length = NameLore.MAX_LENGTH
+	_field.max_length = Lore.MAX_LENGTH
 	_field.text_submitted.connect(_on_submitted)
 	_field.text_changed.connect(_on_text_changed)
 	_confirm.pressed.connect(_try_confirm)
@@ -26,12 +28,12 @@ func _on_submitted(_text: String) -> void:
 	_try_confirm()
 
 func _on_text_changed(text: String) -> void:
-	var error: String = NameLore.validation_error(text)
+	var error: String = Lore.validation_error(text)
 	_confirm.disabled = error != ""
 	if error != "":
 		_hint.text = error
 		return
-	var notes: PackedStringArray = NameLore.notes(text)
+	var notes: PackedStringArray = Lore.notes(text)
 	if notes.is_empty():
 		_hint.text = "Milka likes it. Press Begin."
 	else:
@@ -44,7 +46,7 @@ func _on_surprise() -> void:
 
 func _try_confirm() -> void:
 	var player_name: String = _field.text.strip_edges()
-	if NameLore.validation_error(player_name) != "":
+	if Lore.validation_error(player_name) != "":
 		return
 	name_confirmed.emit(player_name)
 	queue_free()

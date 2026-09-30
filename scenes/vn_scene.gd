@@ -11,9 +11,12 @@ const NAME_ENTRY_SCENE: PackedScene = preload("res://scenes/ui/name_entry.tscn")
 @export var ask_for_name: bool = true
 
 func _ready() -> void:
-	if ask_for_name and GameState.pending_resume_slot < 0:
+	var game_state: Node = get_tree().root.get_node_or_null("GameState")
+	var resuming: bool = game_state != null and int(game_state.get("pending_resume_slot")) >= 0
+	if ask_for_name and not resuming:
 		var prompt: CanvasLayer = NAME_ENTRY_SCENE.instantiate()
 		add_child(prompt)
 		var chosen: String = await prompt.name_confirmed
-		GameState.set_player_name(chosen)
+		if game_state != null and game_state.has_method("set_player_name"):
+			game_state.set_player_name(chosen)
 	Engine.get_singleton("DialogueManager").show_dialogue_balloon(dialogue_resource, start_from_cue)

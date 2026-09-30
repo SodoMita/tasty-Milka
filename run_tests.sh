@@ -24,7 +24,7 @@ echo "== Importing project (editor headless) =="
 
 echo
 echo "== Script checks =="
-for s in scenes/vn_balloon.gd scenes/panic_screen.gd scenes/hold_indicator.gd scenes/vn_scene.gd autoloads/game_state.gd autoloads/audio_director.gd tests/test_vn_ui.gd scenes/route_graph/route_graph_view.gd scenes/route_graph/route_graph_compiler.gd scenes/route_graph/route_graph_mesh_builder.gd scenes/route_graph/route_graph_atlas.gd scenes/route_graph/route_graph_panel.gd scenes/route_graph/route_graph_travel.gd scenes/motion/stage_director.gd scenes/motion/sprite_3d_quad.gd scenes/stage/stage_tag_parser.gd scenes/stage/stage_actors.gd scenes/stage/actor_definition.gd tests/test_staging.gd; do
+for s in scenes/vn_balloon.gd scenes/panic_screen.gd scenes/hold_indicator.gd scenes/vn_scene.gd autoloads/game_state.gd autoloads/audio_director.gd tests/test_vn_ui.gd scenes/route_graph/route_graph_view.gd scenes/route_graph/route_graph_compiler.gd scenes/route_graph/route_graph_mesh_builder.gd scenes/route_graph/route_graph_atlas.gd scenes/route_graph/route_graph_panel.gd scenes/route_graph/route_graph_travel.gd scenes/motion/stage_director.gd scenes/motion/sprite_3d_quad.gd scenes/stage/stage_tag_parser.gd scenes/stage/stage_actors.gd scenes/stage/actor_definition.gd tests/test_staging.gd scenes/ui/name_entry.gd scenes/minigame/rhythm_game.gd autoloads/name_lore.gd autoloads/minigame_host.gd tests/test_name_beat.gd; do
   if "$GODOT" --headless --check-only --script "res://$s" >/tmp/vn_check.log 2>&1; then
     echo "  [OK]   $s"
   else
@@ -76,3 +76,7 @@ if [ "$TEST_EXIT" -ne 0 ] || [ "$ROUTE_EXIT" -ne 0 ] || [ "$PANIC_EXIT" -ne 0 ] 
   exit 1
 fi
 exit 0
+
+echo
+echo "== Name prompt + Milk Beat probe =="
+"$GODOT" --headless res://tests/test_name_beat.tscn || exit 1
