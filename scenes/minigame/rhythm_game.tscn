@@ -1,0 +1,406 @@
+[gd_scene load_steps=10 format=3 uid="uid://cq7milkbeat01"]
+
+[ext_resource type="Script" path="res://scenes/minigame/rhythm_game.gd" id="1_rhythm"]
+[ext_resource type="Theme" path="res://assets/ui/milk_glass_theme.tres" id="2_theme"]
+[ext_resource type="Texture2D" path="res://assets/ui/title_backdrop.svg" id="3_backdrop"]
+[ext_resource type="Texture2D" path="res://assets/ui/milk_cookie.svg" id="4_cookie"]
+[ext_resource type="Texture2D" path="res://assets/ui/milk_churn_bottle.svg" id="5_bottle"]
+[ext_resource type="Texture2D" path="res://assets/characters/milka_chan_smile.svg" id="6_milka"]
+[ext_resource type="Texture2D" path="res://assets/ui/droplet_trio.svg" id="7_trio"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+bg_color = Color(0.99, 0.97, 0.92, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.92, 0.82, 0.52, 0.95)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+content_margin_left = 18.0
+content_margin_top = 16.0
+content_margin_right = 18.0
+content_margin_bottom = 16.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_note"]
+bg_color = Color(1, 0.98, 0.90, 0.95)
+corner_radius_top_left = 26
+corner_radius_top_right = 26
+corner_radius_bottom_right = 26
+corner_radius_bottom_left = 26
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.78, 0.62, 0.28, 0.95)
+
+[node name="RhythmGame" type="CanvasLayer"]
+layer = 110
+script = ExtResource("1_rhythm")
+
+[node name="Root" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+theme = ExtResource("2_theme")
+
+[node name="Backdrop" type="ColorRect" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.16, 0.12, 0.19, 0.88)
+
+[node name="BackdropArt" type="TextureRect" parent="Root"]
+modulate = Color(1, 0.96, 0.88, 0.35)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_backdrop")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Play" type="Control" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Lanes" type="HBoxContainer" parent="Root/Play"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.28
+anchor_top = 0.11
+anchor_right = 0.72
+anchor_bottom = 0.81
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Lane0" type="ColorRect" parent="Root/Play/Lanes"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+color = Color(1, 0.97, 0.88, 0.04)
+
+[node name="Lane1" type="ColorRect" parent="Root/Play/Lanes"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+color = Color(1, 0.97, 0.88, 0.07)
+
+[node name="Lane2" type="ColorRect" parent="Root/Play/Lanes"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+color = Color(1, 0.97, 0.88, 0.04)
+
+[node name="Lane3" type="ColorRect" parent="Root/Play/Lanes"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+color = Color(1, 0.97, 0.88, 0.07)
+
+[node name="HitLine" type="ColorRect" parent="Root/Play"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.30
+anchor_top = 0.76
+anchor_right = 0.70
+anchor_bottom = 0.76
+offset_bottom = 6.0
+grow_horizontal = 2
+mouse_filter = 2
+color = Color(1, 0.94, 0.68, 0.85)
+
+[node name="Notes" type="Control" parent="Root/Play"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="NoteTemplate" type="PanelContainer" parent="Root/Play"]
+visible = false
+custom_minimum_size = Vector2(64, 44)
+offset_right = 64.0
+offset_bottom = 44.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_note")
+
+[node name="Glyph" type="Label" parent="Root/Play/NoteTemplate"]
+layout_mode = 2
+mouse_filter = 2
+text = "●"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_colors/font_color = Color(0.32, 0.22, 0.12, 1)
+theme_override_font_sizes/font_size = 24
+
+[node name="StageCanvas" type="Control" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CenterStage" type="Control" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CookiePivot" type="Control" parent="Root/CenterStage"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.45
+anchor_right = 0.5
+anchor_bottom = 0.45
+offset_left = -115.0
+offset_top = -115.0
+offset_right = 115.0
+offset_bottom = 115.0
+pivot_offset = Vector2(115, 115)
+mouse_filter = 2
+
+[node name="CookieTexture" type="TextureRect" parent="Root/CenterStage/CookiePivot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4_cookie")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SlideCaption" type="Label" parent="Root/CenterStage"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.45
+anchor_right = 0.5
+anchor_bottom = 0.45
+offset_left = -220.0
+offset_top = 172.0
+offset_right = 220.0
+offset_bottom = 202.0
+mouse_filter = 2
+text = "« Optional Slide: Drag Mouse / Touch OR Hold 1 Key »"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(1, 0.95, 0.76, 0.95)
+theme_override_font_sizes/font_size = 16
+
+[node name="LeftCard" type="PanelContainer" parent="Root"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.12
+anchor_bottom = 0.83
+offset_left = 28.0
+offset_right = 338.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="Rows" type="VBoxContainer" parent="Root/LeftCard"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="Header" type="HBoxContainer" parent="Root/LeftCard/Rows"]
+layout_mode = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="Trio" type="TextureRect" parent="Root/LeftCard/Rows/Header"]
+custom_minimum_size = Vector2(28, 24)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("7_trio")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Heading" type="Label" parent="Root/LeftCard/Rows/Header"]
+layout_mode = 2
+text = "Milka's Dairy Beat"
+theme_override_colors/font_color = Color(0.24, 0.18, 0.14, 1)
+theme_override_font_sizes/font_size = 20
+
+[node name="MilkaPortrait" type="TextureRect" parent="Root/LeftCard/Rows"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("6_milka")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CheerLabel" type="Label" parent="Root/LeftCard/Rows"]
+layout_mode = 2
+text = "Milka: \"Click the Milk Cookie! Hold or drag to slide~\""
+autowrap_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.18, 0.14, 1)
+theme_override_font_sizes/font_size = 16
+
+[node name="ControlsHint" type="Label" parent="Root/LeftCard/Rows"]
+layout_mode = 2
+text = "• PC/Mobile: Click/tap cookie (Drag to slide)\n• 1-Key: Tap [Space/Enter] to click, Hold same key to slide!"
+autowrap_mode = 2
+theme_override_colors/font_color = Color(0.42, 0.32, 0.22, 1)
+theme_override_font_sizes/font_size = 14
+
+[node name="RightCard" type="PanelContainer" parent="Root"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.12
+anchor_right = 1.0
+anchor_bottom = 0.83
+offset_left = -338.0
+offset_right = -28.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="Rows" type="VBoxContainer" parent="Root/RightCard"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Header" type="HBoxContainer" parent="Root/RightCard/Rows"]
+layout_mode = 2
+alignment = 1
+
+[node name="BottleIcon" type="TextureRect" parent="Root/RightCard/Rows/Header"]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+texture = ExtResource("5_bottle")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Heading" type="Label" parent="Root/RightCard/Rows/Header"]
+layout_mode = 2
+text = "Milk Churn Upgrades"
+theme_override_colors/font_color = Color(0.24, 0.18, 0.14, 1)
+theme_override_font_sizes/font_size = 20
+
+[node name="BottlePct" type="Label" parent="Root/RightCard/Rows"]
+layout_mode = 2
+text = "Bottle: 0%"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.28, 0.20, 0.14, 1)
+theme_override_font_sizes/font_size = 18
+
+[node name="Spacer" type="Control" parent="Root/RightCard/Rows"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Upgrade1" type="Label" parent="Root/RightCard/Rows"]
+layout_mode = 2
+text = "[ ] Butter Whisk (15 drops)"
+theme_override_colors/font_color = Color(0.26, 0.19, 0.14, 1)
+theme_override_font_sizes/font_size = 15
+
+[node name="Upgrade2" type="Label" parent="Root/RightCard/Rows"]
+layout_mode = 2
+text = "[ ] Meadow Bell (45 drops)"
+theme_override_colors/font_color = Color(0.26, 0.19, 0.14, 1)
+theme_override_font_sizes/font_size = 15
+
+[node name="Upgrade3" type="Label" parent="Root/RightCard/Rows"]
+layout_mode = 2
+text = "[ ] Cream Fever (90 drops)"
+theme_override_colors/font_color = Color(0.26, 0.19, 0.14, 1)
+theme_override_font_sizes/font_size = 15
+
+[node name="ServeButton" type="Button" parent="Root/RightCard/Rows"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.22, 0.16, 0.12, 1)
+theme_override_colors/font_focus_color = Color(0.18, 0.12, 0.09, 1)
+theme_override_colors/font_pressed_color = Color(0.14, 0.09, 0.06, 1)
+theme_override_colors/font_hover_color = Color(0.14, 0.09, 0.06, 1)
+theme_override_colors/font_disabled_color = Color(0.52, 0.45, 0.38, 0.65)
+text = "Serve Milk"
+
+[node name="Hud" type="Control" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Top" type="HBoxContainer" parent="Root/Hud"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 32.0
+offset_top = 20.0
+offset_right = -32.0
+offset_bottom = 60.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/separation = 28
+
+[node name="Title" type="Label" parent="Root/Hud/Top"]
+layout_mode = 2
+text = "Milk Beat Clicker"
+theme_override_colors/font_color = Color(1, 0.98, 0.92, 1)
+theme_override_font_sizes/font_size = 26
+
+[node name="Score" type="Label" parent="Root/Hud/Top"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Milk Drops: 0"
+horizontal_alignment = 2
+theme_override_colors/font_color = Color(1, 0.96, 0.80, 1)
+theme_override_font_sizes/font_size = 24
+
+[node name="Combo" type="Label" parent="Root/Hud/Top"]
+layout_mode = 2
+text = "Combo x0 (Mult x1)"
+theme_override_colors/font_color = Color(0.86, 0.96, 1, 1)
+theme_override_font_sizes/font_size = 22
+
+[node name="Judge" type="Label" parent="Root/Hud"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 32.0
+offset_top = -88.0
+offset_right = -32.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+text = "Click the Milk Cookie on the beat — or hold/drag to slide!"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(1, 0.95, 0.82, 1)
+theme_override_font_sizes/font_size = 26
