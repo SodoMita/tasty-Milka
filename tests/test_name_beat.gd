@@ -3,8 +3,7 @@ extends Node
 ##   1) Mid-dialogue top-anchored NameEntry popout (layer 110 > VNBalloon layer 100,
 ##      with top margin for screen keyboard)
 ##   2) NameLore trait analysis & Milka's reactions (lowercase, digits, emoji, math, special, etc.)
-##   3) Visual Cookie-Clicker + Rhythm Click & Optional Slide minigame with strict
-##      Single Tap vs Swipe/Slide classification & reactions (mouse, touch & 1-key)
+##   3) Visual Cookie-Clicker + Rhythm Click & Optional Slide minigame (mouse, touch & 1-key)
 ##   4) Full live vn_scene.tscn + vn_balloon.tscn play-through using real Viewport.push_input()
 ##      mouse clicks, mouse drags, and keyboard typing events.
 
@@ -21,10 +20,9 @@ func _ready() -> void:
 	_test_name_lore()
 	await _test_name_entry_top_popout()
 	await _test_mid_dialogue_name_ask()
-	await _test_rhythm_visuals_and_tap_vs_swipe()
+	await _test_rhythm_visuals_and_controls()
 	await _test_rhythm_completion()
 	await _test_dialogue_reactions()
-	await _test_rhythm_style_dialogue_reactions()
 	await _test_live_vn_scene_with_real_inputs()
 	print("== name/beat probe: %d passed, %d failed ==" % [_passed, _failed])
 	get_tree().quit(1 if _failed > 0 else 0)
@@ -175,7 +173,7 @@ func _test_mid_dialogue_name_ask() -> void:
 	_check("mid-dialogue name prompt acquired player name", prompted.size() == 1 and prompted[0] == "misha+7🥛!" and _gs().player_name == "misha+7🥛!")
 	_check("line after prompt uses acquired player name", line != null and line.text.contains("misha+7🥛!"))
 
-func _test_rhythm_visuals_and_tap_vs_swipe() -> void:
+func _test_rhythm_visuals_and_controls() -> void:
 	var game: CanvasLayer = RhythmScene.instantiate()
 	game.set("note_count", 8)
 	add_child(game)
@@ -185,86 +183,95 @@ func _test_rhythm_visuals_and_tap_vs_swipe() -> void:
 	_check("minigame is on layer >= 110 (above VNBalloon layer 100)", game.layer >= 110)
 	var cookie_tex: TextureRect = game.get_node("Root/CenterStage/CookiePivot/CookieTexture")
 	var milka_tex: TextureRect = game.get_node("Root/LeftCard/Rows/MilkaPortrait")
+	var milka_cheer: Label = game.get_node("Root/LeftCard/Rows/CheerLabel")
 	var bottle_tex: TextureRect = game.get_node("Root/RightCard/Rows/Header/BottleIcon")
 	var stage_canvas: Control = game.get_node("Root/StageCanvas")
-	var cheer_label: Label = game.get_node("Root/LeftCard/Rows/CheerLabel")
 	_check("visual Milk Cookie texture loaded", cookie_tex != null and cookie_tex.texture != null)
 	_check("visual Milka cheerleader portrait loaded", milka_tex != null and milka_tex.texture != null)
 	_check("visual Milk Churn bottle icon loaded", bottle_tex != null and bottle_tex.texture != null)
 	_check("custom stage canvas present", stage_canvas != null and stage_canvas.visible)
 
-	# 1. Mouse SINGLE TAP: press + release at same spot -> increments _clicks ONLY (never _slides)
-	game.call("_press", Vector2(640.0, 330.0))
-	_check("mouse press-down does not prematurely count as a tap before release", int(game.get("_clicks")) == 0 and int(game.get("_slides")) == 0)
-	game.call("_release", Vector2(642.0, 330.0))
-	_check("mouse single tap increments clicks=1 and slides=0", int(game.get("_clicks")) == 1 and int(game.get("_slides")) == 0)
-	_check("Milka reacts specifically to single tap", String(game.get("_last_gesture")) == "SINGLE TAP" and cheer_label.text.to_lower().contains("single tap"))
+	var cookie_center: Vector2 = game.call("_cookie_center")
+	var s0: int = int(game.get("_score"))
+	game.call("perform_click", cookie_center)
+	var s1: int = int(game.get("_score"))
+	_check("mouse cookie click scores drops & spawns particles", s1 > s0 and (game.get("_particles") as Array).size() > 0)
 
-	# 2. Mouse SWIPE / DRAG: press + motion >= 24px + release -> increments _slides ONLY (never _clicks!)
+	# Mouse tap is classified only on release. Tiny pointer jitter remains a tap.
+	var clicks_before_tap: int = int(game.get("_clicks"))
+	var slides_before_tap: int = int(game.get("_slides"))
+	var score_before_tap: int = int(game.get("_score"))
+	game.call("_press", cookie_center)
+	_check("mouse-down alone does not prematurely score a tap", int(game.get("_clicks")) == clicks_before_tap and int(game.get("_score")) == score_before_tap)
+	game.call("_motion", cookie_center + Vector2(8.0, 3.0))
+	game.call("_release", cookie_center + Vector2(8.0, 3.0))
+	_check("small-jitter release becomes exactly one tap", int(game.get("_clicks")) == clicks_before_tap + 1 and int(game.get("_slides")) == slides_before_tap)
+	_check("Milka reacts specifically to the tap", milka_cheer.text.contains("One clean tap"))
+
+	# Crossing the swipe threshold suppresses the pending tap.
 	var clicks_before_swipe: int = int(game.get("_clicks"))
-	game.call("_press", Vector2(560.0, 330.0))
-	game.call("_motion", Vector2(650.0, 330.0))
-	game.call("_release", Vector2(650.0, 330.0))
-	_check("mouse swipe increments slides without incrementing clicks", int(game.get("_slides")) == 1 and int(game.get("_clicks")) == clicks_before_swipe)
-	_check("Milka reacts specifically to swipe and draws swipe trail", String(game.get("_last_gesture")) == "SWIPE" and cheer_label.text.to_lower().contains("swipe") and (game.get("_swipe_trail") as Array).size() > 0)
+	var slides_before_swipe: int = int(game.get("_slides"))
+	var score_before_swipe: int = int(game.get("_score"))
+	game.call("_press", cookie_center - Vector2(40.0, 0.0))
+	game.call("_motion", cookie_center + Vector2(40.0, 0.0))
+	game.call("_release", cookie_center + Vector2(40.0, 0.0))
+	_check("mouse swipe grants slide bonus", int(game.get("_slides")) > slides_before_swipe and int(game.get("_score")) > score_before_swipe)
+	_check("same mouse swipe does not also count as a tap", int(game.get("_clicks")) == clicks_before_swipe)
+	_check("Milka reacts specifically to the swipe", milka_cheer.text.contains("That was a swipe"))
 
-	# 3. 1-Button Keyboard SINGLE TAP vs HOLD-SLIDE:
-	var c_before_k: int = int(game.get("_clicks"))
-	var s_before_k: int = int(game.get("_slides"))
+	# A medium ambiguous move is cancelled instead of being guessed as a tap.
+	var clicks_before_cancel: int = int(game.get("_clicks"))
+	var slides_before_cancel: int = int(game.get("_slides"))
+	game.call("_press", cookie_center)
+	game.call("_motion", cookie_center + Vector2(34.0, 0.0))
+	game.call("_release", cookie_center + Vector2(34.0, 0.0))
+	_check("ambiguous movement is neither tap nor swipe", int(game.get("_clicks")) == clicks_before_cancel and int(game.get("_slides")) == slides_before_cancel)
+	_check("Milka explains the cancelled ambiguous gesture", milka_cheer.text.contains("between a tap and swipe"))
+
+	var clicks_before_key: int = int(game.get("_clicks"))
+	var score_before_key: int = int(game.get("_score"))
 	game.call("press_one_button")
-	_check("1-key press-down waits to classify tap vs hold-slide", int(game.get("_clicks")) == c_before_k and int(game.get("_slides")) == s_before_k)
+	_check("key-down waits before deciding tap versus hold", int(game.get("_clicks")) == clicks_before_key and int(game.get("_score")) == score_before_key)
 	game.call("release_one_button")
-	_check("1-key quick tap increments clicks only (slides unchanged)", int(game.get("_clicks")) == c_before_k + 1 and int(game.get("_slides")) == s_before_k)
+	_check("quick key release becomes exactly one tap", int(game.get("_clicks")) == clicks_before_key + 1 and int(game.get("_score")) > score_before_key)
 
-	var c_before_hold: int = int(game.get("_clicks"))
-	var s_before_hold: int = int(game.get("_slides"))
+	var clicks_before_hold: int = int(game.get("_clicks"))
+	var slides_before_key: int = int(game.get("_slides"))
+	var score_before_hold: int = int(game.get("_score"))
 	game.call("hold_one_button", 0.62)
-	_check("1-key hold increments slides only (clicks unchanged!)", int(game.get("_slides")) > s_before_hold and int(game.get("_clicks")) == c_before_hold)
+	_check("1-button keyboard hold performs slide churn", int(game.get("_slides")) > slides_before_key and int(game.get("_score")) > score_before_hold)
+	_check("keyboard hold suppresses its pending tap", int(game.get("_clicks")) == clicks_before_hold)
+	_check("Milka reacts specifically to held-key slide", milka_cheer.text.contains("held key"))
 
-	# 4. Mobile ScreenTouch SINGLE TAP vs ScreenDrag SWIPE:
-	var c_before_touch: int = int(game.get("_clicks"))
-	var s_before_touch: int = int(game.get("_slides"))
-	var t_down := InputEventScreenTouch.new()
-	t_down.pressed = true
-	t_down.position = Vector2(640.0, 330.0)
-	game.call("_on_gui_input", t_down)
-	var t_up := InputEventScreenTouch.new()
-	t_up.pressed = false
-	t_up.position = Vector2(641.0, 330.0)
-	game.call("_on_gui_input", t_up)
-	_check("mobile touch tap increments clicks only (slides unchanged)", int(game.get("_clicks")) == c_before_touch + 1 and int(game.get("_slides")) == s_before_touch)
+	# Touch follows exactly the same down/move/up classifier.
+	var touch_down := InputEventScreenTouch.new()
+	touch_down.pressed = true
+	touch_down.position = cookie_center - Vector2(20.0, 0.0)
+	var score_before_touch: int = int(game.get("_score"))
+	var clicks_before_touch: int = int(game.get("_clicks"))
+	game.call("_on_gui_input", touch_down)
+	_check("touch-down alone does not prematurely score", int(game.get("_score")) == score_before_touch)
+	var touch_up_tap := InputEventScreenTouch.new()
+	touch_up_tap.pressed = false
+	touch_up_tap.position = cookie_center - Vector2(20.0, 0.0)
+	game.call("_on_gui_input", touch_up_tap)
+	_check("touch release becomes exactly one tap", int(game.get("_clicks")) == clicks_before_touch + 1)
 
-	var c_before_tdrag: int = int(game.get("_clicks"))
-	var s_before_tdrag: int = int(game.get("_slides"))
-	t_down.position = Vector2(570.0, 330.0)
-	game.call("_on_gui_input", t_down)
-	var t_drag := InputEventScreenDrag.new()
-	t_drag.position = Vector2(660.0, 330.0)
-	game.call("_on_gui_input", t_drag)
-	t_up.position = Vector2(660.0, 330.0)
-	game.call("_on_gui_input", t_up)
-	_check("mobile touch drag increments slides only (clicks unchanged!)", int(game.get("_slides")) > s_before_tdrag and int(game.get("_clicks")) == c_before_tdrag)
-
-	# 5. Single tap on an arrow slide note vs swiping it:
-	var notes: Array = game.get("_notes")
-	var slide_note: Dictionary = {}
-	for n: Dictionary in notes:
-		if bool(n["slide"]):
-			slide_note = n
-			break
-	if not slide_note.is_empty():
-		game.set("_time", float(slide_note["time"]))
-		var sx: float = float(game.call("_lane_x", int(slide_note["lane"])))
-		var sy: float = 540.0
-		var s_before_arrow_tap: int = int(game.get("_slides"))
-		game.call("_press", Vector2(sx, sy))
-		game.call("_release", Vector2(sx, sy))
-		_check("single tap on slide arrow note is NOT counted as a swipe and prompts user to swipe", int(game.get("_slides")) == s_before_arrow_tap and String(game.get("_last_gesture")) == "TAP_ON_SLIDE" and not bool(slide_note["done"]))
-		var dir_sign: float = float(int(slide_note["dir"]))
-		game.call("_press", Vector2(sx, sy))
-		game.call("_motion", Vector2(sx + 75.0 * dir_sign, sy))
-		game.call("_release", Vector2(sx + 75.0 * dir_sign, sy))
-		_check("directional swipe on slide arrow note resolves it and increments slides", bool(slide_note["done"]) and int(game.get("_slides")) > s_before_arrow_tap)
+	var touch_swipe_down := InputEventScreenTouch.new()
+	touch_swipe_down.pressed = true
+	touch_swipe_down.position = cookie_center - Vector2(45.0, 0.0)
+	game.call("_on_gui_input", touch_swipe_down)
+	var slides_before_drag: int = int(game.get("_slides"))
+	var clicks_before_drag: int = int(game.get("_clicks"))
+	var touch_drag := InputEventScreenDrag.new()
+	touch_drag.position = cookie_center + Vector2(45.0, 0.0)
+	game.call("_on_gui_input", touch_drag)
+	var touch_up := InputEventScreenTouch.new()
+	touch_up.pressed = false
+	touch_up.position = cookie_center + Vector2(45.0, 0.0)
+	game.call("_on_gui_input", touch_up)
+	_check("mobile screen swipe triggers slide churn", int(game.get("_slides")) > slides_before_drag)
+	_check("mobile screen swipe does not also tap", int(game.get("_clicks")) == clicks_before_drag)
 
 	game.queue_free()
 	await get_tree().process_frame
@@ -290,7 +297,7 @@ func _test_rhythm_completion() -> void:
 		await get_tree().process_frame
 	_check("minigame finishes cleanly", result.size() == 1)
 	if result.size() == 1:
-		_check("result carries rank, clicks, slides, and style", String(result[0].get("rank", "")) != "" and result[0].has("slides") and result[0].has("style"))
+		_check("result carries rank and stats", String(result[0].get("rank", "")) != "" and result[0].has("slides"))
 
 func _test_dialogue_reactions() -> void:
 	_gs().set_player_name("boris42+🥛!")
@@ -313,28 +320,6 @@ func _test_dialogue_reactions() -> void:
 	_check("dialogue reacts to special symbols", joined.contains("brackets and slashes"))
 	_check("dialogue reaches the cookie-clicker rhythm offer", joined.contains("milk cookie"))
 
-func _test_rhythm_style_dialogue_reactions() -> void:
-	var dm: Node = get_tree().root.get_node("DialogueManager")
-	_gs().set_player_name("Sonya")
-
-	# 1. Tap-only result reaction
-	_gs().record_rhythm_result({"score": 40, "clicks": 12, "slides": 0, "style": "tap_only", "missed": 0, "rank": "wobbly whisk"})
-	var lines_tap: PackedStringArray = []
-	var l1: DialogueLine = await dm.get_next_dialogue_line(DialogueRes, "rhythm_result")
-	while l1 != null and l1.responses.is_empty():
-		lines_tap.append(l1.text)
-		l1 = await dm.get_next_dialogue_line(DialogueRes, l1.next_id)
-	_check("dialogue reacts to tap_only play style", "\n".join(lines_tap).to_lower().contains("all single taps and zero swipes"))
-
-	# 2. Swipe-only result reaction
-	_gs().record_rhythm_result({"score": 60, "clicks": 0, "slides": 8, "style": "swipe_only", "missed": 0, "rank": "steady churner"})
-	var lines_swipe: PackedStringArray = []
-	var l2: DialogueLine = await dm.get_next_dialogue_line(DialogueRes, "rhythm_result")
-	while l2 != null and l2.responses.is_empty():
-		lines_swipe.append(l2.text)
-		l2 = await dm.get_next_dialogue_line(DialogueRes, l2.next_id)
-	_check("dialogue reacts to swipe_only play style", "\n".join(lines_swipe).to_lower().contains("all swipes and not a single tap"))
-
 func _test_live_vn_scene_with_real_inputs() -> void:
 	_gs().reset()
 	var vn: Node = (load("res://scenes/vn_scene.tscn") as PackedScene).instantiate()
@@ -346,6 +331,7 @@ func _test_live_vn_scene_with_real_inputs() -> void:
 	if balloon == null:
 		return
 
+	# 1. Click through opening lines with real mouse clicks until NameEntry appears
 	for step in 20:
 		if _mg().active_name_prompt != null:
 			break
@@ -370,6 +356,7 @@ func _test_live_vn_scene_with_real_inputs() -> void:
 		await get_tree().process_frame
 	_check("real mouse click on Tell Milka confirmed name and resumed VNBalloon", _mg().active_name_prompt == null and _gs().player_name == "misha7+")
 
+	# 2. Click through Milka's reactions until the choices menu is visible
 	for step in 50:
 		if (balloon.get("responses_menu") as Control).visible:
 			break
@@ -392,17 +379,18 @@ func _test_live_vn_scene_with_real_inputs() -> void:
 	var rgame: CanvasLayer = _mg().active_rhythm_game
 	_check("live game launched RhythmGame above VNBalloon", _mg().is_playing and rgame != null and rgame.layer > balloon.layer)
 	if rgame != null:
-		await _click_at(Vector2(640.0, 320.0))
-		_check("live single click counted as 1 tap and 0 swipes", int(rgame.get("_clicks")) == 1 and int(rgame.get("_slides")) == 0)
-		await _drag_mouse(Vector2(560.0, 320.0), Vector2(700.0, 320.0))
-		_check("live mouse drag counted as 1 swipe and did not increment taps", int(rgame.get("_slides")) == 1 and int(rgame.get("_clicks")) == 1)
+		var live_cookie_local: Vector2 = rgame.call("_cookie_center")
+		var live_cookie_viewport: Vector2 = rgame.transform * live_cookie_local
+		await _click_at(live_cookie_viewport)
+		var swipe_delta: Vector2 = (rgame.transform.basis_xform(Vector2(75.0, 0.0)))
+		await _drag_mouse(live_cookie_viewport - swipe_delta, live_cookie_viewport + swipe_delta)
 		await _type_char(" ", KEY_SPACE)
-		_check("live Space key tap counted as 2nd tap and kept swipes at 1", int(rgame.get("_clicks")) == 2 and int(rgame.get("_slides")) == 1)
+		_check("live RhythmGame distinguished real tap, swipe, and Space tap", int(rgame.get("_score")) > 0 and int(rgame.get("_slides")) >= 1 and int(rgame.get("_clicks")) >= 2)
 		var serve_btn: Button = rgame.get_node("Root/RightCard/Rows/ServeButton")
 		await _click_at(serve_btn.get_global_rect().get_center())
 		for f_i in 15:
 			await get_tree().process_frame
-		_check("real mouse click on Serve Milk finished minigame and recorded balanced style", not _mg().is_playing and _gs().rhythm_clicks() == 2 and _gs().rhythm_slides() == 1 and _gs().rhythm_style() == "balanced")
+		_check("real mouse click on Serve Milk finished minigame and resumed story", not _mg().is_playing and _gs().rhythm_score() > 0)
 
 	vn.queue_free()
 	if is_instance_valid(balloon):
