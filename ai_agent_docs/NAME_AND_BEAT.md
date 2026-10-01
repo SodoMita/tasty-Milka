@@ -35,7 +35,7 @@
 
 ## 3. Verification
 - `bash tests/check_assets.sh` — all WebP/SVG size and path rules pass.
-- `godot --headless res://tests/test_name_beat.tscn` — 69/69 assertions pass, including a complete live VN scene driven through `Viewport.push_input()` and exclusivity checks for mouse, touch, and keyboard gestures.
+- `godot --headless res://tests/test_name_beat.tscn` — 71/71 assertions pass, including a complete live VN scene driven through `Viewport.push_input()` and exclusivity checks for mouse, touch, and keyboard gestures.
 
 ### Real-window gesture verification
 

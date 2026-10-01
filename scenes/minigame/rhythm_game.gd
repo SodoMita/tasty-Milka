@@ -97,6 +97,7 @@ var _last_gesture: String = ""
 ## Visual particles & popups drawn on _canvas
 var _particles: Array[Dictionary] = []
 var _ripples: Array[Dictionary] = []
+var _swipe_trail: Array[Dictionary] = []
 var _popups: Array[Dictionary] = []
 
 func _ready() -> void:
@@ -298,6 +299,13 @@ func _tick_visuals(delta: float) -> void:
 			next_ripples.append(r)
 	_ripples = next_ripples
 
+	var next_trail: Array[Dictionary] = []
+	for trail_point: Dictionary in _swipe_trail:
+		trail_point["life"] = float(trail_point["life"]) - delta
+		if float(trail_point["life"]) > 0.0:
+			next_trail.append(trail_point)
+	_swipe_trail = next_trail
+
 	var next_popups: Array[Dictionary] = []
 	for pop: Dictionary in _popups:
 		pop["life"] = float(pop["life"]) - delta
@@ -384,7 +392,16 @@ func _on_canvas_draw() -> void:
 	_canvas.draw_circle(Vector2(orb_x, track_y), 17.0, Color(1.0, 0.96, 0.78, 1.0))
 	_canvas.draw_arc(Vector2(orb_x, track_y), 17.0, 0.0, TAU, 28, Color(0.58, 0.42, 0.16, 1.0), 3.0)
 
-
+	# Golden ribbon makes swipe classification visible independently of score text.
+	for i: int in _swipe_trail.size():
+		var trail_point: Dictionary = _swipe_trail[i]
+		var trail_alpha: float = clampf(float(trail_point["life"]) / 0.40, 0.0, 1.0)
+		var trail_pos: Vector2 = trail_point["pos"]
+		_canvas.draw_circle(trail_pos, 10.0 * trail_alpha, Color(1.0, 0.88, 0.34, trail_alpha * 0.85))
+		if i > 0:
+			var previous_pos: Vector2 = _swipe_trail[i - 1]["pos"]
+			if previous_pos.distance_to(trail_pos) < 160.0:
+				_canvas.draw_line(previous_pos, trail_pos, Color(1.0, 0.92, 0.45, trail_alpha * 0.9), 7.0 * trail_alpha)
 
 	for r: Dictionary in _ripples:
 		var alpha: float = clampf(float(r["life"]) / 0.45, 0.0, 1.0)
@@ -518,6 +535,7 @@ func _motion(pos: Vector2) -> void:
 	if not _pointer_is_swipe:
 		return
 
+	_swipe_trail.append({"pos": pos, "life": 0.40})
 	var signed_dx: float = pos.x - _pointer_start.x
 	_slider_pos = clampf(0.5 + signed_dx / (SLIDE_DISTANCE * 4.0), 0.0, 1.0)
 	while _pointer_path_distance >= SLIDE_DISTANCE:
@@ -773,10 +791,20 @@ func _finish(immediate: bool = false) -> void:
 		rank = "steady churner"
 	elif _score >= 10 or accuracy >= 35.0:
 		rank = "wobbly whisk"
+	var style: String = "none"
+	if _clicks > 0 and _slides == 0:
+		style = "tap_only"
+	elif _slides > 0 and _clicks == 0:
+		style = "swipe_only"
+	elif _slides > _clicks:
+		style = "swipe_master"
+	elif _clicks > 0 and _slides > 0:
+		style = "balanced"
 	var result: Dictionary = {
 		"score": _score,
 		"clicks": _clicks,
 		"slides": _slides,
+		"style": style,
 		"perfect": _perfect,
 		"good": _good,
 		"missed": _missed,

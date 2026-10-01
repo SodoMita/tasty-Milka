@@ -297,7 +297,7 @@ func _test_rhythm_completion() -> void:
 		await get_tree().process_frame
 	_check("minigame finishes cleanly", result.size() == 1)
 	if result.size() == 1:
-		_check("result carries rank and stats", String(result[0].get("rank", "")) != "" and result[0].has("slides"))
+		_check("result carries rank, tap/swipe stats, and style", String(result[0].get("rank", "")) != "" and result[0].has("clicks") and result[0].has("slides") and result[0].has("style"))
 
 func _test_dialogue_reactions() -> void:
 	_gs().set_player_name("boris42+🥛!")
@@ -319,6 +319,19 @@ func _test_dialogue_reactions() -> void:
 	_check("dialogue reacts to math", joined.contains("arithmetic"))
 	_check("dialogue reacts to special symbols", joined.contains("brackets and slashes"))
 	_check("dialogue reaches the cookie-clicker rhythm offer", joined.contains("milk cookie"))
+
+	_gs().record_rhythm_result({"score": 24, "clicks": 12, "slides": 0, "style": "tap_only", "missed": 1, "rank": "wobbly whisk"})
+	var tap_result: DialogueLine = await dm.get_next_dialogue_line(DialogueRes, "rhythm_result")
+	var tap_result_text: PackedStringArray = []
+	var tap_guard: int = 0
+	while tap_result != null and tap_guard < 6:
+		tap_guard += 1
+		tap_result_text.append(tap_result.text)
+		if not tap_result.responses.is_empty():
+			break
+		tap_result = await dm.get_next_dialogue_line(DialogueRes, tap_result.next_id)
+	_check("result dialogue reports separate tap/swipe totals", "\n".join(tap_result_text).contains("12 single taps, 0 swipes"))
+	_check("result dialogue reacts to tap-only style", "\n".join(tap_result_text).contains("All single taps and zero swipes"))
 
 func _test_live_vn_scene_with_real_inputs() -> void:
 	_gs().reset()
