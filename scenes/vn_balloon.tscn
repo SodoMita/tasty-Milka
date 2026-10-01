@@ -21,7 +21,7 @@
 [ext_resource type="Texture2D" uid="uid://bas21osbbugsy" path="res://assets/backgrounds/starry_night.svg" id="35_bg_night"]
 [ext_resource type="Resource" path="res://characters/milka_chan.tres" id="36_def_milka"]
 [ext_resource type="Texture2D" uid="uid://disyvkjbef0iq" path="res://assets/ui/milk_droplet.svg" id="40_drop"]
-[ext_resource type="Theme" uid="uid://b2868f6o1ewh6" path="res://assets/ui/milk_glass_theme.tres" id="60_theme"]
+[ext_resource type="Theme" uid="uid://bckjh04a6b4vk" path="res://assets/ui/milk_glass_theme.tres" id="60_theme"]
 [ext_resource type="PackedScene" path="res://scenes/ui/settings_menu.tscn" id="61_settings"]
 [ext_resource type="Texture2D" uid="uid://kqi36bxlspmg" path="res://assets/ui/icons/auto.svg" id="70_auto"]
 [ext_resource type="Texture2D" uid="uid://4irxkkrhn26n" path="res://assets/ui/icons/close.svg" id="70_close"]
@@ -305,6 +305,8 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
 mouse_filter = 2
 
 [node name="right" type="Control" parent="Balloon/Stage/Anchors" unique_id=1964544367]

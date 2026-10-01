@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://bmexb552rgmt2"
+path="res://.godot/imported/rm milka.dialogue-a18a08ed3c676ed0f14b581f227ff53b.tres"
+
+[deps]
+
+source_file="res://dialogue/rm milka.dialogue"
+dest_files=["res://.godot/imported/rm milka.dialogue-a18a08ed3c676ed0f14b581f227ff53b.tres"]
+
+[params]
+
+defaults=true
