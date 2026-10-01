@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" path="res://assets/ui/droplet_trio.svg" id="7_trio"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
-bg_color = Color(0.99, 0.97, 0.92, 0.90)
+bg_color = Color(0.99, 0.97, 0.92, 0.92)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -37,7 +37,7 @@ border_width_bottom = 2
 border_color = Color(0.78, 0.62, 0.28, 0.95)
 
 [node name="RhythmGame" type="CanvasLayer"]
-layer = 30
+layer = 110
 script = ExtResource("1_rhythm")
 
 [node name="Root" type="Control" parent="."]
@@ -83,10 +83,14 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="Lanes" type="HBoxContainer" parent="Root/Play"]
-offset_left = 360.0
-offset_top = 80.0
-offset_right = 920.0
-offset_bottom = 580.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.28
+anchor_top = 0.11
+anchor_right = 0.72
+anchor_bottom = 0.81
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 theme_override_constants/separation = 6
 
@@ -115,10 +119,14 @@ mouse_filter = 2
 color = Color(1, 0.97, 0.88, 0.07)
 
 [node name="HitLine" type="ColorRect" parent="Root/Play"]
-offset_left = 380.0
-offset_top = 540.0
-offset_right = 900.0
-offset_bottom = 546.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.30
+anchor_top = 0.76
+anchor_right = 0.70
+anchor_bottom = 0.76
+offset_bottom = 6.0
+grow_horizontal = 2
 mouse_filter = 2
 color = Color(1, 0.94, 0.68, 0.85)
 
@@ -167,10 +175,16 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="CookiePivot" type="Control" parent="Root/CenterStage"]
-offset_left = 525.0
-offset_top = 205.0
-offset_right = 755.0
-offset_bottom = 435.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.45
+anchor_right = 0.5
+anchor_bottom = 0.45
+offset_left = -115.0
+offset_top = -115.0
+offset_right = 115.0
+offset_bottom = 115.0
 pivot_offset = Vector2(115, 115)
 mouse_filter = 2
 
@@ -187,21 +201,29 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="SlideCaption" type="Label" parent="Root/CenterStage"]
-offset_left = 440.0
-offset_top = 495.0
-offset_right = 840.0
-offset_bottom = 525.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.45
+anchor_right = 0.5
+anchor_bottom = 0.45
+offset_left = -220.0
+offset_top = 172.0
+offset_right = 220.0
+offset_bottom = 202.0
 mouse_filter = 2
-text = "« Optional Slide: Drag Mouse OR Hold 1 Key »"
+text = "« Optional Slide: Drag Mouse / Touch OR Hold 1 Key »"
 horizontal_alignment = 1
 theme_override_colors/font_color = Color(1, 0.95, 0.76, 0.95)
 theme_override_font_sizes/font_size = 16
 
 [node name="LeftCard" type="PanelContainer" parent="Root"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.12
+anchor_bottom = 0.83
 offset_left = 28.0
-offset_top = 88.0
 offset_right = 338.0
-offset_bottom = 590.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_card")
 
@@ -230,7 +252,7 @@ theme_override_colors/font_color = Color(0.24, 0.18, 0.14, 1)
 theme_override_font_sizes/font_size = 20
 
 [node name="MilkaPortrait" type="TextureRect" parent="Root/LeftCard/Rows"]
-custom_minimum_size = Vector2(0, 220)
+custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
@@ -247,16 +269,20 @@ theme_override_font_sizes/font_size = 16
 
 [node name="ControlsHint" type="Label" parent="Root/LeftCard/Rows"]
 layout_mode = 2
-text = "• Mouse-only: Click cookie (Drag to slide)\n• 1-Key-only: Tap [Space/Enter] to click, Hold same key to slide!"
+text = "• PC/Mobile: Click/tap cookie (Drag to slide)\n• 1-Key: Tap [Space/Enter] to click, Hold same key to slide!"
 autowrap_mode = 2
 theme_override_colors/font_color = Color(0.42, 0.32, 0.22, 1)
 theme_override_font_sizes/font_size = 14
 
 [node name="RightCard" type="PanelContainer" parent="Root"]
-offset_left = 942.0
-offset_top = 88.0
-offset_right = 1252.0
-offset_bottom = 590.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.12
+anchor_right = 1.0
+anchor_bottom = 0.83
+offset_left = -338.0
+offset_right = -28.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_card")
 
 [node name="Rows" type="VBoxContainer" parent="Root/RightCard"]
@@ -288,7 +314,7 @@ theme_override_colors/font_color = Color(0.28, 0.20, 0.14, 1)
 theme_override_font_sizes/font_size = 18
 
 [node name="Spacer" type="Control" parent="Root/RightCard/Rows"]
-custom_minimum_size = Vector2(0, 170)
+custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 mouse_filter = 2
 
@@ -325,10 +351,14 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="Top" type="HBoxContainer" parent="Root/Hud"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
 offset_left = 32.0
 offset_top = 20.0
-offset_right = 1248.0
+offset_right = -32.0
 offset_bottom = 60.0
+grow_horizontal = 2
 mouse_filter = 2
 theme_override_constants/separation = 28
 
@@ -353,10 +383,17 @@ theme_override_colors/font_color = Color(0.86, 0.96, 1, 1)
 theme_override_font_sizes/font_size = 22
 
 [node name="Judge" type="Label" parent="Root/Hud"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 offset_left = 32.0
-offset_top = 628.0
-offset_right = 1248.0
-offset_bottom = 688.0
+offset_top = -88.0
+offset_right = -32.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 0
 mouse_filter = 2
 text = "Click the Milk Cookie on the beat — or hold/drag to slide!"
 horizontal_alignment = 1

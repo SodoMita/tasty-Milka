@@ -1,8 +1,11 @@
 extends Node
 ## Headless probe for:
-##   1) Mid-dialogue top-anchored NameEntry popout (with top margin for screen keyboard)
+##   1) Mid-dialogue top-anchored NameEntry popout (layer 110 > VNBalloon layer 100,
+##      with top margin for screen keyboard)
 ##   2) NameLore trait analysis & Milka's reactions (lowercase, digits, emoji, math, special, etc.)
-##   3) Visual Cookie-Clicker + Rhythm Click & Optional Slide minigame (mouse-only & 1-key-only)
+##   3) Visual Cookie-Clicker + Rhythm Click & Optional Slide minigame (mouse, touch & 1-key)
+##   4) Full live vn_scene.tscn + vn_balloon.tscn play-through using real Viewport.push_input()
+##      mouse clicks, mouse drags, and keyboard typing events.
 
 const Lore = preload("res://autoloads/name_lore.gd")
 const NameEntryScene: PackedScene = preload("res://scenes/ui/name_entry.tscn")
@@ -20,6 +23,7 @@ func _ready() -> void:
 	await _test_rhythm_visuals_and_controls()
 	await _test_rhythm_completion()
 	await _test_dialogue_reactions()
+	await _test_live_vn_scene_with_real_inputs()
 	print("== name/beat probe: %d passed, %d failed ==" % [_passed, _failed])
 	get_tree().quit(1 if _failed > 0 else 0)
 
@@ -36,6 +40,61 @@ func _check(label: String, ok: bool) -> void:
 	else:
 		_failed += 1
 		printerr("  [FAIL] %s" % label)
+
+func _click_at(pos: Vector2) -> void:
+	var down := InputEventMouseButton.new()
+	down.button_index = MOUSE_BUTTON_LEFT
+	down.pressed = true
+	down.position = pos
+	down.global_position = pos
+	get_viewport().push_input(down, true)
+	await get_tree().process_frame
+	var up := InputEventMouseButton.new()
+	up.button_index = MOUSE_BUTTON_LEFT
+	up.pressed = false
+	up.position = pos
+	up.global_position = pos
+	get_viewport().push_input(up, true)
+	await get_tree().process_frame
+
+func _drag_mouse(from_pos: Vector2, to_pos: Vector2) -> void:
+	var down := InputEventMouseButton.new()
+	down.button_index = MOUSE_BUTTON_LEFT
+	down.pressed = true
+	down.position = from_pos
+	down.global_position = from_pos
+	get_viewport().push_input(down, true)
+	await get_tree().process_frame
+	var move := InputEventMouseMotion.new()
+	move.position = to_pos
+	move.global_position = to_pos
+	move.relative = to_pos - from_pos
+	get_viewport().push_input(move, true)
+	await get_tree().process_frame
+	var up := InputEventMouseButton.new()
+	up.button_index = MOUSE_BUTTON_LEFT
+	up.pressed = false
+	up.position = to_pos
+	up.global_position = to_pos
+	get_viewport().push_input(up, true)
+	await get_tree().process_frame
+
+func _type_char(ch: String, keycode: Key = KEY_NONE) -> void:
+	var code: int = ch.unicode_at(0) if ch.length() > 0 else 0
+	var k := InputEventKey.new()
+	k.pressed = true
+	k.unicode = code
+	k.keycode = keycode if keycode != KEY_NONE else (code as Key)
+	k.physical_keycode = k.keycode
+	get_viewport().push_input(k, true)
+	await get_tree().process_frame
+	var ku := InputEventKey.new()
+	ku.pressed = false
+	ku.unicode = code
+	ku.keycode = k.keycode
+	ku.physical_keycode = k.keycode
+	get_viewport().push_input(ku, true)
+	await get_tree().process_frame
 
 func _test_name_lore() -> void:
 	var t: Dictionary = Lore.analyze("boris")
@@ -68,6 +127,7 @@ func _test_name_entry_top_popout() -> void:
 	var field: LineEdit = entry.call("get_field")
 	var confirm: Button = entry.call("get_confirm_button")
 	var margin_top_px: int = int(entry.call("get_top_margin"))
+	_check("popout is on layer >= 110 (above VNBalloon layer 100)", entry.layer >= 110)
 	_check("popout has top margin for screen keyboard", margin_top_px >= 24)
 	_check("popout sits in top area of screen (keyboard-safe)", top_margin.offset_bottom <= 280.0 and top_margin.anchor_top == 0.0)
 	_check("confirm disabled while empty", confirm.disabled)
@@ -91,7 +151,6 @@ func _test_name_entry_top_popout() -> void:
 
 func _test_mid_dialogue_name_ask() -> void:
 	var dm: Node = get_tree().root.get_node("DialogueManager")
-	# Walk from ~ start; verify Milka speaks first and then triggers ask_player_name mid-dialogue.
 	var line: DialogueLine = await dm.get_next_dialogue_line(DialogueRes, "start")
 	var before_ask_lines: int = 0
 	var prompted: Array = []
@@ -121,7 +180,7 @@ func _test_rhythm_visuals_and_controls() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 
-	# 1. Verify rich visual elements exist
+	_check("minigame is on layer >= 110 (above VNBalloon layer 100)", game.layer >= 110)
 	var cookie_tex: TextureRect = game.get_node("Root/CenterStage/CookiePivot/CookieTexture")
 	var milka_tex: TextureRect = game.get_node("Root/LeftCard/Rows/MilkaPortrait")
 	var bottle_tex: TextureRect = game.get_node("Root/RightCard/Rows/Header/BottleIcon")
@@ -131,7 +190,6 @@ func _test_rhythm_visuals_and_controls() -> void:
 	_check("visual Milk Churn bottle icon loaded", bottle_tex != null and bottle_tex.texture != null)
 	_check("custom stage canvas present", stage_canvas != null and stage_canvas.visible)
 
-	# 2. Verify Mouse-only Cookie Click + Mouse Drag Optional Slide
 	var s0: int = int(game.get("_score"))
 	game.call("perform_click", Vector2(640.0, 330.0))
 	var s1: int = int(game.get("_score"))
@@ -143,7 +201,6 @@ func _test_rhythm_visuals_and_controls() -> void:
 	game.call("_release", Vector2(660.0, 330.0))
 	_check("mouse drag triggers optional slide churn bonus", int(game.get("_slides")) > slides_before and int(game.get("_score")) > s1)
 
-	# 3. Verify 1-Button Keyboard-Only: tap to click, hold same button to slide
 	var clicks_before: int = int(game.get("_clicks"))
 	var score_before_key: int = int(game.get("_score"))
 	game.call("press_one_button")
@@ -155,7 +212,6 @@ func _test_rhythm_visuals_and_controls() -> void:
 	game.call("hold_one_button", 0.62)
 	_check("1-button keyboard hold performs slide churn", int(game.get("_slides")) > slides_before_key and int(game.get("_score")) > score_before_hold)
 
-	# 4. Verify Mobile Touch & Drag accessibility
 	var touch_down := InputEventScreenTouch.new()
 	touch_down.pressed = true
 	touch_down.position = Vector2(600.0, 330.0)
@@ -209,7 +265,6 @@ func _test_dialogue_reactions() -> void:
 		seen.append(line.text)
 		if not line.responses.is_empty():
 			break
-		print("    step ", guard, " id=", line.id, " next=", line.next_id, " text=", line.text)
 		line = await dm.get_next_dialogue_line(DialogueRes, line.next_id)
 	var joined: String = "\n".join(seen).to_lower()
 	_check("dialogue interpolates the player name", joined.contains("boris42+🥛!"))
@@ -219,3 +274,77 @@ func _test_dialogue_reactions() -> void:
 	_check("dialogue reacts to math", joined.contains("arithmetic"))
 	_check("dialogue reacts to special symbols", joined.contains("brackets and slashes"))
 	_check("dialogue reaches the cookie-clicker rhythm offer", joined.contains("milk cookie"))
+
+func _test_live_vn_scene_with_real_inputs() -> void:
+	_gs().reset()
+	var vn: Node = (load("res://scenes/vn_scene.tscn") as PackedScene).instantiate()
+	add_child(vn)
+	for i in 15:
+		await get_tree().process_frame
+	var balloon: CanvasLayer = get_tree().current_scene.get_node_or_null("VNBalloon")
+	_check("live VNScene spawned VNBalloon", balloon != null)
+	if balloon == null:
+		return
+
+	# 1. Click through opening lines with real mouse clicks until NameEntry appears
+	for step in 20:
+		if _mg().active_name_prompt != null:
+			break
+		await _click_at(Vector2(640.0, 600.0))
+		for f_i in 4:
+			await get_tree().process_frame
+
+	var prompt: CanvasLayer = _mg().active_name_prompt
+	_check("live game opened NameEntry above VNBalloon", prompt != null and prompt.layer > balloon.layer)
+	if prompt == null:
+		return
+
+	var field: LineEdit = prompt.call("get_field")
+	var confirm: Button = prompt.call("get_confirm_button")
+	for ch_pair in [["m", KEY_M], ["i", KEY_I], ["s", KEY_S], ["h", KEY_H], ["a", KEY_A], ["7", KEY_7], ["+", KEY_EQUAL]]:
+		await _type_char(ch_pair[0], ch_pair[1])
+	_check("real keyboard typing entered 'misha7+' into LineEdit", field.text == "misha7+")
+	_check("typing 'h' into LineEdit did not open VNBalloon history", not (balloon.get("history_panel") as Control).visible)
+
+	await _click_at(confirm.get_global_rect().get_center())
+	for f_i in 10:
+		await get_tree().process_frame
+	_check("real mouse click on Tell Milka confirmed name and resumed VNBalloon", _mg().active_name_prompt == null and _gs().player_name == "misha7+")
+
+	# 2. Click through Milka's reactions until the choices menu is visible
+	for step in 50:
+		if (balloon.get("responses_menu") as Control).visible:
+			break
+		await _click_at(Vector2(640.0, 600.0))
+		for f_i in 4:
+			await get_tree().process_frame
+
+	var rmenu: Control = balloon.get("responses_menu")
+	_check("live game reached rhythm choices", rmenu.visible and rmenu.get_child_count() >= 2)
+	await get_tree().process_frame
+	var choice_btn: Control = rmenu.get_child(1)
+	await _click_at(choice_btn.get_global_rect().get_center())
+	for step in 10:
+		if _mg().is_playing:
+			break
+		await _click_at(Vector2(640.0, 600.0))
+		for f_i in 4:
+			await get_tree().process_frame
+
+	var rgame: CanvasLayer = _mg().active_rhythm_game
+	_check("live game launched RhythmGame above VNBalloon", _mg().is_playing and rgame != null and rgame.layer > balloon.layer)
+	if rgame != null:
+		await _click_at(Vector2(640.0, 320.0))
+		await _drag_mouse(Vector2(560.0, 320.0), Vector2(700.0, 320.0))
+		await _type_char(" ", KEY_SPACE)
+		_check("live RhythmGame received real mouse clicks, drags, and Space key", int(rgame.get("_score")) > 0 and int(rgame.get("_slides")) >= 1 and int(rgame.get("_clicks")) >= 2)
+		var serve_btn: Button = rgame.get_node("Root/RightCard/Rows/ServeButton")
+		await _click_at(serve_btn.get_global_rect().get_center())
+		for f_i in 15:
+			await get_tree().process_frame
+		_check("real mouse click on Serve Milk finished minigame and resumed story", not _mg().is_playing and _gs().rhythm_score() > 0)
+
+	vn.queue_free()
+	if is_instance_valid(balloon):
+		balloon.queue_free()
+	await get_tree().process_frame

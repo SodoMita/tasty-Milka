@@ -1,19 +1,18 @@
 extends CanvasLayer
 ## "Milk Beat Clicker" — a visual Cookie-Clicker + Rhythm Click & Optional Slide
-## minigame for Milka VN.
+## minigame for Milka VN (runs on layer 110, above VNBalloon's layer 100).
 ##
-## Playable two ways (or mixed):
-##   - Mouse only : click the giant Milk Cookie (in rhythm with the contracting
-##                  beat ring for x2/x3 bonus, or rapidly like Cookie Clicker),
-##                  and optionally drag/sweep across the cookie (or hold LMB)
-##                  to churn-slide!
-##   - 1-Key only : tap Space / Enter (or any single key) to click the cookie;
-##                  hold the same single key down to slide the churn whisk!
-##
-## Sliding is optional: clicking alone can fill the milk bottle and win, while
-## sliding gives juicy "SLIDE CHURN" bonus drops and combo multipliers.
+## Playable with PC mouse, mobile touch, or 1-button keyboard:
+##   - Mouse / Touch : click/tap the giant Milk Cookie (in rhythm with the
+##                     contracting beat ring for x2/x3 bonus, or rapidly like
+##                     Cookie Clicker), and optionally drag/sweep across the
+##                     cookie (or hold LMB) to churn-slide!
+##   - 1-Key only    : tap Space / Enter (or any single key) to click the cookie;
+##                     hold the same single key down to slide the churn whisk!
 
 signal finished(result: Dictionary)
+
+const DisplayRotation = preload("res://scenes/display_rotation.gd")
 
 const LANES: int = 4
 const FALL_TIME: float = 1.4
@@ -76,7 +75,7 @@ var _pointer_drag_accum: float = 0.0
 var _key_down: bool = false
 var _hold_duration: float = 0.0
 var _hold_slide_progress: float = 0.0
-var _slider_pos: float = 0.5         ## 0..1 across the churn ribbon
+var _slider_pos: float = 0.5
 var _slider_dir: float = 1.0
 var _cookie_scale: float = 1.0
 var _cookie_angle: float = 0.0
@@ -89,14 +88,31 @@ var _ripples: Array[Dictionary] = []
 var _popups: Array[Dictionary] = []
 
 func _ready() -> void:
+	layer = 110
 	_note_template.visible = false
 	_root.gui_input.connect(_on_gui_input)
 	_canvas.draw.connect(_on_canvas_draw)
 	_serve_button.pressed.connect(_on_serve_pressed)
+	get_viewport().size_changed.connect(_sync_display_rotation)
+	_sync_display_rotation()
 	_build_chart()
 	_spawn_notes()
 	_update_hud("Click the Milk Cookie on the beat — or hold/drag to slide!")
 	_running = true
+
+func _sync_display_rotation() -> void:
+	if not is_node_ready():
+		return
+	var store: Node = get_node_or_null("/root/SettingsStore")
+	var deg: int = 0
+	if store != null and store.get("data") is Dictionary:
+		deg = DisplayRotation.normalize(int((store.get("data") as Dictionary).get("rotation", 0)))
+	var win: Vector2 = get_viewport().get_visible_rect().size
+	if win.x > 1.0 and win.y > 1.0:
+		_root.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+		_root.pivot_offset = Vector2.ZERO
+		_root.size = DisplayRotation.logical_size(win, deg)
+		transform = DisplayRotation.canvas_transform(win, deg)
 
 func start_with_seed(seed_value: int, notes: int = 18) -> void:
 	note_count = notes
@@ -142,7 +158,6 @@ func _input(event: InputEvent) -> void:
 		var ke: InputEventKey = event
 		if ke.echo:
 			return
-		# Any single keyboard button (Space, Enter, Z, X, etc.) except Esc/F-keys
 		if ke.keycode == KEY_ESCAPE or ke.keycode == KEY_F12:
 			return
 		if ke.pressed:
@@ -157,7 +172,6 @@ func _process(delta: float) -> void:
 		return
 	_time += delta
 
-	# Beat pulse animation
 	var beat_phase: float = fposmod(_time, beat_length) / maxf(beat_length, 0.001)
 	_beat_pulse = exp(-beat_phase * 5.0)
 	_cookie_scale = move_toward(_cookie_scale, 1.0 + _beat_pulse * 0.06, delta * 6.0)
@@ -169,7 +183,6 @@ func _process(delta: float) -> void:
 	if is_instance_valid(_milka_tex):
 		_milka_tex.position.y = sin(_time * TAU / maxf(beat_length, 0.15)) * 5.0
 
-	# Auto-drip from Meadow Bell upgrade (unlocked at 45 score)
 	if _score >= 45:
 		_auto_drip_accum += delta
 		if _auto_drip_accum >= beat_length:
@@ -178,7 +191,6 @@ func _process(delta: float) -> void:
 			_spawn_burst(_cookie_center() + Vector2(randf_range(-55.0, 55.0), randf_range(-55.0, 55.0)), 2, false)
 			_update_hud("")
 
-	# 1-button or mouse hold-to-slide progression
 	if _key_down or _pointer_down:
 		_hold_duration += delta
 		if _hold_duration >= HOLD_TO_SLIDE_TIME:
@@ -190,10 +202,8 @@ func _process(delta: float) -> void:
 				_slider_dir = -_slider_dir
 				_complete_slide_churn(_cookie_center())
 
-	# Update particles & popups
 	_tick_visuals(delta)
 
-	# Advance rhythm beats / notes
 	var remaining: int = 0
 	for note: Dictionary in _notes:
 		if bool(note["done"]):
@@ -207,7 +217,7 @@ func _process(delta: float) -> void:
 			_resolve(note, "MISS")
 	_canvas.queue_redraw()
 	if remaining == 0:
-		_finish()
+		_finish(false)
 
 func _tick_visuals(delta: float) -> void:
 	var next_particles: Array[Dictionary] = []
@@ -239,14 +249,14 @@ func _tick_visuals(delta: float) -> void:
 
 func _cookie_center() -> Vector2:
 	if is_instance_valid(_cookie_pivot):
-		return _cookie_pivot.global_position + _cookie_pivot.size * 0.5
-	return Vector2(640.0, 330.0)
+		return _cookie_pivot.position + _cookie_pivot.size * 0.5
+	var vp: Vector2 = _root.size if _root.size.x > 10.0 else Vector2(1280.0, 720.0)
+	return Vector2(vp.x * 0.5, vp.y * 0.45)
 
 func _on_canvas_draw() -> void:
 	var c: Vector2 = _cookie_center()
 	var vp: Vector2 = _canvas.size if _canvas.size.x > 10.0 else Vector2(1280.0, 720.0)
 
-	# 1. Soft meadow vignette + rotating golden-butter sunburst behind the Milk Cookie
 	_canvas.draw_circle(c, 250.0, Color(1.0, 0.96, 0.80, 0.12))
 	_canvas.draw_circle(c, 195.0, Color(1.0, 0.95, 0.72, 0.16))
 	var ray_count: int = 12
@@ -260,7 +270,6 @@ func _on_canvas_draw() -> void:
 		])
 		_canvas.draw_colored_polygon(pts, Color(1.0, 0.94, 0.68, 0.11))
 
-	# 2. Contracting Rhythm Beat Rings around the Cookie
 	var cookie_radius: float = 114.0 + _beat_pulse * 8.0
 	_canvas.draw_arc(c, cookie_radius, 0.0, TAU, 64, Color(1.0, 0.95, 0.74, 0.9), 5.0)
 	for note: Dictionary in _notes:
@@ -278,7 +287,6 @@ func _on_canvas_draw() -> void:
 		)
 		_canvas.draw_arc(c, ring_r, 0.0, TAU, 56, ring_col, 6.0 if in_sweet else 3.5)
 
-	# 3. Optional Slide Churn Track & Golden Whisk Orb below the Cookie
 	var track_w: float = 320.0
 	var track_y: float = c.y + 152.0
 	var track_left: float = c.x - track_w * 0.5
@@ -291,8 +299,7 @@ func _on_canvas_draw() -> void:
 	_canvas.draw_circle(Vector2(orb_x, track_y), 17.0, Color(1.0, 0.96, 0.78, 1.0))
 	_canvas.draw_arc(Vector2(orb_x, track_y), 17.0, 0.0, TAU, 28, Color(0.58, 0.42, 0.16, 1.0), 3.0)
 
-	# 4. Visual Milk Bottle Fill Meter on the Right Card
-	var bottle_rect := Rect2(vp.x - 245.0, 210.0, 56.0, 185.0)
+	var bottle_rect := Rect2(vp.x - 210.0, vp.y * 0.14 + 110.0, 56.0, 150.0)
 	_canvas.draw_rect(bottle_rect, Color(0.18, 0.14, 0.12, 0.65), true)
 	var fill_ratio: float = clampf(float(_score) / float(maxi(target_drops, 1)), 0.0, 1.0)
 	var fill_h: float = (bottle_rect.size.y - 8.0) * fill_ratio
@@ -306,14 +313,12 @@ func _on_canvas_draw() -> void:
 		_canvas.draw_rect(milk_rect, Color(1.0, 0.98, 0.90, 0.95), true)
 	_canvas.draw_rect(bottle_rect, Color(1.0, 0.93, 0.72, 0.95), false, 3.0)
 
-	# 5. Expanding splash ripples
 	for r: Dictionary in _ripples:
 		var alpha: float = clampf(float(r["life"]) / 0.45, 0.0, 1.0)
 		var col: Color = r["color"]
 		col.a = alpha
 		_canvas.draw_arc(r["pos"], float(r["radius"]), 0.0, TAU, 40, col, 4.0)
 
-	# 6. Flying Milk Droplets
 	for p: Dictionary in _particles:
 		var alpha: float = clampf(float(p["life"]) / 0.7, 0.0, 1.0)
 		var pos: Vector2 = p["pos"]
@@ -323,7 +328,6 @@ func _on_canvas_draw() -> void:
 		_canvas.draw_circle(pos, rad, col)
 		_canvas.draw_circle(pos + Vector2(-rad * 0.28, -rad * 0.28), rad * 0.35, Color(1.0, 1.0, 1.0, alpha))
 
-	# 7. Floating "+Drops" & verdict popups
 	var font: Font = ThemeDB.fallback_font
 	if font != null:
 		for pop: Dictionary in _popups:
@@ -373,8 +377,6 @@ func _on_gui_input(event: InputEvent) -> void:
 		var sd: InputEventScreenDrag = event
 		_motion(sd.position)
 
-## 1-button keyboard (or accessibility switch) press: taps click immediately,
-## holding the same button down smoothly sweeps the slide churn.
 func press_one_button() -> void:
 	if not _running:
 		return
@@ -392,7 +394,6 @@ func release_one_button() -> void:
 	_hold_duration = 0.0
 	_hold_slide_progress = 0.0
 
-## Simulate holding the 1-button key for `seconds` (handy for automated tests).
 func hold_one_button(seconds: float) -> void:
 	press_one_button()
 	var step: float = 0.05
@@ -420,7 +421,6 @@ func _press(pos: Vector2) -> void:
 		_judge(note)
 		return
 
-	# Cookie-Clicker + Rhythm click anywhere on the stage/cookie
 	perform_click(pos)
 
 func _motion(pos: Vector2) -> void:
@@ -454,14 +454,11 @@ func _release(_pos: Vector2) -> void:
 		return
 	var note: Dictionary = _dragging["note"]
 	_dragging = {}
-	# Optional slide: if the player tapped a slide note instead of dragging,
-	# still grant a Good Cookie tap so 1-click/mouse-only play is never punished.
 	if bool(note.get("optional", true)):
 		_resolve(note, "GOOD")
 	else:
 		_resolve(note, "MISS")
 
-## Cookie-Clicker tap/click that also checks if a rhythm beat is in window.
 func perform_click(pos: Vector2 = Vector2(640.0, 330.0)) -> void:
 	_clicks += 1
 	_bounce_cookie(1.18)
@@ -472,7 +469,6 @@ func perform_click(pos: Vector2 = Vector2(640.0, 330.0)) -> void:
 			_judge(nearest)
 			_spawn_burst(pos, 9, dt <= PERFECT_WINDOW)
 			return
-	# Pure Cookie-Clicker click between beats!
 	var mult: int = _current_multiplier()
 	var gain: int = 2 * mult
 	_score += gain
@@ -483,7 +479,6 @@ func perform_click(pos: Vector2 = Vector2(640.0, 330.0)) -> void:
 	_sfx("click")
 	_update_hud("CLICK +%d" % gain)
 
-## Optional slide churn (triggered by mouse drag OR holding 1 button).
 func _complete_slide_churn(pos: Vector2) -> void:
 	_slides += 1
 	_bounce_cookie(1.22)
@@ -612,7 +607,6 @@ func _resolve(note: Dictionary, verdict: String) -> void:
 			_sfx("click")
 		_:
 			_missed += 1
-			# Optional slide notes never break your cookie-clicker combo if ignored
 			if not bool(note.get("optional", false)):
 				_combo = 0
 	_best_combo = maxi(_best_combo, _combo)
@@ -648,9 +642,9 @@ func _update_hud(verdict: String) -> void:
 
 func _on_serve_pressed() -> void:
 	_sfx("save")
-	_finish()
+	_finish(true)
 
-func _finish() -> void:
+func _finish(immediate: bool = false) -> void:
 	if not _running or _finishing:
 		return
 	_running = false
@@ -663,7 +657,7 @@ func _finish() -> void:
 		rank = "cream legend"
 	elif _score >= 90 or accuracy >= 70.0:
 		rank = "steady churner"
-	elif _score >= 25 or accuracy >= 40.0:
+	elif _score >= 10 or accuracy >= 35.0:
 		rank = "wobbly whisk"
 	var result: Dictionary = {
 		"score": _score,
@@ -678,7 +672,10 @@ func _finish() -> void:
 		"total": total,
 	}
 	_judge_label.text = "%s! %d Milk Drops" % [rank, _score]
-	await get_tree().create_timer(0.8).timeout
+	if not immediate and DisplayServer.get_name() != "headless":
+		await get_tree().create_timer(0.55).timeout
+	else:
+		await get_tree().process_frame
 	finished.emit(result)
 	queue_free()
 
