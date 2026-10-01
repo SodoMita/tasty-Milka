@@ -339,6 +339,11 @@ theme_override_font_sizes/font_size = 15
 [node name="ServeButton" type="Button" parent="Root/RightCard/Rows"]
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.22, 0.16, 0.12, 1)
+theme_override_colors/font_focus_color = Color(0.18, 0.12, 0.09, 1)
+theme_override_colors/font_pressed_color = Color(0.14, 0.09, 0.06, 1)
+theme_override_colors/font_hover_color = Color(0.14, 0.09, 0.06, 1)
+theme_override_colors/font_disabled_color = Color(0.52, 0.45, 0.38, 0.65)
 text = "Serve Milk"
 
 [node name="Hud" type="Control" parent="Root"]

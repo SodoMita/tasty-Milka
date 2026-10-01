@@ -137,12 +137,22 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_field")
 [node name="Surprise" type="Button" parent="Root/TopMargin/Center/Panel/Rows/InputRow"]
 custom_minimum_size = Vector2(120, 44)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.22, 0.16, 0.12, 1)
+theme_override_colors/font_focus_color = Color(0.18, 0.12, 0.09, 1)
+theme_override_colors/font_pressed_color = Color(0.14, 0.09, 0.06, 1)
+theme_override_colors/font_hover_color = Color(0.14, 0.09, 0.06, 1)
+theme_override_colors/font_disabled_color = Color(0.52, 0.45, 0.38, 0.65)
 text = "Random"
 
 [node name="Confirm" type="Button" parent="Root/TopMargin/Center/Panel/Rows/InputRow"]
 custom_minimum_size = Vector2(128, 44)
 layout_mode = 2
 disabled = true
+theme_override_colors/font_color = Color(0.22, 0.16, 0.12, 1)
+theme_override_colors/font_focus_color = Color(0.18, 0.12, 0.09, 1)
+theme_override_colors/font_pressed_color = Color(0.14, 0.09, 0.06, 1)
+theme_override_colors/font_hover_color = Color(0.14, 0.09, 0.06, 1)
+theme_override_colors/font_disabled_color = Color(0.52, 0.45, 0.38, 0.65)
 text = "Tell Milka"
 
 [node name="Hint" type="Label" parent="Root/TopMargin/Center/Panel/Rows"]

@@ -47,6 +47,7 @@ const TEX_MILKA_SURPRISED: Texture2D = preload("res://assets/characters/milka_ch
 @onready var _upgrade_2: Label = $Root/RightCard/Rows/Upgrade2
 @onready var _upgrade_3: Label = $Root/RightCard/Rows/Upgrade3
 @onready var _bottle_label: Label = $Root/RightCard/Rows/BottlePct
+@onready var _bottle_canvas: Control = $Root/RightCard/Rows/Spacer
 @onready var _serve_button: Button = $Root/RightCard/Rows/ServeButton
 @onready var _score_label: Label = $Root/Hud/Top/Score
 @onready var _combo_label: Label = $Root/Hud/Top/Combo
@@ -92,6 +93,7 @@ func _ready() -> void:
 	_note_template.visible = false
 	_root.gui_input.connect(_on_gui_input)
 	_canvas.draw.connect(_on_canvas_draw)
+	_bottle_canvas.draw.connect(_on_bottle_draw)
 	_serve_button.pressed.connect(_on_serve_pressed)
 	get_viewport().size_changed.connect(_sync_display_rotation)
 	_sync_display_rotation()
@@ -216,6 +218,7 @@ func _process(delta: float) -> void:
 		if dt < -MISS_WINDOW:
 			_resolve(note, "MISS")
 	_canvas.queue_redraw()
+	_bottle_canvas.queue_redraw()
 	if remaining == 0:
 		_finish(false)
 
@@ -252,6 +255,32 @@ func _cookie_center() -> Vector2:
 		return _cookie_pivot.position + _cookie_pivot.size * 0.5
 	var vp: Vector2 = _root.size if _root.size.x > 10.0 else Vector2(1280.0, 720.0)
 	return Vector2(vp.x * 0.5, vp.y * 0.45)
+
+func _on_bottle_draw() -> void:
+	var sz: Vector2 = _bottle_canvas.size
+	var bw: float = 78.0
+	var bh: float = maxf(sz.y - 12.0, 110.0)
+	var bx: float = (sz.x - bw) * 0.5
+	var by: float = (sz.y - bh) * 0.5
+	var bottle_rect := Rect2(bx, by, bw, bh)
+	_bottle_canvas.draw_rect(bottle_rect, Color(0.24, 0.18, 0.14, 0.88), true)
+	var fill_ratio: float = clampf(float(_score) / float(maxi(target_drops, 1)), 0.0, 1.0)
+	var fill_h: float = (bottle_rect.size.y - 10.0) * fill_ratio
+	if fill_h > 1.0:
+		var milk_rect := Rect2(
+			bottle_rect.position.x + 5.0,
+			bottle_rect.position.y + bottle_rect.size.y - 5.0 - fill_h,
+			bottle_rect.size.x - 10.0,
+			fill_h
+		)
+		_bottle_canvas.draw_rect(milk_rect, Color(1.0, 0.97, 0.84, 0.98), true)
+		_bottle_canvas.draw_line(
+			Vector2(milk_rect.position.x, milk_rect.position.y),
+			Vector2(milk_rect.end.x, milk_rect.position.y),
+			Color(0.95, 0.82, 0.38, 1.0),
+			3.0
+		)
+	_bottle_canvas.draw_rect(bottle_rect, Color(0.62, 0.48, 0.22, 0.95), false, 3.0)
 
 func _on_canvas_draw() -> void:
 	var c: Vector2 = _cookie_center()
@@ -299,19 +328,7 @@ func _on_canvas_draw() -> void:
 	_canvas.draw_circle(Vector2(orb_x, track_y), 17.0, Color(1.0, 0.96, 0.78, 1.0))
 	_canvas.draw_arc(Vector2(orb_x, track_y), 17.0, 0.0, TAU, 28, Color(0.58, 0.42, 0.16, 1.0), 3.0)
 
-	var bottle_rect := Rect2(vp.x - 210.0, vp.y * 0.14 + 110.0, 56.0, 150.0)
-	_canvas.draw_rect(bottle_rect, Color(0.18, 0.14, 0.12, 0.65), true)
-	var fill_ratio: float = clampf(float(_score) / float(maxi(target_drops, 1)), 0.0, 1.0)
-	var fill_h: float = (bottle_rect.size.y - 8.0) * fill_ratio
-	if fill_h > 1.0:
-		var milk_rect := Rect2(
-			bottle_rect.position.x + 4.0,
-			bottle_rect.position.y + bottle_rect.size.y - 4.0 - fill_h,
-			bottle_rect.size.x - 8.0,
-			fill_h
-		)
-		_canvas.draw_rect(milk_rect, Color(1.0, 0.98, 0.90, 0.95), true)
-	_canvas.draw_rect(bottle_rect, Color(1.0, 0.93, 0.72, 0.95), false, 3.0)
+
 
 	for r: Dictionary in _ripples:
 		var alpha: float = clampf(float(r["life"]) / 0.45, 0.0, 1.0)
@@ -607,10 +624,10 @@ func _resolve(note: Dictionary, verdict: String) -> void:
 			_sfx("click")
 		_:
 			_missed += 1
-			if not bool(note.get("optional", false)):
+			if _clicks == 0 and _slides == 0 and not bool(note.get("optional", false)):
 				_combo = 0
 	_best_combo = maxi(_best_combo, _combo)
-	_update_hud(verdict)
+	_update_hud(verdict if (verdict != "MISS" or (_clicks == 0 and _slides == 0)) else "")
 
 func _update_hud(verdict: String) -> void:
 	_score_label.text = "Milk Drops: %d" % _score
