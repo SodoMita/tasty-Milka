@@ -67,11 +67,11 @@ if GameState.name_is("is_tidy")
 Milka: "Now, {{GameState.player_name}}, the meadow has a heartbeat! Want to bake and churn the giant Milk Cookie with me?" [#bg=cafe_parlor, sprite=milka_chan_smile:center, sfx=open]
 
 - "How does it work?"
-	Milka: "Click the big Milk Cookie in the center — especially when the glowing beat ring touches its rim!" [#sprite=milka_chan:center, sfx=click]
-	Milka: "And sliding is optional: drag the mouse across the cookie, or simply hold down your 1 keyboard key to sweep the butter churn!" [#sprite=milka_chan_smile:center]
+	Milka: "Single-tap the big Milk Cookie in the center — especially when the glowing beat ring touches its rim!" [#sprite=milka_chan:center, sfx=click]
+	Milka: "And sliding is optional: swipe across the cookie with mouse or touch, or hold down your 1 keyboard key to sweep the butter churn!" [#sprite=milka_chan_smile:center]
 	=> play_rhythm
 - "Let's click and churn!"
-	Milka: "That is the spirit! Mouse-only or 1-button keyboard both work!" [#sprite=milka_chan_smile:center, sfx=click]
+	Milka: "That is the spirit! Single taps and optional swipes both work!" [#sprite=milka_chan_smile:center, sfx=click]
 	=> play_rhythm
 - "Maybe later."
 	Milka: "The beat will wait. It is very patient milk." [#sprite=milka_chan:center, sfx=close]
@@ -82,7 +82,16 @@ do Minigame.play_rhythm(18)
 => rhythm_result
 
 ~ rhythm_result
-Milka: "Scored {{GameState.rhythm_score()}} milk drops! I call that a {{GameState.rhythm_rank()}}!" [#sprite=milka_chan_smile:center, sfx=confirm]
+Milka: "Scored {{GameState.rhythm_score()}} milk drops ({{GameState.rhythm_clicks()}} single taps, {{GameState.rhythm_slides()}} swipes)! I call that a {{GameState.rhythm_rank()}}!" [#sprite=milka_chan_smile:center, sfx=confirm]
+if GameState.rhythm_style() == "tap_only"
+	Milka: "All single taps and zero swipes! Classic rapid Cookie-Clicker fingers, {{GameState.player_name}}!" [#sprite=milka_chan_smile:center, sfx=click]
+elif GameState.rhythm_style() == "swipe_only"
+	Milka: "All swipes and not a single tap! You churned the whole batch by sliding, {{GameState.player_name}}!" [#sprite=milka_chan_surprised:center, sfx=open]
+elif GameState.rhythm_style() == "swipe_master"
+	Milka: "More swipes than single taps — a true butter-swirl master, {{GameState.player_name}}!" [#sprite=milka_chan_smile:center, sfx=save]
+elif GameState.rhythm_style() == "balanced"
+	Milka: "A sweet rhythm of crisp single taps and creamy swipes, {{GameState.player_name}}!" [#sprite=milka_chan_smile:center, sfx=confirm]
+
 if GameState.rhythm_missed() == 0
 	Milka: "Not a single beat missed, {{GameState.player_name}}. Cream perfection!" [#sprite=milka_chan_smile:center, sfx=save]
 elif GameState.rhythm_score() >= 90

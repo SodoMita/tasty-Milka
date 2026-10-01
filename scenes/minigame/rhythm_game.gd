@@ -2,13 +2,14 @@ extends CanvasLayer
 ## "Milk Beat Clicker" — a visual Cookie-Clicker + Rhythm Click & Optional Slide
 ## minigame for Milka VN (runs on layer 110, above VNBalloon's layer 100).
 ##
-## Playable with PC mouse, mobile touch, or 1-button keyboard:
-##   - Mouse / Touch : click/tap the giant Milk Cookie (in rhythm with the
-##                     contracting beat ring for x2/x3 bonus, or rapidly like
-##                     Cookie Clicker), and optionally drag/sweep across the
-##                     cookie (or hold LMB) to churn-slide!
-##   - 1-Key only    : tap Space / Enter (or any single key) to click the cookie;
-##                     hold the same single key down to slide the churn whisk!
+## Properly distinguishes a SINGLE TAP from a SWIPE / SLIDE and reacts to each:
+##   - Single Tap : quick press & release (< 24 px movement and < 0.20s hold).
+##                  Triggers crisp milk droplet burst, hits round tap notes (●),
+##                  increments `clicks` (never `slides`).
+##   - Swipe/Slide: pointer drag (>= 24 px movement) OR holding down a single
+##                  key / button (>= 0.20s). Draws a golden butter swipe ribbon,
+##                  sweeps the churn whisk, hits arrow slide notes (» / «), and
+##                  increments `slides` (never `clicks`).
 
 signal finished(result: Dictionary)
 
@@ -19,9 +20,10 @@ const FALL_TIME: float = 1.4
 const PERFECT_WINDOW: float = 0.14
 const GOOD_WINDOW: float = 0.26
 const MISS_WINDOW: float = 0.34
+const SWIPE_THRESHOLD: float = 24.0
 const SLIDE_DISTANCE: float = 56.0
-const HOLD_TO_SLIDE_TIME: float = 0.18
-const HOLD_SWEEP_TIME: float = 0.38
+const HOLD_TO_SLIDE_TIME: float = 0.20
+const HOLD_SWEEP_TIME: float = 0.36
 const LEAD_IN: float = 0.45
 
 const TEX_COOKIE: Texture2D = preload("res://assets/ui/milk_cookie.svg")
@@ -66,16 +68,24 @@ var _best_combo: int = 0
 var _perfect: int = 0
 var _good: int = 0
 var _missed: int = 0
-var _dragging: Dictionary = {}
+var _last_gesture: String = "NONE"
 
-## Cookie-clicker + 1-button hold-to-slide state
+## Pointer (mouse / touch) & 1-key gesture classification state
 var _pointer_down: bool = false
 var _pointer_start: Vector2 = Vector2.ZERO
 var _pointer_last: Vector2 = Vector2.ZERO
+var _pointer_down_time: float = 0.0
 var _pointer_drag_accum: float = 0.0
+var _gesture_became_swipe: bool = false
+var _slides_in_gesture: int = 0
+var _dragging: Dictionary = {}
+
 var _key_down: bool = false
+var _key_down_time: float = 0.0
+var _key_became_slide: bool = false
 var _hold_duration: float = 0.0
 var _hold_slide_progress: float = 0.0
+
 var _slider_pos: float = 0.5
 var _slider_dir: float = 1.0
 var _cookie_scale: float = 1.0
@@ -83,9 +93,10 @@ var _cookie_angle: float = 0.0
 var _beat_pulse: float = 0.0
 var _auto_drip_accum: float = 0.0
 
-## Visual particles & popups drawn on _canvas
+## Visual particles, swipe trail & popups drawn on _canvas
 var _particles: Array[Dictionary] = []
 var _ripples: Array[Dictionary] = []
+var _swipe_trail: Array[Dictionary] = []
 var _popups: Array[Dictionary] = []
 
 func _ready() -> void:
@@ -99,7 +110,7 @@ func _ready() -> void:
 	_sync_display_rotation()
 	_build_chart()
 	_spawn_notes()
-	_update_hud("Click the Milk Cookie on the beat — or hold/drag to slide!")
+	_update_hud("Single-tap cookie for drops, or swipe/hold to churn!")
 	_running = true
 
 func _sync_display_rotation() -> void:
@@ -177,7 +188,7 @@ func _process(delta: float) -> void:
 	var beat_phase: float = fposmod(_time, beat_length) / maxf(beat_length, 0.001)
 	_beat_pulse = exp(-beat_phase * 5.0)
 	_cookie_scale = move_toward(_cookie_scale, 1.0 + _beat_pulse * 0.06, delta * 6.0)
-	_cookie_angle = sin(_time * 2.4) * 0.05
+	_cookie_angle = move_toward(_cookie_angle, sin(_time * 2.4) * 0.05, delta * 4.0)
 	if is_instance_valid(_cookie_pivot):
 		_cookie_pivot.pivot_offset = _cookie_pivot.size * 0.5
 		_cookie_pivot.scale = Vector2.ONE * _cookie_scale
@@ -193,16 +204,28 @@ func _process(delta: float) -> void:
 			_spawn_burst(_cookie_center() + Vector2(randf_range(-55.0, 55.0), randf_range(-55.0, 55.0)), 2, false)
 			_update_hud("")
 
-	if _key_down or _pointer_down:
+	# Hold-to-slide classification: once held >= HOLD_TO_SLIDE_TIME without moving,
+	# the gesture becomes a SWIPE/SLIDE (and NOT a single tap!).
+	if _key_down or (_pointer_down and not _gesture_became_swipe):
 		_hold_duration += delta
 		if _hold_duration >= HOLD_TO_SLIDE_TIME:
+			if _key_down:
+				_key_became_slide = true
+			if _pointer_down:
+				_gesture_became_swipe = true
 			var step: float = delta / HOLD_SWEEP_TIME
 			_hold_slide_progress += step
 			_slider_pos = pingpong(_slider_pos + step * _slider_dir, 1.0)
+			var c: Vector2 = _cookie_center()
+			var trail_x: float = lerpf(c.x - 140.0, c.x + 140.0, _slider_pos)
+			_swipe_trail.append({"pos": Vector2(trail_x, c.y + 152.0), "life": 0.35})
 			if _hold_slide_progress >= 1.0:
 				_hold_slide_progress -= 1.0
 				_slider_dir = -_slider_dir
-				_complete_slide_churn(_cookie_center())
+				_slides_in_gesture += 1
+				perform_swipe(c, Vector2(_slider_dir * 80.0, 0.0))
+	elif _pointer_down and _gesture_became_swipe:
+		_hold_duration += delta
 
 	_tick_visuals(delta)
 
@@ -241,6 +264,13 @@ func _tick_visuals(delta: float) -> void:
 			r["radius"] = float(r["radius"]) + float(r["speed"]) * delta
 			next_ripples.append(r)
 	_ripples = next_ripples
+
+	var next_trail: Array[Dictionary] = []
+	for tr_pt: Dictionary in _swipe_trail:
+		tr_pt["life"] = float(tr_pt["life"]) - delta
+		if float(tr_pt["life"]) > 0.0:
+			next_trail.append(tr_pt)
+	_swipe_trail = next_trail
 
 	var next_popups: Array[Dictionary] = []
 	for pop: Dictionary in _popups:
@@ -284,7 +314,6 @@ func _on_bottle_draw() -> void:
 
 func _on_canvas_draw() -> void:
 	var c: Vector2 = _cookie_center()
-	var vp: Vector2 = _canvas.size if _canvas.size.x > 10.0 else Vector2(1280.0, 720.0)
 
 	_canvas.draw_circle(c, 250.0, Color(1.0, 0.96, 0.80, 0.12))
 	_canvas.draw_circle(c, 195.0, Color(1.0, 0.95, 0.72, 0.16))
@@ -300,7 +329,8 @@ func _on_canvas_draw() -> void:
 		_canvas.draw_colored_polygon(pts, Color(1.0, 0.94, 0.68, 0.11))
 
 	var cookie_radius: float = 114.0 + _beat_pulse * 8.0
-	_canvas.draw_arc(c, cookie_radius, 0.0, TAU, 64, Color(1.0, 0.95, 0.74, 0.9), 5.0)
+	var rim_col: Color = Color(1.0, 0.86, 0.32, 0.95) if _last_gesture == "SWIPE" else Color(0.82, 0.96, 1.0, 0.92)
+	_canvas.draw_arc(c, cookie_radius, 0.0, TAU, 64, rim_col, 5.0)
 	for note: Dictionary in _notes:
 		if bool(note["done"]):
 			continue
@@ -328,7 +358,16 @@ func _on_canvas_draw() -> void:
 	_canvas.draw_circle(Vector2(orb_x, track_y), 17.0, Color(1.0, 0.96, 0.78, 1.0))
 	_canvas.draw_arc(Vector2(orb_x, track_y), 17.0, 0.0, TAU, 28, Color(0.58, 0.42, 0.16, 1.0), 3.0)
 
-
+	# Golden Swipe Ribbon Trail
+	for i: int in _swipe_trail.size():
+		var pt: Dictionary = _swipe_trail[i]
+		var a: float = clampf(float(pt["life"]) / 0.40, 0.0, 1.0)
+		var pos: Vector2 = pt["pos"]
+		_canvas.draw_circle(pos, 10.0 * a, Color(1.0, 0.88, 0.34, a * 0.85))
+		if i > 0:
+			var prev_pos: Vector2 = _swipe_trail[i - 1]["pos"]
+			if prev_pos.distance_to(pos) < 160.0:
+				_canvas.draw_line(prev_pos, pos, Color(1.0, 0.92, 0.45, a * 0.9), 7.0 * a)
 
 	for r: Dictionary in _ripples:
 		var alpha: float = clampf(float(r["life"]) / 0.45, 0.0, 1.0)
@@ -356,7 +395,7 @@ func _on_canvas_draw() -> void:
 				pop["pos"],
 				String(pop["text"]),
 				HORIZONTAL_ALIGNMENT_CENTER,
-				180.0,
+				220.0,
 				20,
 				col
 			)
@@ -394,22 +433,33 @@ func _on_gui_input(event: InputEvent) -> void:
 		var sd: InputEventScreenDrag = event
 		_motion(sd.position)
 
+## 1-button keyboard press: classifies as SINGLE TAP if released before
+## HOLD_TO_SLIDE_TIME, or as SWIPE/SLIDE if held >= HOLD_TO_SLIDE_TIME.
 func press_one_button() -> void:
 	if not _running:
 		return
 	_key_down = true
+	_key_down_time = _time
+	_key_became_slide = false
 	_hold_duration = 0.0
 	_hold_slide_progress = 0.0
-	perform_click(_cookie_center())
+	_slides_in_gesture = 0
+	_cookie_scale = 0.94
 
 func release_one_button() -> void:
-	if not _running:
+	if not _running or not _key_down:
 		return
-	if _key_down and _hold_duration >= HOLD_TO_SLIDE_TIME and _hold_slide_progress >= 0.35:
-		_complete_slide_churn(_cookie_center())
 	_key_down = false
+	if _key_became_slide or _hold_duration >= HOLD_TO_SLIDE_TIME:
+		# Held long enough -> classified strictly as SWIPE/SLIDE (never a single tap).
+		if _slides_in_gesture == 0:
+			perform_swipe(_cookie_center(), Vector2(_slider_dir * 80.0, 0.0))
+	else:
+		# Quick press + release -> classified strictly as SINGLE TAP (never a swipe).
+		perform_tap(_cookie_center(), _key_down_time)
 	_hold_duration = 0.0
 	_hold_slide_progress = 0.0
+	_key_became_slide = false
 
 func hold_one_button(seconds: float) -> void:
 	press_one_button()
@@ -425,65 +475,136 @@ func _press(pos: Vector2) -> void:
 	_pointer_down = true
 	_pointer_start = pos
 	_pointer_last = pos
+	_pointer_down_time = _time
 	_pointer_drag_accum = 0.0
+	_gesture_became_swipe = false
+	_slides_in_gesture = 0
 	_hold_duration = 0.0
 	_hold_slide_progress = 0.0
+	_cookie_scale = 0.94
 
 	var note: Dictionary = _note_at(pos)
 	if not note.is_empty():
-		if bool(note["slide"]):
-			_dragging = {"note": note, "from": pos}
-			_bounce_cookie(1.12)
-			return
-		_judge(note)
-		return
-
-	perform_click(pos)
+		_dragging = {"note": note, "from": pos, "down_time": _time}
+	else:
+		_dragging = {}
 
 func _motion(pos: Vector2) -> void:
+	if not _pointer_down and _dragging.is_empty():
+		return
+
+	var step_vec: Vector2 = pos - _pointer_last
+	var step_dist: float = step_vec.length()
+	_pointer_last = pos
+	_pointer_drag_accum += step_dist
+	var disp_from_start: float = pos.distance_to(_pointer_start)
+
+	if disp_from_start >= SWIPE_THRESHOLD or _pointer_drag_accum >= SWIPE_THRESHOLD:
+		_gesture_became_swipe = true
+		_swipe_trail.append({"pos": pos, "life": 0.40})
+
 	if not _dragging.is_empty():
 		var note: Dictionary = _dragging["note"]
 		var from: Vector2 = _dragging["from"]
 		var dx: float = pos.x - from.x
-		_slider_pos = clampf(0.5 + dx / (SLIDE_DISTANCE * 2.0), 0.0, 1.0)
-		if absf(dx) >= SLIDE_DISTANCE and signf(dx) == float(int(note["dir"])):
+		if bool(note["slide"]):
+			_slider_pos = clampf(0.5 + dx / (SLIDE_DISTANCE * 2.0), 0.0, 1.0)
+			if absf(dx) >= SLIDE_DISTANCE and signf(dx) == float(int(note["dir"])):
+				_gesture_became_swipe = true
+				_dragging = {}
+				_slides += 1
+				_slides_in_gesture += 1
+				_last_gesture = "SWIPE"
+				_cookie_angle = 0.18 * float(int(note["dir"]))
+				_judge(note)
+				_spawn_burst(pos, 11, true)
+				_add_popup(pos, "SWIPE PERFECT!", Color(1.0, 0.90, 0.35))
+				_update_hud("SWIPE PERFECT!")
+				return
+		elif _gesture_became_swipe:
+			# Swiped across a tap note: drop the tap note target and treat as cookie swipe
 			_dragging = {}
-			_slides += 1
-			_judge(note)
-			_spawn_burst(pos, 10, true)
-			_add_popup(pos, "SLIDE PERFECT!", Color(1.0, 0.90, 0.35))
-		return
 
-	if _pointer_down:
-		var step_dx: float = absf(pos.x - _pointer_last.x) + absf(pos.y - _pointer_last.y) * 0.5
-		_pointer_last = pos
-		_pointer_drag_accum += step_dx
-		_slider_pos = pingpong(_slider_pos + step_dx / 180.0, 1.0)
+	if _pointer_down and _gesture_became_swipe:
+		_slider_pos = pingpong(_slider_pos + step_dist / 160.0, 1.0)
 		if _pointer_drag_accum >= SLIDE_DISTANCE:
-			_pointer_drag_accum = 0.0
-			_complete_slide_churn(pos)
+			_pointer_drag_accum -= SLIDE_DISTANCE
+			_slides_in_gesture += 1
+			perform_swipe(pos, pos - _pointer_start)
 
-func _release(_pos: Vector2) -> void:
+func _release(pos: Vector2) -> void:
+	var was_down: bool = _pointer_down
 	_pointer_down = false
 	_hold_duration = 0.0
 	_hold_slide_progress = 0.0
-	if _dragging.is_empty():
-		return
-	var note: Dictionary = _dragging["note"]
-	_dragging = {}
-	if bool(note.get("optional", true)):
-		_resolve(note, "GOOD")
-	else:
-		_resolve(note, "MISS")
 
+	var dragged_entry: Dictionary = _dragging
+	_dragging = {}
+
+	var total_disp: float = pos.distance_to(_pointer_start)
+	if total_disp >= SWIPE_THRESHOLD:
+		_gesture_became_swipe = true
+
+	if _gesture_became_swipe:
+		# Classified strictly as a SWIPE (never increments _clicks).
+		if not dragged_entry.is_empty():
+			var s_note: Dictionary = dragged_entry["note"]
+			if bool(s_note["slide"]) and not bool(s_note["done"]):
+				var dx: float = pos.x - (dragged_entry["from"] as Vector2).x
+				if absf(dx) >= SWIPE_THRESHOLD and signf(dx) == float(int(s_note["dir"])):
+					_slides += 1
+					_slides_in_gesture += 1
+					_last_gesture = "SWIPE"
+					_judge_at(s_note, float(dragged_entry.get("down_time", _time)))
+					_spawn_burst(pos, 10, true)
+					_add_popup(pos, "SWIPE!", Color(1.0, 0.90, 0.35))
+					_update_hud("SWIPE!")
+					return
+				else:
+					_resolve(s_note, "MISS")
+		if _slides_in_gesture == 0 and was_down:
+			perform_swipe(pos, pos - _pointer_start)
+		return
+
+	# Classified strictly as a SINGLE TAP (movement < 24 px and hold < 0.20s; never increments _slides).
+	if not dragged_entry.is_empty():
+		var note: Dictionary = dragged_entry["note"]
+		if not bool(note["done"]):
+			if bool(note["slide"]):
+				# Single tap on a slide arrow note: distinguish from swipe!
+				_clicks += 1
+				_score += 1
+				_last_gesture = "TAP_ON_SLIDE"
+				_bounce_cookie(1.08)
+				_spawn_burst(pos, 4, false)
+				_add_popup(pos, "TAP! (SWIPE »)", Color(1.0, 0.72, 0.45))
+				_sfx("click")
+				_update_hud("SINGLE TAP — SWIPE ARROWS!")
+				return
+			else:
+				_clicks += 1
+				_last_gesture = "SINGLE TAP"
+				_bounce_cookie(1.18)
+				_judge_at(note, float(dragged_entry.get("down_time", _time)))
+				return
+
+	if was_down:
+		perform_tap(pos, _pointer_down_time)
+
+## Direct helper for single-tap / click (used by release of a tap or direct call).
 func perform_click(pos: Vector2 = Vector2(640.0, 330.0)) -> void:
+	perform_tap(pos, _time)
+
+func perform_tap(pos: Vector2 = Vector2(640.0, 330.0), tap_time: float = -1.0) -> void:
+	var eval_time: float = _time if tap_time < 0.0 else tap_time
 	_clicks += 1
+	_last_gesture = "SINGLE TAP"
 	_bounce_cookie(1.18)
-	var nearest: Dictionary = _nearest_active_note()
+	var nearest: Dictionary = _nearest_active_tap_note(eval_time)
 	if not nearest.is_empty():
-		var dt: float = absf(float(nearest["time"]) - _time)
-		if not bool(nearest["slide"]) and dt <= GOOD_WINDOW:
-			_judge(nearest)
+		var dt: float = absf(float(nearest["time"]) - eval_time)
+		if dt <= GOOD_WINDOW:
+			_judge_at(nearest, eval_time)
 			_spawn_burst(pos, 9, dt <= PERFECT_WINDOW)
 			return
 	var mult: int = _current_multiplier()
@@ -492,13 +613,19 @@ func perform_click(pos: Vector2 = Vector2(640.0, 330.0)) -> void:
 	_combo += 1
 	_best_combo = maxi(_best_combo, _combo)
 	_spawn_burst(pos, 6, false)
-	_add_popup(pos, "+%d" % gain, Color(1.0, 0.98, 0.88))
+	_add_popup(pos, "TAP +%d" % gain, Color(0.84, 0.97, 1.0))
 	_sfx("click")
-	_update_hud("CLICK +%d" % gain)
+	_update_hud("SINGLE TAP +%d" % gain)
 
-func _complete_slide_churn(pos: Vector2) -> void:
+## Direct helper for swipe / slide churn (used by drag/hold or direct call).
+func perform_slide(pos: Vector2 = Vector2(640.0, 330.0)) -> void:
+	perform_swipe(pos, Vector2(80.0, 0.0))
+
+func perform_swipe(pos: Vector2 = Vector2(640.0, 330.0), delta_vec: Vector2 = Vector2(80.0, 0.0)) -> void:
 	_slides += 1
-	_bounce_cookie(1.22)
+	_last_gesture = "SWIPE"
+	_bounce_cookie(1.24)
+	_cookie_angle = clampf(delta_vec.x / 320.0, -0.22, 0.22)
 	var slide_note: Dictionary = _nearest_slide_note()
 	if not slide_note.is_empty():
 		_resolve(slide_note, "PERFECT")
@@ -507,10 +634,12 @@ func _complete_slide_churn(pos: Vector2) -> void:
 	_score += gain
 	_combo += 1
 	_best_combo = maxi(_best_combo, _combo)
+	_swipe_trail.append({"pos": pos - delta_vec * 0.5, "life": 0.40})
+	_swipe_trail.append({"pos": pos, "life": 0.40})
 	_spawn_burst(pos, 11, true)
-	_add_popup(pos, "SLIDE +%d!" % gain, Color(1.0, 0.88, 0.32))
+	_add_popup(pos, "SWIPE +%d!" % gain, Color(1.0, 0.88, 0.32))
 	_sfx("confirm")
-	_update_hud("SLIDE CHURN +%d!" % gain)
+	_update_hud("SWIPE CHURN +%d!" % gain)
 
 func _current_multiplier() -> int:
 	var mult: int = 1
@@ -529,7 +658,7 @@ func _spawn_burst(origin: Vector2, count: int, golden: bool) -> void:
 		"radius": 28.0,
 		"speed": 220.0,
 		"life": 0.42,
-		"color": Color(1.0, 0.88, 0.36, 0.9) if golden else Color(1.0, 0.98, 0.90, 0.85),
+		"color": Color(1.0, 0.88, 0.36, 0.9) if golden else Color(0.82, 0.96, 1.0, 0.88),
 	})
 	for i: int in count:
 		var angle: float = randf() * TAU
@@ -539,24 +668,24 @@ func _spawn_burst(origin: Vector2, count: int, golden: bool) -> void:
 			"vel": Vector2(cos(angle) * speed, sin(angle) * speed - 110.0),
 			"size": randf_range(5.0, 10.0),
 			"life": randf_range(0.38, 0.70),
-			"color": Color(1.0, 0.90, 0.42, 1.0) if golden else Color(1.0, 0.98, 0.92, 1.0),
+			"color": Color(1.0, 0.90, 0.42, 1.0) if golden else Color(0.90, 0.98, 1.0, 1.0),
 		})
 
 func _add_popup(origin: Vector2, text: String, col: Color) -> void:
 	_popups.append({
-		"pos": origin + Vector2(-70.0, -24.0),
+		"pos": origin + Vector2(-90.0, -24.0),
 		"text": text,
 		"color": col,
 		"life": 0.72,
 	})
 
-func _nearest_active_note() -> Dictionary:
+func _nearest_active_tap_note(eval_time: float) -> Dictionary:
 	var best: Dictionary = {}
 	var best_dt: float = MISS_WINDOW
 	for note: Dictionary in _notes:
-		if bool(note["done"]):
+		if bool(note["done"]) or bool(note["slide"]):
 			continue
-		var dt: float = absf(float(note["time"]) - _time)
+		var dt: float = absf(float(note["time"]) - eval_time)
 		if dt < best_dt:
 			best_dt = dt
 			best = note
@@ -588,7 +717,10 @@ func _note_at(pos: Vector2) -> Dictionary:
 	return best
 
 func _judge(note: Dictionary) -> void:
-	var dt: float = absf(float(note["time"]) - _time)
+	_judge_at(note, _time)
+
+func _judge_at(note: Dictionary, eval_time: float) -> void:
+	var dt: float = absf(float(note["time"]) - eval_time)
 	if dt <= PERFECT_WINDOW:
 		_resolve(note, "PERFECT")
 	elif dt <= GOOD_WINDOW:
@@ -629,8 +761,19 @@ func _resolve(note: Dictionary, verdict: String) -> void:
 	_best_combo = maxi(_best_combo, _combo)
 	_update_hud(verdict if (verdict != "MISS" or (_clicks == 0 and _slides == 0)) else "")
 
+func _play_style() -> String:
+	if _clicks > 0 and _slides == 0:
+		return "tap_only"
+	if _slides > 0 and _clicks == 0:
+		return "swipe_only"
+	if _slides > _clicks and _clicks > 0:
+		return "swipe_master"
+	if _clicks > 0 and _slides > 0:
+		return "balanced"
+	return "none"
+
 func _update_hud(verdict: String) -> void:
-	_score_label.text = "Milk Drops: %d" % _score
+	_score_label.text = "Drops: %d  (Taps: %d | Swipes: %d)" % [_score, _clicks, _slides]
 	_combo_label.text = "Combo x%d (Mult x%d)" % [_combo, _current_multiplier()]
 	_title_label.text = "Milk Beat Clicker"
 	var pct: int = clampi(int(round(float(_score) * 100.0 / float(maxi(target_drops, 1)))), 0, 999)
@@ -643,17 +786,20 @@ func _update_hud(verdict: String) -> void:
 	if is_instance_valid(_upgrade_3):
 		_upgrade_3.text = "[x] Cream Fever (x3!)" if _score >= 90 else "[ ] Cream Fever (90 drops)"
 	if is_instance_valid(_milka_line):
-		if _score >= 90:
-			_milka_line.text = "Milka: \"GOLDEN CREAM FEVER! Look at all that milk!!\""
+		if _last_gesture == "TAP_ON_SLIDE":
+			_milka_line.text = "Milka: \"That was a single tap! Swipe or hold to slide the arrow~\""
 			_milka_tex.texture = TEX_MILKA_SURPRISED
-		elif _slides > 0 and verdict.begins_with("SLIDE"):
-			_milka_line.text = "Milka: \"Ooh, smooth slide churn~! Keep going!\""
+		elif _score >= 90:
+			_milka_line.text = "Milka: \"GOLDEN CREAM FEVER! Taps & swipes overflowing!!\""
+			_milka_tex.texture = TEX_MILKA_SURPRISED
+		elif _last_gesture == "SWIPE":
+			_milka_line.text = "Milka: \"Ooh, a golden swipe! Look at that butter swirl~!\""
 			_milka_tex.texture = TEX_MILKA_SMILE
-		elif _combo >= 4:
-			_milka_line.text = "Milka: \"Nya~ You caught the meadow heartbeat!\""
+		elif _last_gesture == "SINGLE TAP":
+			_milka_line.text = "Milka: \"Crisp single tap! Tap-tap-tap on the Milk Cookie~\""
 			_milka_tex.texture = TEX_MILKA_SMILE
 		else:
-			_milka_line.text = "Milka: \"Click the Milk Cookie! Hold or drag to slide~\""
+			_milka_line.text = "Milka: \"Single-tap the Cookie, or swipe/hold to churn~\""
 	if verdict != "":
 		_judge_label.text = verdict
 
@@ -680,6 +826,7 @@ func _finish(immediate: bool = false) -> void:
 		"score": _score,
 		"clicks": _clicks,
 		"slides": _slides,
+		"style": _play_style(),
 		"perfect": _perfect,
 		"good": _good,
 		"missed": _missed,
@@ -688,7 +835,7 @@ func _finish(immediate: bool = false) -> void:
 		"rank": rank,
 		"total": total,
 	}
-	_judge_label.text = "%s! %d Milk Drops" % [rank, _score]
+	_judge_label.text = "%s! %d Drops (%d Taps, %d Swipes)" % [rank, _score, _clicks, _slides]
 	if not immediate and DisplayServer.get_name() != "headless":
 		await get_tree().create_timer(0.55).timeout
 	else:
