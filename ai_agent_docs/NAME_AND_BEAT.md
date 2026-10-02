@@ -27,10 +27,25 @@
     2. `Meadow Bell (Auto-Drip)` at 45 drops
     3. `Cream Fever (x3!)` at 90 drops
 - **Flexible Controls (Mouse-Only OR 1-Key-Only, with Optional Sliding)**:
-  - **Mouse-only**: Click the Milk Cookie to earn drops (clicking when the Beat Ring touches the rim grants x2/x3 rhythm bonus; rapid clicking between beats still grants Cookie-Clicker drops). Optional slide: drag/move the mouse across the cookie (or hold LMB) to sweep the churn whisk for `SLIDE CHURN` bonus drops!
-  - **1-Button Keyboard-only**: Tap any single key (`Space`, `Enter`, `Z`, etc.) to click the cookie; **hold the same single key down** (`>= 0.18s`) to automatically sweep the slide churn!
-  - **Optional sliding**: Sliding is never mandatory — ignoring or tapping slide cues never breaks combo, while sliding rewards extra drops and combo.
+  - **Mouse/touch tap**: press and release with no more than 22 px of movement. The tap scores exactly once, on release—not on pointer-down.
+  - **Mouse/touch swipe**: movement of at least 56 px changes the pending tap into a swipe. The pending tap is permanently suppressed, so one physical gesture can never award both.
+  - **Ambiguous movement**: 23–55 px is deliberately cancelled instead of being guessed as either gesture; Milka explains why it did not count.
+  - **1-Button keyboard**: quick release scores exactly one key tap. Holding the same key for at least 0.24 s converts it to a hold-slide and suppresses the pending key tap.
+  - **Optional sliding**: sliding is never mandatory. Tap, swipe, held-key slide, wrong-direction swipe, and cancelled movement have distinct HUD copy, floating score text, and Milka reactions.
 
 ## 3. Verification
 - `bash tests/check_assets.sh` — all WebP/SVG size and path rules pass.
-- `godot --headless res://tests/test_name_beat.tscn` — 44/44 assertions pass.
+- `godot --headless res://tests/test_name_beat.tscn` — 71/71 assertions pass, including a complete live VN scene driven through `Viewport.push_input()` and exclusivity checks for mouse, touch, and keyboard gestures.
+
+### Real-window gesture verification
+
+Ran the minigame as a rendered 1280×720 X11 window and drove it with xdotool:
+
+- A mouse down by itself displayed the pending instruction and awarded nothing.
+- Releasing at the same position awarded one tap; HUD: `exactly one tap`; Milka:
+  `One clean tap! Not a swipe, not two clicks.`
+- Dragging 145 px across the cookie awarded swipe drops only; HUD:
+  `SWIPE +18 — tap suppressed`; Milka: `That was a swipe—no tap counted.`
+- Pointer handling is captured at viewport `_input` level and transformed back to
+  CanvasLayer-local coordinates. This guarantees release/motion still arrives if
+  GUI hover or focus changes during the gesture.

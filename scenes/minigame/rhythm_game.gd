@@ -5,8 +5,8 @@ extends CanvasLayer
 ## Playable with PC mouse, mobile touch, or 1-button keyboard:
 ##   - Mouse / Touch : click/tap the giant Milk Cookie (in rhythm with the
 ##                     contracting beat ring for x2/x3 bonus, or rapidly like
-##                     Cookie Clicker), and optionally drag/sweep across the
-##                     cookie (or hold LMB) to churn-slide!
+##                     Cookie Clicker), and optionally swipe across the cookie
+##                     to churn-slide. A swipe suppresses the pending tap.
 ##   - 1-Key only    : tap Space / Enter (or any single key) to click the cookie;
 ##                     hold the same single key down to slide the churn whisk!
 
@@ -19,8 +19,9 @@ const FALL_TIME: float = 1.4
 const PERFECT_WINDOW: float = 0.14
 const GOOD_WINDOW: float = 0.26
 const MISS_WINDOW: float = 0.34
+const TAP_MOVE_TOLERANCE: float = 22.0
 const SLIDE_DISTANCE: float = 56.0
-const HOLD_TO_SLIDE_TIME: float = 0.18
+const HOLD_TO_SLIDE_TIME: float = 0.24
 const HOLD_SWEEP_TIME: float = 0.38
 const LEAD_IN: float = 0.45
 
@@ -66,15 +67,24 @@ var _best_combo: int = 0
 var _perfect: int = 0
 var _good: int = 0
 var _missed: int = 0
-var _dragging: Dictionary = {}
-
-## Cookie-clicker + 1-button hold-to-slide state
+## Gesture classification. A pointer press scores nothing until it is released
+## as a tap or travels SLIDE_DISTANCE and becomes a swipe. This guarantees one
+## physical gesture can never score as both tap and swipe.
 var _pointer_down: bool = false
 var _pointer_start: Vector2 = Vector2.ZERO
 var _pointer_last: Vector2 = Vector2.ZERO
-var _pointer_drag_accum: float = 0.0
+var _pointer_path_distance: float = 0.0
+var _pointer_max_displacement: float = 0.0
+var _pointer_is_swipe: bool = false
+var _pointer_swipes_scored: int = 0
+var _pointer_started_valid: bool = false
+var _pointer_press_note: Dictionary = {}
+
+## A keyboard button is classified on duration: release before the threshold is
+## one tap; crossing the threshold is a hold-slide and suppresses that tap.
 var _key_down: bool = false
-var _hold_duration: float = 0.0
+var _key_is_hold: bool = false
+var _key_hold_duration: float = 0.0
 var _hold_slide_progress: float = 0.0
 var _slider_pos: float = 0.5
 var _slider_dir: float = 1.0
@@ -82,16 +92,17 @@ var _cookie_scale: float = 1.0
 var _cookie_angle: float = 0.0
 var _beat_pulse: float = 0.0
 var _auto_drip_accum: float = 0.0
+var _last_gesture: String = ""
 
 ## Visual particles & popups drawn on _canvas
 var _particles: Array[Dictionary] = []
 var _ripples: Array[Dictionary] = []
+var _swipe_trail: Array[Dictionary] = []
 var _popups: Array[Dictionary] = []
 
 func _ready() -> void:
 	layer = 110
 	_note_template.visible = false
-	_root.gui_input.connect(_on_gui_input)
 	_canvas.draw.connect(_on_canvas_draw)
 	_bottle_canvas.draw.connect(_on_bottle_draw)
 	_serve_button.pressed.connect(_on_serve_pressed)
@@ -168,6 +179,48 @@ func _input(event: InputEvent) -> void:
 		else:
 			release_one_button()
 			get_viewport().set_input_as_handled()
+		return
+
+	# Pointer capture lives at viewport level. Control.gui_input can lose release
+	# or motion when focus/hover changes during a gesture. Convert viewport
+	# coordinates through the CanvasLayer transform before classification.
+	if event is InputEventMouseButton:
+		var mb: InputEventMouseButton = event
+		if mb.button_index != MOUSE_BUTTON_LEFT:
+			return
+		var local_pos: Vector2 = _viewport_to_local(mb.position)
+		if mb.pressed:
+			_press(local_pos)
+			if _pointer_started_valid:
+				get_viewport().set_input_as_handled()
+		elif _pointer_down:
+			var captured: bool = _pointer_started_valid
+			_release(local_pos)
+			if captured:
+				get_viewport().set_input_as_handled()
+	elif event is InputEventMouseMotion and _pointer_down:
+		_motion(_viewport_to_local((event as InputEventMouseMotion).position))
+		if _pointer_started_valid:
+			get_viewport().set_input_as_handled()
+	elif event is InputEventScreenTouch:
+		var st: InputEventScreenTouch = event
+		var touch_local: Vector2 = _viewport_to_local(st.position)
+		if st.pressed:
+			_press(touch_local)
+			if _pointer_started_valid:
+				get_viewport().set_input_as_handled()
+		elif _pointer_down:
+			var touch_captured: bool = _pointer_started_valid
+			_release(touch_local)
+			if touch_captured:
+				get_viewport().set_input_as_handled()
+	elif event is InputEventScreenDrag and _pointer_down:
+		_motion(_viewport_to_local((event as InputEventScreenDrag).position))
+		if _pointer_started_valid:
+			get_viewport().set_input_as_handled()
+
+func _viewport_to_local(viewport_pos: Vector2) -> Vector2:
+	return transform.affine_inverse() * viewport_pos
 
 func _process(delta: float) -> void:
 	if not _running:
@@ -193,16 +246,20 @@ func _process(delta: float) -> void:
 			_spawn_burst(_cookie_center() + Vector2(randf_range(-55.0, 55.0), randf_range(-55.0, 55.0)), 2, false)
 			_update_hud("")
 
-	if _key_down or _pointer_down:
-		_hold_duration += delta
-		if _hold_duration >= HOLD_TO_SLIDE_TIME:
+	if _key_down:
+		_key_hold_duration += delta
+		if not _key_is_hold and _key_hold_duration >= HOLD_TO_SLIDE_TIME:
+			_key_is_hold = true
+			_hold_slide_progress = 0.0
+			_complete_slide_churn(_cookie_center(), "HOLD SLIDE")
+		if _key_is_hold:
 			var step: float = delta / HOLD_SWEEP_TIME
 			_hold_slide_progress += step
 			_slider_pos = pingpong(_slider_pos + step * _slider_dir, 1.0)
-			if _hold_slide_progress >= 1.0:
+			while _hold_slide_progress >= 1.0:
 				_hold_slide_progress -= 1.0
 				_slider_dir = -_slider_dir
-				_complete_slide_churn(_cookie_center())
+				_complete_slide_churn(_cookie_center(), "HOLD SLIDE")
 
 	_tick_visuals(delta)
 
@@ -241,6 +298,13 @@ func _tick_visuals(delta: float) -> void:
 			r["radius"] = float(r["radius"]) + float(r["speed"]) * delta
 			next_ripples.append(r)
 	_ripples = next_ripples
+
+	var next_trail: Array[Dictionary] = []
+	for trail_point: Dictionary in _swipe_trail:
+		trail_point["life"] = float(trail_point["life"]) - delta
+		if float(trail_point["life"]) > 0.0:
+			next_trail.append(trail_point)
+	_swipe_trail = next_trail
 
 	var next_popups: Array[Dictionary] = []
 	for pop: Dictionary in _popups:
@@ -328,7 +392,16 @@ func _on_canvas_draw() -> void:
 	_canvas.draw_circle(Vector2(orb_x, track_y), 17.0, Color(1.0, 0.96, 0.78, 1.0))
 	_canvas.draw_arc(Vector2(orb_x, track_y), 17.0, 0.0, TAU, 28, Color(0.58, 0.42, 0.16, 1.0), 3.0)
 
-
+	# Golden ribbon makes swipe classification visible independently of score text.
+	for i: int in _swipe_trail.size():
+		var trail_point: Dictionary = _swipe_trail[i]
+		var trail_alpha: float = clampf(float(trail_point["life"]) / 0.40, 0.0, 1.0)
+		var trail_pos: Vector2 = trail_point["pos"]
+		_canvas.draw_circle(trail_pos, 10.0 * trail_alpha, Color(1.0, 0.88, 0.34, trail_alpha * 0.85))
+		if i > 0:
+			var previous_pos: Vector2 = _swipe_trail[i - 1]["pos"]
+			if previous_pos.distance_to(trail_pos) < 160.0:
+				_canvas.draw_line(previous_pos, trail_pos, Color(1.0, 0.92, 0.45, trail_alpha * 0.9), 7.0 * trail_alpha)
 
 	for r: Dictionary in _ripples:
 		var alpha: float = clampf(float(r["life"]) / 0.45, 0.0, 1.0)
@@ -395,25 +468,29 @@ func _on_gui_input(event: InputEvent) -> void:
 		_motion(sd.position)
 
 func press_one_button() -> void:
-	if not _running:
+	if not _running or _key_down:
 		return
 	_key_down = true
-	_hold_duration = 0.0
+	_key_is_hold = false
+	_key_hold_duration = 0.0
 	_hold_slide_progress = 0.0
-	perform_click(_cookie_center())
+	_last_gesture = "pending"
+	_update_hud("BUTTON DOWN — release for TAP, hold for SLIDE")
 
 func release_one_button() -> void:
-	if not _running:
+	if not _running or not _key_down:
 		return
-	if _key_down and _hold_duration >= HOLD_TO_SLIDE_TIME and _hold_slide_progress >= 0.35:
-		_complete_slide_churn(_cookie_center())
+	var was_hold: bool = _key_is_hold
 	_key_down = false
-	_hold_duration = 0.0
+	_key_is_hold = false
+	_key_hold_duration = 0.0
 	_hold_slide_progress = 0.0
+	if not was_hold:
+		perform_click(_cookie_center(), "KEY TAP")
 
 func hold_one_button(seconds: float) -> void:
 	press_one_button()
-	var step: float = 0.05
+	var step: float = 0.025
 	var elapsed: float = 0.0
 	while elapsed < seconds:
 		var dt: float = minf(step, seconds - elapsed)
@@ -422,61 +499,86 @@ func hold_one_button(seconds: float) -> void:
 	release_one_button()
 
 func _press(pos: Vector2) -> void:
+	if _pointer_down:
+		return
 	_pointer_down = true
 	_pointer_start = pos
 	_pointer_last = pos
-	_pointer_drag_accum = 0.0
-	_hold_duration = 0.0
-	_hold_slide_progress = 0.0
-
-	var note: Dictionary = _note_at(pos)
-	if not note.is_empty():
-		if bool(note["slide"]):
-			_dragging = {"note": note, "from": pos}
-			_bounce_cookie(1.12)
-			return
-		_judge(note)
-		return
-
-	perform_click(pos)
+	_pointer_path_distance = 0.0
+	_pointer_max_displacement = 0.0
+	_pointer_is_swipe = false
+	_pointer_swipes_scored = 0
+	var on_cookie: bool = _point_is_on_cookie(pos)
+	# The large cookie owns gestures that begin on it. A falling lane cue must
+	# not accidentally impose its direction on a cookie swipe behind the cue.
+	_pointer_press_note = {} if on_cookie else _note_at(pos)
+	_pointer_started_valid = on_cookie or not _pointer_press_note.is_empty()
+	if _pointer_started_valid:
+		_last_gesture = "pending"
+		_bounce_cookie(1.06)
+		_update_hud("PRESS — release for TAP, move for SWIPE")
 
 func _motion(pos: Vector2) -> void:
-	if not _dragging.is_empty():
-		var note: Dictionary = _dragging["note"]
-		var from: Vector2 = _dragging["from"]
-		var dx: float = pos.x - from.x
-		_slider_pos = clampf(0.5 + dx / (SLIDE_DISTANCE * 2.0), 0.0, 1.0)
-		if absf(dx) >= SLIDE_DISTANCE and signf(dx) == float(int(note["dir"])):
-			_dragging = {}
-			_slides += 1
-			_judge(note)
-			_spawn_burst(pos, 10, true)
-			_add_popup(pos, "SLIDE PERFECT!", Color(1.0, 0.90, 0.35))
+	if not _pointer_down:
+		return
+	var segment: float = pos.distance_to(_pointer_last)
+	_pointer_last = pos
+	_pointer_path_distance += segment
+	_pointer_max_displacement = maxf(_pointer_max_displacement, pos.distance_to(_pointer_start))
+	if not _pointer_started_valid:
 		return
 
-	if _pointer_down:
-		var step_dx: float = absf(pos.x - _pointer_last.x) + absf(pos.y - _pointer_last.y) * 0.5
-		_pointer_last = pos
-		_pointer_drag_accum += step_dx
-		_slider_pos = pingpong(_slider_pos + step_dx / 180.0, 1.0)
-		if _pointer_drag_accum >= SLIDE_DISTANCE:
-			_pointer_drag_accum = 0.0
-			_complete_slide_churn(pos)
+	if not _pointer_is_swipe and _pointer_max_displacement >= SLIDE_DISTANCE:
+		_pointer_is_swipe = true
+		_update_hud("SWIPE DETECTED — tap suppressed")
 
-func _release(_pos: Vector2) -> void:
+	if not _pointer_is_swipe:
+		return
+
+	_swipe_trail.append({"pos": pos, "life": 0.40})
+	var signed_dx: float = pos.x - _pointer_start.x
+	_slider_pos = clampf(0.5 + signed_dx / (SLIDE_DISTANCE * 4.0), 0.0, 1.0)
+	while _pointer_path_distance >= SLIDE_DISTANCE:
+		_pointer_path_distance -= SLIDE_DISTANCE
+		if not _pointer_press_note.is_empty() and bool(_pointer_press_note.get("slide", false)):
+			var expected_dir: int = int(_pointer_press_note.get("dir", 0))
+			if expected_dir != 0 and signf(signed_dx) != float(expected_dir):
+				_update_hud("SWIPE THE OTHER WAY — no tap counted")
+				continue
+		_complete_slide_churn(pos, "SWIPE")
+		_pointer_swipes_scored += 1
+		_pointer_press_note = {}
+
+func _release(pos: Vector2) -> void:
+	if not _pointer_down:
+		return
+	var was_valid: bool = _pointer_started_valid
+	var was_swipe: bool = _pointer_is_swipe
+	var moved: float = _pointer_max_displacement
 	_pointer_down = false
-	_hold_duration = 0.0
-	_hold_slide_progress = 0.0
-	if _dragging.is_empty():
-		return
-	var note: Dictionary = _dragging["note"]
-	_dragging = {}
-	if bool(note.get("optional", true)):
-		_resolve(note, "GOOD")
-	else:
-		_resolve(note, "MISS")
+	_pointer_started_valid = false
+	_pointer_press_note = {}
 
-func perform_click(pos: Vector2 = Vector2(640.0, 330.0)) -> void:
+	if not was_valid:
+		_update_hud("Tap the Milk Cookie")
+		return
+	if was_swipe:
+		if _pointer_swipes_scored == 0:
+			_update_hud("SWIPE recognised — try the shown direction")
+		return
+	if moved <= TAP_MOVE_TOLERANCE:
+		perform_click(pos, "TAP")
+	else:
+		_last_gesture = "cancelled"
+		_update_hud("GESTURE CANCELLED — tap still or swipe farther")
+
+func _point_is_on_cookie(pos: Vector2) -> bool:
+	var center: Vector2 = _cookie_center()
+	var radius: float = maxf(_cookie_pivot.size.x, _cookie_pivot.size.y) * 0.62
+	return pos.distance_to(center) <= maxf(radius, 138.0)
+
+func perform_click(pos: Vector2 = Vector2(640.0, 330.0), gesture: String = "TAP") -> void:
+	_last_gesture = gesture.to_lower()
 	_clicks += 1
 	_bounce_cookie(1.18)
 	var nearest: Dictionary = _nearest_active_note()
@@ -485,6 +587,7 @@ func perform_click(pos: Vector2 = Vector2(640.0, 330.0)) -> void:
 		if not bool(nearest["slide"]) and dt <= GOOD_WINDOW:
 			_judge(nearest)
 			_spawn_burst(pos, 9, dt <= PERFECT_WINDOW)
+			_update_hud("%s • ON BEAT — exactly one tap" % gesture)
 			return
 	var mult: int = _current_multiplier()
 	var gain: int = 2 * mult
@@ -492,11 +595,12 @@ func perform_click(pos: Vector2 = Vector2(640.0, 330.0)) -> void:
 	_combo += 1
 	_best_combo = maxi(_best_combo, _combo)
 	_spawn_burst(pos, 6, false)
-	_add_popup(pos, "+%d" % gain, Color(1.0, 0.98, 0.88))
+	_add_popup(pos, "%s +%d" % [gesture, gain], Color(1.0, 0.98, 0.88))
 	_sfx("click")
-	_update_hud("CLICK +%d" % gain)
+	_update_hud("%s +%d — clean single tap" % [gesture, gain])
 
-func _complete_slide_churn(pos: Vector2) -> void:
+func _complete_slide_churn(pos: Vector2, gesture: String = "SWIPE") -> void:
+	_last_gesture = gesture.to_lower()
 	_slides += 1
 	_bounce_cookie(1.22)
 	var slide_note: Dictionary = _nearest_slide_note()
@@ -508,9 +612,9 @@ func _complete_slide_churn(pos: Vector2) -> void:
 	_combo += 1
 	_best_combo = maxi(_best_combo, _combo)
 	_spawn_burst(pos, 11, true)
-	_add_popup(pos, "SLIDE +%d!" % gain, Color(1.0, 0.88, 0.32))
+	_add_popup(pos, "%s +%d!" % [gesture, gain], Color(1.0, 0.88, 0.32))
 	_sfx("confirm")
-	_update_hud("SLIDE CHURN +%d!" % gain)
+	_update_hud("%s +%d — tap suppressed" % [gesture, gain])
 
 func _current_multiplier() -> int:
 	var mult: int = 1
@@ -643,17 +747,28 @@ func _update_hud(verdict: String) -> void:
 	if is_instance_valid(_upgrade_3):
 		_upgrade_3.text = "[x] Cream Fever (x3!)" if _score >= 90 else "[ ] Cream Fever (90 drops)"
 	if is_instance_valid(_milka_line):
-		if _score >= 90:
+		# Gesture feedback wins for the current action, even after Cream Fever;
+		# otherwise Milka's milestone line would hide whether input was a tap.
+		if _last_gesture.begins_with("swipe"):
+			_milka_line.text = "Milka: \"That was a swipe—no tap counted. Smooth churn!\""
+			_milka_tex.texture = TEX_MILKA_SMILE
+		elif _last_gesture.begins_with("hold"):
+			_milka_line.text = "Milka: \"A held key becomes a slide. I can hear the whisk!\""
+			_milka_tex.texture = TEX_MILKA_SMILE
+		elif _last_gesture.contains("tap"):
+			_milka_line.text = "Milka: \"One clean tap! Not a swipe, not two clicks.\""
+			_milka_tex.texture = TEX_MILKA_SMILE
+		elif _last_gesture == "cancelled":
+			_milka_line.text = "Milka: \"That was between a tap and swipe, so I did not count it.\""
+			_milka_tex.texture = TEX_MILKA_SURPRISED
+		elif _score >= 90:
 			_milka_line.text = "Milka: \"GOLDEN CREAM FEVER! Look at all that milk!!\""
 			_milka_tex.texture = TEX_MILKA_SURPRISED
-		elif _slides > 0 and verdict.begins_with("SLIDE"):
-			_milka_line.text = "Milka: \"Ooh, smooth slide churn~! Keep going!\""
-			_milka_tex.texture = TEX_MILKA_SMILE
 		elif _combo >= 4:
 			_milka_line.text = "Milka: \"Nya~ You caught the meadow heartbeat!\""
 			_milka_tex.texture = TEX_MILKA_SMILE
 		else:
-			_milka_line.text = "Milka: \"Click the Milk Cookie! Hold or drag to slide~\""
+			_milka_line.text = "Milka: \"Release still for a tap, or move far enough to swipe~\""
 	if verdict != "":
 		_judge_label.text = verdict
 
@@ -676,10 +791,20 @@ func _finish(immediate: bool = false) -> void:
 		rank = "steady churner"
 	elif _score >= 10 or accuracy >= 35.0:
 		rank = "wobbly whisk"
+	var style: String = "none"
+	if _clicks > 0 and _slides == 0:
+		style = "tap_only"
+	elif _slides > 0 and _clicks == 0:
+		style = "swipe_only"
+	elif _slides > _clicks:
+		style = "swipe_master"
+	elif _clicks > 0 and _slides > 0:
+		style = "balanced"
 	var result: Dictionary = {
 		"score": _score,
 		"clicks": _clicks,
 		"slides": _slides,
+		"style": style,
 		"perfect": _perfect,
 		"good": _good,
 		"missed": _missed,

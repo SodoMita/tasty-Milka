@@ -68,6 +68,15 @@ func rhythm_rank() -> String:
 func rhythm_missed() -> int:
 	return int(rhythm_result.get("missed", 0))
 
+func rhythm_clicks() -> int:
+	return int(rhythm_result.get("clicks", 0))
+
+func rhythm_slides() -> int:
+	return int(rhythm_result.get("slides", 0))
+
+func rhythm_style() -> String:
+	return String(rhythm_result.get("style", "none"))
+
 func snapshot() -> Dictionary:
 	var data: Dictionary = {
 		"player_name": player_name,
