@@ -1,19 +1,19 @@
-[gd_scene load_steps=10 format=3 uid="uid://title_milka_vn"]
+[gd_scene format=3 uid="uid://cfb4inboe1ofh"]
 
-[ext_resource type="Script" path="res://scenes/title_screen.gd" id="1_script"]
-[ext_resource type="Theme" path="res://assets/ui/milk_glass_theme.tres" id="2_theme"]
-[ext_resource type="Texture2D" path="res://assets/ui/title_backdrop.svg" id="3_backdrop"]
-[ext_resource type="Texture2D" path="res://assets/ui/milk_droplet.svg" id="4_droplet"]
-[ext_resource type="Texture2D" path="res://assets/ui/droplet_trio.svg" id="5_trio"]
-[ext_resource type="Texture2D" path="res://assets/ui/droplet_cluster.svg" id="6_cluster"]
+[ext_resource type="Script" uid="uid://c8223fcsk16rg" path="res://scenes/title_screen.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://bckjh04a6b4vk" path="res://assets/ui/milk_glass_theme.tres" id="2_theme"]
+[ext_resource type="Texture2D" uid="uid://d0o0lvlte8muy" path="res://assets/ui/title_backdrop.svg" id="3_backdrop"]
+[ext_resource type="Texture2D" uid="uid://disyvkjbef0iq" path="res://assets/ui/milk_droplet.svg" id="4_droplet"]
+[ext_resource type="Texture2D" uid="uid://dlam8iuk670ub" path="res://assets/ui/droplet_trio.svg" id="5_trio"]
+[ext_resource type="Texture2D" uid="uid://bcr220hrms2ga" path="res://assets/ui/droplet_cluster.svg" id="6_cluster"]
 [ext_resource type="PackedScene" path="res://scenes/ui/settings_menu.tscn" id="7_settings"]
-[ext_resource type="Texture2D" path="res://assets/ui/icons/play.svg" id="11_play"]
-[ext_resource type="Texture2D" path="res://assets/ui/icons/resume.svg" id="12_resume"]
-[ext_resource type="Texture2D" path="res://assets/ui/icons/settings.svg" id="13_settings"]
-[ext_resource type="Texture2D" path="res://assets/ui/icons/quit.svg" id="14_quit"]
-[ext_resource type="PackedScene" path="res://scenes/character/crema.tscn" id="10_crema"]
-[ext_resource type="FontFile" path="res://assets/fonts/DejaVuSerif.ttf" id="8_serif"]
-[ext_resource type="FontFile" path="res://assets/fonts/DejaVuSerif-Bold.ttf" id="9_serifbold"]
+[ext_resource type="FontFile" uid="uid://ctxcxi25fm0pu" path="res://assets/fonts/DejaVuSerif.ttf" id="8_serif"]
+[ext_resource type="FontFile" uid="uid://ex3s7gibjgfb" path="res://assets/fonts/DejaVuSerif-Bold.ttf" id="9_serifbold"]
+[ext_resource type="PackedScene" uid="uid://daisyspirit01" path="res://scenes/character/crema.tscn" id="10_crema"]
+[ext_resource type="Texture2D" uid="uid://d30dme00t8quw" path="res://assets/ui/icons/play.svg" id="11_play"]
+[ext_resource type="Texture2D" uid="uid://dmm5gjqrb802h" path="res://assets/ui/icons/resume.svg" id="12_resume"]
+[ext_resource type="Texture2D" uid="uid://d0gj5pd47s52v" path="res://assets/ui/icons/settings.svg" id="13_settings"]
+[ext_resource type="Texture2D" uid="uid://bitnaek2cnhwf" path="res://assets/ui/icons/quit.svg" id="14_quit"]
 
 [sub_resource type="Animation" id="Animation_ambient"]
 resource_name = "ambient"
@@ -176,13 +176,12 @@ tracks/12/keys = {
 "values": [130.0, 124.0, 130.0, 136.0, 130.0]
 }
 
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ambient"]
 _data = {
-"ambient": SubResource("Animation_ambient")
+&"ambient": SubResource("Animation_ambient")
 }
 
-[node name="TitleScreen" type="Control"]
+[node name="TitleScreen" type="Control" unique_id=385580647]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -192,7 +191,7 @@ grow_vertical = 2
 theme = ExtResource("2_theme")
 script = ExtResource("1_script")
 
-[node name="Backdrop" type="TextureRect" parent="."]
+[node name="Backdrop" type="TextureRect" parent="." unique_id=1632969881]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -200,11 +199,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+texture = ExtResource("3_backdrop")
 expand_mode = 1
 stretch_mode = 6
-texture = ExtResource("3_backdrop")
 
-[node name="Droplets" type="Control" parent="."]
+[node name="Droplets" type="Control" parent="." unique_id=966318432]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -213,73 +212,74 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Drop1" type="TextureRect" parent="Droplets"]
+[node name="Drop1" type="TextureRect" parent="Droplets" unique_id=752793531]
+modulate = Color(1, 1, 1, 0.85)
 layout_mode = 0
 offset_left = 96.0
 offset_top = -120.0
 offset_right = 224.0
 offset_bottom = 8.0
-mouse_filter = 2
 scale = Vector2(0.31, 0.31)
-modulate = Color(1, 1, 1, 0.85)
+mouse_filter = 2
 texture = ExtResource("4_droplet")
 
-[node name="Drop2" type="TextureRect" parent="Droplets"]
+[node name="Drop2" type="TextureRect" parent="Droplets" unique_id=752038027]
+modulate = Color(1, 1, 1, 0.8)
 layout_mode = 0
 offset_left = 305.0
 offset_top = -120.0
 offset_right = 433.0
 offset_bottom = 8.0
-mouse_filter = 2
 scale = Vector2(0.2, 0.2)
-modulate = Color(1, 1, 1, 0.8)
+mouse_filter = 2
 texture = ExtResource("4_droplet")
 
-[node name="Drop3" type="TextureRect" parent="Droplets"]
+[node name="Drop3" type="TextureRect" parent="Droplets" unique_id=283158626]
+modulate = Color(1, 1, 1, 0.85)
 layout_mode = 0
 offset_left = 536.0
 offset_top = -120.0
 offset_right = 664.0
 offset_bottom = 8.0
-mouse_filter = 2
 scale = Vector2(0.42, 0.42)
-modulate = Color(1, 1, 1, 0.85)
+mouse_filter = 2
 texture = ExtResource("4_droplet")
 
-[node name="Drop4" type="TextureRect" parent="Droplets"]
+[node name="Drop4" type="TextureRect" parent="Droplets" unique_id=2129911790]
+modulate = Color(1, 1, 1, 0.8)
 layout_mode = 0
 offset_left = 748.0
 offset_top = -120.0
 offset_right = 876.0
 offset_bottom = 8.0
-mouse_filter = 2
 scale = Vector2(0.25, 0.25)
-modulate = Color(1, 1, 1, 0.8)
+mouse_filter = 2
 texture = ExtResource("4_droplet")
 
-[node name="Drop5" type="TextureRect" parent="Droplets"]
+[node name="Drop5" type="TextureRect" parent="Droplets" unique_id=1289065051]
+modulate = Color(1, 1, 1, 0.85)
 layout_mode = 0
 offset_left = 1006.0
 offset_top = -120.0
 offset_right = 1134.0
 offset_bottom = 8.0
-mouse_filter = 2
 scale = Vector2(0.36, 0.36)
-modulate = Color(1, 1, 1, 0.85)
+mouse_filter = 2
 texture = ExtResource("4_droplet")
 
-[node name="Drop6" type="TextureRect" parent="Droplets"]
+[node name="Drop6" type="TextureRect" parent="Droplets" unique_id=1971294650]
+modulate = Color(1, 1, 1, 0.8)
 layout_mode = 0
 offset_left = 1188.0
 offset_top = -120.0
 offset_right = 1316.0
 offset_bottom = 8.0
-mouse_filter = 2
 scale = Vector2(0.17, 0.17)
-modulate = Color(1, 1, 1, 0.8)
+mouse_filter = 2
 texture = ExtResource("4_droplet")
 
-[node name="CornerTR" type="TextureRect" parent="."]
+[node name="CornerTR" type="TextureRect" parent="." unique_id=1099846257]
+modulate = Color(1, 1, 1, 0.75)
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -290,11 +290,11 @@ offset_right = -12.0
 offset_bottom = 194.0
 grow_horizontal = 0
 mouse_filter = 2
-modulate = Color(1, 1, 1, 0.75)
-stretch_mode = 5
 texture = ExtResource("6_cluster")
+stretch_mode = 5
 
-[node name="CornerBL" type="TextureRect" parent="."]
+[node name="CornerBL" type="TextureRect" parent="." unique_id=1604952056]
+modulate = Color(1, 1, 1, 0.7)
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -305,17 +305,16 @@ offset_right = 192.0
 offset_bottom = -14.0
 grow_vertical = 0
 mouse_filter = 2
-modulate = Color(1, 1, 1, 0.7)
-flip_h = true
-stretch_mode = 5
 texture = ExtResource("6_cluster")
+stretch_mode = 5
+flip_h = true
 
-[node name="Crema" parent="." instance=ExtResource("10_crema")]
+[node name="Crema" parent="." unique_id=92385162 instance=ExtResource("10_crema")]
 unique_name_in_owner = true
 position = Vector2(900, 560)
 scale = Vector2(0.78, 0.78)
 
-[node name="TitleBlock" type="VBoxContainer" parent="."]
+[node name="TitleBlock" type="VBoxContainer" parent="." unique_id=2120383124]
 layout_mode = 1
 offset_left = 96.0
 offset_top = 130.0
@@ -324,7 +323,7 @@ offset_bottom = 650.0
 mouse_filter = 2
 theme_override_constants/separation = 8
 
-[node name="Title" type="Label" parent="TitleBlock"]
+[node name="Title" type="Label" parent="TitleBlock" unique_id=1647343109]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.32, 0.31, 0.26, 1)
 theme_override_colors/font_outline_color = Color(0.99, 0.97, 0.9, 0.95)
@@ -333,7 +332,7 @@ theme_override_fonts/font = ExtResource("9_serifbold")
 theme_override_font_sizes/font_size = 92
 text = "Milka"
 
-[node name="Subtitle" type="Label" parent="TitleBlock"]
+[node name="Subtitle" type="Label" parent="TitleBlock" unique_id=1105763057]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.44, 0.43, 0.37, 0.95)
@@ -343,22 +342,22 @@ theme_override_fonts/font = ExtResource("8_serif")
 theme_override_font_sizes/font_size = 22
 text = "a milk-soft visual novel"
 
-[node name="Divider" type="TextureRect" parent="TitleBlock"]
+[node name="Divider" type="TextureRect" parent="TitleBlock" unique_id=358591829]
 layout_mode = 2
 mouse_filter = 2
-stretch_mode = 5
 texture = ExtResource("5_trio")
+stretch_mode = 5
 
-[node name="MenuBubble" type="PanelContainer" parent="TitleBlock"]
+[node name="MenuBubble" type="PanelContainer" parent="TitleBlock" unique_id=1114178518]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_type_variation = &"MilkBubble"
 
-[node name="Menu" type="HBoxContainer" parent="TitleBlock/MenuBubble"]
+[node name="Menu" type="HBoxContainer" parent="TitleBlock/MenuBubble" unique_id=334447238]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="StartButton" type="Button" parent="TitleBlock/MenuBubble/Menu"]
+[node name="StartButton" type="Button" parent="TitleBlock/MenuBubble/Menu" unique_id=852245589]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(76, 76)
 layout_mode = 2
@@ -368,7 +367,7 @@ icon = ExtResource("11_play")
 icon_alignment = 1
 expand_icon = true
 
-[node name="ContinueButton" type="Button" parent="TitleBlock/MenuBubble/Menu"]
+[node name="ContinueButton" type="Button" parent="TitleBlock/MenuBubble/Menu" unique_id=1910210321]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(76, 76)
 layout_mode = 2
@@ -378,7 +377,7 @@ icon = ExtResource("12_resume")
 icon_alignment = 1
 expand_icon = true
 
-[node name="SettingsButton" type="Button" parent="TitleBlock/MenuBubble/Menu"]
+[node name="SettingsButton" type="Button" parent="TitleBlock/MenuBubble/Menu" unique_id=380475089]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(76, 76)
 layout_mode = 2
@@ -388,7 +387,7 @@ icon = ExtResource("13_settings")
 icon_alignment = 1
 expand_icon = true
 
-[node name="QuitButton" type="Button" parent="TitleBlock/MenuBubble/Menu"]
+[node name="QuitButton" type="Button" parent="TitleBlock/MenuBubble/Menu" unique_id=1619949257]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(76, 76)
 layout_mode = 2
@@ -398,24 +397,24 @@ icon = ExtResource("14_quit")
 icon_alignment = 1
 expand_icon = true
 
-[node name="HowToPlayTitle" type="Label" parent="TitleBlock"]
+[node name="HowToPlayTitle" type="Label" parent="TitleBlock" unique_id=1192190886]
 unique_name_in_owner = true
 layout_mode = 2
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.38, 0.37, 0.32, 1)
 theme_override_font_sizes/font_size = 18
 text = "How to play"
 
-[node name="HowToPlay" type="Label" parent="TitleBlock"]
+[node name="HowToPlay" type="Label" parent="TitleBlock" unique_id=1540940907]
 unique_name_in_owner = true
 layout_mode = 2
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.44, 0.43, 0.37, 0.95)
 theme_override_font_sizes/font_size = 14
-text = "Enter / Space / tap · Advance\nH / swipe up · History    Esc · Pause\nF5 · Quick save    F9 · Quick load    F12 · Field notes"
+text = "Enter / Space / tap · Advance
+H / swipe up · History    Esc · Pause
+F5 · Quick save    F9 · Quick load    F12 · Field notes"
 autowrap_mode = 2
 
-[node name="Version" type="Label" parent="."]
+[node name="Version" type="Label" parent="." unique_id=1523166023]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 2
@@ -426,15 +425,12 @@ offset_top = -38.0
 offset_right = 520.0
 offset_bottom = -12.0
 grow_vertical = 0
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.5, 0.49, 0.43, 0.8)
 theme_override_fonts/font = ExtResource("8_serif")
 theme_override_font_sizes/font_size = 14
 text = "v0.1.0 · milk-glass UI · placeholder art"
 
-[node name="SettingsPanel" parent="." instance=ExtResource("7_settings")]
+[node name="SettingsPanel" parent="." unique_id=1886091224 instance=ExtResource("7_settings")]
 
-[node name="Ambient" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_ambient")
-}
+[node name="Ambient" type="AnimationPlayer" parent="." unique_id=1906659449]
+libraries/ = SubResource("AnimationLibrary_ambient")

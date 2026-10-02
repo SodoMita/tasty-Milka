@@ -6,20 +6,15 @@
 [ext_resource type="Script" uid="uid://bb52rsfwhkxbn" path="res://addons/dialogue_manager/nodes/responses_menu/dialogue_responses_menu.gd" id="3_menu"]
 [ext_resource type="FontFile" uid="uid://ctxcxi25fm0pu" path="res://assets/fonts/DejaVuSerif.ttf" id="4_serif"]
 [ext_resource type="FontFile" uid="uid://ex3s7gibjgfb" path="res://assets/fonts/DejaVuSerif-Bold.ttf" id="5_serifbold"]
+[ext_resource type="Texture2D" uid="uid://dbmkb4k1snr65" path="res://assets/backgrounds/in_train.webp" id="6_u72eb"]
 [ext_resource type="Script" uid="uid://dvxki2gr62k4a" path="res://scenes/hold_indicator.gd" id="11_hold"]
 [ext_resource type="PackedScene" uid="uid://ba4pj5dj4gjtc" path="res://scenes/route_graph/route_graph_panel.tscn" id="12_route"]
 [ext_resource type="Script" uid="uid://iqq1vagpcskl" path="res://scenes/motion/stage_director.gd" id="13_director"]
 [ext_resource type="Script" uid="uid://bvq2jwptdrjwi" path="res://scenes/stage/stage_actors.gd" id="14_actors"]
-[ext_resource type="Texture2D" uid="uid://wn8erwp616ea" path="res://assets/characters/shadow.svg" id="27_shadow"]
-[ext_resource type="Resource" path="res://characters/shadow.tres" id="28_def_shadow"]
-[ext_resource type="Texture2D" uid="uid://c1ftamr8lg0v4" path="res://assets/characters/milka_chan.svg" id="30_milka"]
 [ext_resource type="Texture2D" uid="uid://bh5peycdwmmuu" path="res://assets/ui/milk_spot.svg" id="30_wgqj7"]
-[ext_resource type="Texture2D" uid="uid://dhe5m6xvyl750" path="res://assets/characters/milka_chan_smile.svg" id="31_milka_smile"]
-[ext_resource type="Texture2D" uid="uid://dq3yssd6vefku" path="res://assets/characters/milka_chan_surprised.svg" id="32_milka_surprised"]
 [ext_resource type="Texture2D" uid="uid://cdy3gt6l5uq0f" path="res://assets/backgrounds/milky_meadow.svg" id="33_bg_meadow"]
 [ext_resource type="Texture2D" uid="uid://c8veeqljmbbsa" path="res://assets/backgrounds/cafe_parlor.svg" id="34_bg_cafe"]
 [ext_resource type="Texture2D" uid="uid://bas21osbbugsy" path="res://assets/backgrounds/starry_night.svg" id="35_bg_night"]
-[ext_resource type="Resource" path="res://characters/milka_chan.tres" id="36_def_milka"]
 [ext_resource type="Texture2D" uid="uid://disyvkjbef0iq" path="res://assets/ui/milk_droplet.svg" id="40_drop"]
 [ext_resource type="Theme" uid="uid://bckjh04a6b4vk" path="res://assets/ui/milk_glass_theme.tres" id="60_theme"]
 [ext_resource type="PackedScene" path="res://scenes/ui/settings_menu.tscn" id="61_settings"]
@@ -158,16 +153,11 @@ script = ExtResource("1_balloon")
 dialogue_resource = ExtResource("2_dkpi6")
 backgrounds = Dictionary[String, Texture2D]({
 "cafe_parlor": ExtResource("34_bg_cafe"),
+"in_train": ExtResource("6_u72eb"),
 "milky_meadow": ExtResource("33_bg_meadow"),
 "starry_night": ExtResource("35_bg_night")
 })
-sprites = Dictionary[String, Texture2D]({
-"milka_chan": ExtResource("30_milka"),
-"milka_chan_smile": ExtResource("31_milka_smile"),
-"milka_chan_surprised": ExtResource("32_milka_surprised"),
-"shadow": ExtResource("27_shadow")
-})
-actor_definitions = Array[Resource]([ExtResource("28_def_shadow"), ExtResource("36_def_milka")])
+move_time = 0.3
 
 [node name="Balloon" type="Control" parent="." unique_id=1419289364]
 unique_name_in_owner = true

@@ -1,7 +1,7 @@
 using GameState
 
 ~ start
-Еду в вагоне. [#bg=in_train, #music=active]
+Еду в вагоне. [#bg=in_train.webp, #music=active]
 Тут полно народу.
 Ой, я внезапно врезался писой прямо ей в попу.[#sprite=milka_back@center]
 Некто: Ещё!~[#sprite=milka_lookback@center]
