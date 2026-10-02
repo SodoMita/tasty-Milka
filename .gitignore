@@ -1,6 +1,29 @@
+# Godot 4+ specific ignores
 .godot/
-__pycache__/
+/android/
+*.png~
+*~
 
-# release pipeline output
-build/
-dist/
+# Editor configs
+.vscode/
+.idea/
+
+# Test artifacts
+*.log
+
+# Secrets — never commit credentials, even by accident.
+.env
+.env.*
+*.env
+secrets/
+credentials/
+# Common credential prefixes (matched as substrings, case-insensitive):
+# ghp_, gho_, ghu_, ghs_, ghr_, github_pat_, xoxb-, xoxp-, sk-, AKIA,
+# glpat-, glptt-, AIza, ya29, ycp_, oc_, hp_, pi_, pt_, sk_live_, sk_test_
+
+# Ignore backups created by chrono-nexus unpack --into-existing
+/.chrono-nexus-incoming-backup-*/
+
+*__pycache__
+
+*.swp

@@ -465,6 +465,19 @@ msgstr "молочно-мягкая визуальная новелла"
 msgid "v0.1.0 · milk-glass UI · placeholder art"
 msgstr "v0.1.0 · молочное стекло · временная графика"
 
+# Ask name
+msgid "Milka leans in: \"What should I call you?\""
+msgstr "Милка наклонилась: \"Как мне тебя звать?\""
+
+msgid "Type your name here..."
+msgstr "Тут могло быть твоё имя..."
+
+msgid "Milka is waiting for at least one character."
+msgstr "Милка ждёт твоего ответа."
+
+msgid "Tell Milka"
+msgstr "Сказать Милке"
+
 msgid "How to play"
 msgstr "Как играть"
 

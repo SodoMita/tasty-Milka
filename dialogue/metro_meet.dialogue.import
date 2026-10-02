@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://ca0s4kpa5nte4"
+path="res://.godot/imported/metro_meet.dialogue-3913505757d72f88150d15ed05f1cb59.tres"
+
+[deps]
+
+source_file="res://dialogue/metro_meet.dialogue"
+dest_files=["res://.godot/imported/metro_meet.dialogue-3913505757d72f88150d15ed05f1cb59.tres"]
+
+[params]
+
+defaults=true

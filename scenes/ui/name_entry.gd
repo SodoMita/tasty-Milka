@@ -33,7 +33,6 @@ func _ready() -> void:
 	_field.text_submitted.connect(_on_submitted)
 	_field.text_changed.connect(_on_text_changed)
 	_confirm.pressed.connect(_try_confirm)
-	_surprise.pressed.connect(_on_surprise)
 	_root.gui_input.connect(_on_root_gui_input)
 	get_viewport().size_changed.connect(_sync_display_rotation)
 	_sync_display_rotation()
@@ -88,9 +87,9 @@ func _on_text_changed(text: String) -> void:
 		return
 	var notes: PackedStringArray = Lore.notes(text)
 	if notes.is_empty():
-		_hint.text = "Milka likes it! Press Enter or click Tell Milka."
+		_hint.text = "OK"
 	else:
-		_hint.text = "Milka notices: " + ", ".join(notes) + "."
+		_hint.text = "".join(notes)
 
 func _on_surprise() -> void:
 	_sfx("click")
