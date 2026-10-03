@@ -60,6 +60,40 @@ const KEY_BUTTONS := {
 	"PanicKeyButton": &"dialogue_panic",
 }
 
+
+## Authored UI text does not auto-translate, so reapply it whenever locale changes.
+const UI_TEXT := {
+	"SettingsTitle": "Settings", "LanguageRowLabel": "Language",
+	"TextSpeedRowLabel": "Text speed", "TextSizeRowLabel": "Text size",
+	"SyncVoiceRowLabel": "Sync text to voice", "SkipSpeedRowLabel": "Skip speed",
+	"SkipModeRowLabel": "Skip texts", "ControlsHeader": "Controls",
+	"AdvanceKeyRowLabel": "Advance", "SkipKeyRowLabel": "Skip mode",
+	"CloseKeyRowLabel": "Close", "HistoryKeyRowLabel": "History",
+	"QuickSaveKeyRowLabel": "Quick save", "QuickLoadKeyRowLabel": "Quick load",
+	"PauseKeyRowLabel": "Pause", "PanicKeyRowLabel": "Panic",
+	"AutoDelayRowLabel": "Auto delay", "UIScaleRowLabel": "UI scale",
+	"DisplayHeader": "Display", "PortraitRowLabel": "Portrait layout",
+	"RotationRowLabel": "Rotation", "FullscreenRowLabel": "Fullscreen",
+	"VsyncRowLabel": "V-Sync", "ResolutionRowLabel": "Resolution",
+	"ResCustomLabel": "Custom size", "GlyphScaleRowLabel": "Glyph scale",
+	"GameFilterRowLabel": "Game filter", "MapFilterRowLabel": "Map filter",
+	"AudioHeader": "Audio", "ProceduralMusicRowLabel": "Generated music",
+	"MasterVolRowLabel": "Master volume", "MusicVolRowLabel": "Music volume",
+	"VoiceVolRowLabel": "Voice volume", "SfxVolRowLabel": "SFX volume",
+	"TypewriterSfxRowLabel": "Typewriter sound", "ButtonSfxRowLabel": "Button sound",
+	"SpritesHeader": "Sprites", "SpriteScaleRowLabel": "Sprite scale",
+	"SpriteYRowLabel": "Sprite Y offset",
+	"SettingsHint": "Settings are saved automatically. Use Close or X to exit.",
+}
+const OPTION_ITEM_MSGIDS := {
+	"LanguageOption": ["English", "Russian"],
+	"SkipModeOption": ["Everything", "Seen only"],
+	"ResolutionOption": ["1280 x 720", "1600 x 900", "1920 x 1080", "2560 x 1440", "Custom"],
+	"GlyphScaleOption": ["1× Low", "2× Medium", "3× High", "4× Ultra"],
+	"GameFilterOption": ["Nearest", "Linear", "Nearest mipmaps", "Linear mipmaps"],
+	"MapFilterOption": ["Nearest", "Linear", "Nearest mipmaps", "Linear mipmaps"],
+}
+
 const HoldTiming = preload("res://scenes/ui/hold_timing.gd")
 
 @onready var close_button: Button = %MenuCloseButton
@@ -76,6 +110,7 @@ var _loading := false
 
 
 func _ready() -> void:
+	_translate_authored_text()
 	# In-game the balloon owns the floating close button and every row.
 	close_button.visible = drive_settings
 	hold_indicator.hide_ring()
@@ -102,8 +137,35 @@ func _ready() -> void:
 	_load_from_store()
 
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		_translate_authored_text()
+
+
+func _translate_authored_text() -> void:
+	for node_name: String in UI_TEXT:
+		var control := find_child(node_name, true, false) as Control
+		if control is Label:
+			(control as Label).text = tr(str(UI_TEXT[node_name]))
+	for option_name: String in OPTION_ITEM_MSGIDS:
+		var option := find_child(option_name, true, false) as OptionButton
+		if option == null:
+			continue
+		var msgids: Array = OPTION_ITEM_MSGIDS[option_name]
+		for i: int in mini(option.item_count, msgids.size()):
+			option.set_item_text(i, tr(str(msgids[i])))
+	for check_name: String in CHECKS:
+		var check := find_child(check_name, true, false) as BaseButton
+		if check != null:
+			check.text = tr("on")
+	var close_tip := find_child("MenuCloseButton", true, false) as Button
+	if close_tip != null:
+		close_tip.tooltip_text = tr("Close")
+
+
 func open() -> void:
 	_cancel_hold()
+	_translate_authored_text()
 	if drive_settings:
 		_load_from_store()
 	show()
@@ -369,7 +431,7 @@ func _update_value_label(slider_name: String) -> void:
 	var label := _ctl(label_name) as Label
 	if label == null:
 		return
-	var fmt: String = SLIDERS[slider_name][2]
+	var fmt: String = tr(str(SLIDERS[slider_name][2]))
 	var v := _range_value(slider_name)
 	if fmt.contains("%d"):
 		label.text = fmt % roundi(v)

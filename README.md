@@ -148,6 +148,9 @@ Edit `dialogue/milka.dialogue` or create a new `.dialogue` file. Use these tags:
 - `#sfx=click|open|close|confirm|save|error` - Play preserved SFX
 - `- "Choice text"` - Branching dialogue
 
+## 🌐 Translate the current UI
+For current-main title/settings, name-entry, clicker and dialogue translation instructions, see [`docs/TRANSLATING_UI.md`](docs/TRANSLATING_UI.md).
+
 ## 🎬 Title Screen (milk-glass UI)
 The game starts with `scenes/title_screen.tscn` — a fully scene-authored main
 menu (no scene-builder script; `title_screen.gd` only wires buttons):

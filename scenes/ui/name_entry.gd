@@ -21,13 +21,13 @@ const SUGGESTIONS: PackedStringArray = [
 @onready var _field: LineEdit = $Root/TopMargin/Center/Panel/Rows/InputRow/Field
 @onready var _hint: Label = $Root/TopMargin/Center/Panel/Rows/Hint
 @onready var _confirm: Button = $Root/TopMargin/Center/Panel/Rows/InputRow/Confirm
-@onready var _surprise: Button = $Root/TopMargin/Center/Panel/Rows/InputRow/Surprise
 
 var _confirmed: bool = false
 
 func _ready() -> void:
 	layer = 110
 	_top_margin.add_theme_constant_override("margin_top", TOP_SAFE_MARGIN)
+	_translate_static_text()
 	_field.max_length = Lore.MAX_LENGTH
 	_field.virtual_keyboard_enabled = true
 	_field.text_submitted.connect(_on_submitted)
@@ -41,11 +41,24 @@ func _ready() -> void:
 	_field.grab_focus()
 	_field.call_deferred("grab_focus")
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		_translate_static_text()
+		_on_text_changed(_field.text)
+
+
+func _translate_static_text() -> void:
+	var title: Label = $Root/TopMargin/Center/Panel/Rows/Header/Title
+	title.text = tr("Milka leans in: What should I call you?")
+	_field.placeholder_text = tr("Type your name here...")
+	_confirm.text = tr("Tell Milka")
+
+
 func _process(_delta: float) -> void:
 	if _confirmed:
 		return
 	var owner_ctrl: Control = get_viewport().gui_get_focus_owner()
-	if owner_ctrl != _field and owner_ctrl != _confirm and owner_ctrl != _surprise:
+	if owner_ctrl != _field and owner_ctrl != _confirm:
 		_field.grab_focus()
 
 func _sync_display_rotation() -> void:
@@ -83,20 +96,20 @@ func _on_text_changed(text: String) -> void:
 	var error: String = Lore.validation_error(text)
 	_confirm.disabled = error != ""
 	if error != "":
-		_hint.text = error
+		if error.contains("%d"):
+			_hint.text = tr(error) % Lore.MAX_LENGTH
+		else:
+			_hint.text = tr(error)
 		return
 	var notes: PackedStringArray = Lore.notes(text)
 	if notes.is_empty():
-		_hint.text = "OK"
+		_hint.text = tr("OK")
 	else:
-		_hint.text = "".join(notes)
+		var localized_notes := PackedStringArray()
+		for note: String in notes:
+			localized_notes.append(tr(note))
+		_hint.text = tr("Milka notices: %s") % ", ".join(localized_notes)
 
-func _on_surprise() -> void:
-	_sfx("click")
-	_field.text = SUGGESTIONS[randi() % SUGGESTIONS.size()]
-	_field.caret_column = _field.text.length()
-	_on_text_changed(_field.text)
-	_field.grab_focus()
 
 func _try_confirm() -> void:
 	if _confirmed:

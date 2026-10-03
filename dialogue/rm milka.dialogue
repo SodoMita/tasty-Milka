@@ -112,7 +112,7 @@ Milka: "Now the stage is all yours, {{GameState.player_name}}." [#sprite=milka_c
 Milka: "Edit 'dialogue/milka.dialogue' to write your own story."
 Milka: "Add your characters to 'assets/characters/' and backgrounds to 'assets/backgrounds/'."
 
-Milka: "Thank you for visiting, {{GameState.player_name}}! May your stories be as sweet as chocolate milk! ✨🥛" [#sprite=milka_chan_smile:center, sfx=confirm]
+Milka: "Thank you for visiting, {{GameState.player_name}}! May your stories be as warm as a glass of milk! ✨🥛" [#sprite=milka_chan_smile:center, sfx=confirm]
 
 Narrator: [End of prologue — the stage is yours!]
 => END

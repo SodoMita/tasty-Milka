@@ -104,6 +104,16 @@ func _translate_labels() -> void:
 	for node_name: String in LABEL_KEYS:
 		var label := get_node("%" + node_name) as Label
 		label.text = tr(str(LABEL_KEYS[node_name]))
+	var tooltip_keys := {
+		"StartButton": "Begin the Story",
+		"ContinueButton": "Continue",
+		"SettingsButton": "Settings",
+		"QuitButton": "Quit",
+	}
+	for button_name: String in tooltip_keys:
+		var button := find_child(button_name, true, false) as Button
+		if button != null:
+			button.tooltip_text = tr(str(tooltip_keys[button_name]))
 
 
 func _react(expression: String) -> void:

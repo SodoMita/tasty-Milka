@@ -54,6 +54,10 @@ const TEX_MILKA_SURPRISED: Texture2D = preload("res://assets/characters/milka_ch
 @onready var _combo_label: Label = $Root/Hud/Top/Combo
 @onready var _judge_label: Label = $Root/Hud/Judge
 @onready var _title_label: Label = $Root/Hud/Top/Title
+@onready var _slide_caption: Label = $Root/CenterStage/SlideCaption
+@onready var _left_heading: Label = $Root/LeftCard/Rows/Header/Heading
+@onready var _controls_hint: Label = $Root/LeftCard/Rows/ControlsHint
+@onready var _right_heading: Label = $Root/RightCard/Rows/Header/Heading
 
 var _time: float = 0.0
 var _running: bool = false
@@ -93,6 +97,8 @@ var _cookie_angle: float = 0.0
 var _beat_pulse: float = 0.0
 var _auto_drip_accum: float = 0.0
 var _last_gesture: String = ""
+var _current_status_key: String = ""
+var _current_status_args: Array = []
 
 ## Visual particles & popups drawn on _canvas
 var _particles: Array[Dictionary] = []
@@ -107,11 +113,26 @@ func _ready() -> void:
 	_bottle_canvas.draw.connect(_on_bottle_draw)
 	_serve_button.pressed.connect(_on_serve_pressed)
 	get_viewport().size_changed.connect(_sync_display_rotation)
+	_translate_static_labels()
 	_sync_display_rotation()
 	_build_chart()
 	_spawn_notes()
 	_update_hud("Click the Milk Cookie on the beat — or hold/drag to slide!")
 	_running = true
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		_translate_static_labels()
+		_update_hud("")
+
+
+func _translate_static_labels() -> void:
+	_slide_caption.text = tr("« Optional Slide: Drag Mouse / Touch OR Hold 1 Key »")
+	_left_heading.text = tr("Milka's Dairy Beat")
+	_controls_hint.text = tr("• PC/Mobile: Click/tap cookie (Drag to slide)\n• 1-Key: Tap [Space/Enter] to click, Hold same key to slide!")
+	_right_heading.text = tr("Milk Churn Upgrades")
+	_serve_button.text = tr("Serve Milk")
+
 
 func _sync_display_rotation() -> void:
 	if not is_node_ready():
@@ -716,7 +737,7 @@ func _resolve(note: Dictionary, verdict: String) -> void:
 			var pts: int = (100 + _combo * 5) * mult
 			_score += pts
 			_spawn_burst(_cookie_center(), 10, true)
-			_add_popup(_cookie_center(), "PERFECT +%d" % pts, Color(1.0, 0.90, 0.36))
+			_add_popup(_cookie_center(), tr("PERFECT +%d") % pts, Color(1.0, 0.90, 0.36))
 			_sfx("confirm")
 		"GOOD":
 			_good += 1
@@ -724,7 +745,7 @@ func _resolve(note: Dictionary, verdict: String) -> void:
 			var pts_g: int = (50 + _combo * 2) * mult
 			_score += pts_g
 			_spawn_burst(_cookie_center(), 6, false)
-			_add_popup(_cookie_center(), "GOOD +%d" % pts_g, Color(0.75, 1.0, 0.82))
+			_add_popup(_cookie_center(), tr("GOOD +%d") % pts_g, Color(0.75, 1.0, 0.82))
 			_sfx("click")
 		_:
 			_missed += 1
@@ -733,44 +754,53 @@ func _resolve(note: Dictionary, verdict: String) -> void:
 	_best_combo = maxi(_best_combo, _combo)
 	_update_hud(verdict if (verdict != "MISS" or (_clicks == 0 and _slides == 0)) else "")
 
-func _update_hud(verdict: String) -> void:
-	_score_label.text = "Milk Drops: %d" % _score
-	_combo_label.text = "Combo x%d (Mult x%d)" % [_combo, _current_multiplier()]
-	_title_label.text = "Milk Beat Clicker"
+func _update_hud(verdict: String, format_args: Array = []) -> void:
+	if not verdict.is_empty():
+		_current_status_key = verdict
+		_current_status_args = format_args.duplicate()
+	_score_label.text = tr("Milk Drops: %d") % _score
+	_combo_label.text = tr("Combo x%d (Mult x%d)") % [_combo, _current_multiplier()]
+	_title_label.text = tr("Milk Beat Clicker")
 	var pct: int = clampi(int(round(float(_score) * 100.0 / float(maxi(target_drops, 1)))), 0, 999)
 	if is_instance_valid(_bottle_label):
-		_bottle_label.text = "Bottle: %d%%" % pct
+		_bottle_label.text = tr("Bottle: %d%%") % pct
 	if is_instance_valid(_upgrade_1):
-		_upgrade_1.text = "[x] Butter Whisk (x2)" if _score >= 15 else "[ ] Butter Whisk (15 drops)"
+		_upgrade_1.text = tr("[x] Butter Whisk (x2)") if _score >= 15 else tr("[ ] Butter Whisk (15 drops)")
 	if is_instance_valid(_upgrade_2):
-		_upgrade_2.text = "[x] Meadow Bell (Auto)" if _score >= 45 else "[ ] Meadow Bell (45 drops)"
+		_upgrade_2.text = tr("[x] Meadow Bell (Auto)") if _score >= 45 else tr("[ ] Meadow Bell (45 drops)")
 	if is_instance_valid(_upgrade_3):
-		_upgrade_3.text = "[x] Cream Fever (x3!)" if _score >= 90 else "[ ] Cream Fever (90 drops)"
+		_upgrade_3.text = tr("[x] Cream Fever (x3!)") if _score >= 90 else tr("[ ] Cream Fever (90 drops)")
 	if is_instance_valid(_milka_line):
 		# Gesture feedback wins for the current action, even after Cream Fever;
 		# otherwise Milka's milestone line would hide whether input was a tap.
 		if _last_gesture.begins_with("swipe"):
-			_milka_line.text = "Milka: \"That was a swipe—no tap counted. Smooth churn!\""
+			_milka_line.text = tr("That was a swipe—no tap counted. Smooth churn!")
 			_milka_tex.texture = TEX_MILKA_SMILE
 		elif _last_gesture.begins_with("hold"):
-			_milka_line.text = "Milka: \"A held key becomes a slide. I can hear the whisk!\""
+			_milka_line.text = tr("A held key becomes a slide. I can hear the whisk!")
 			_milka_tex.texture = TEX_MILKA_SMILE
 		elif _last_gesture.contains("tap"):
-			_milka_line.text = "Milka: \"One clean tap! Not a swipe, not two clicks.\""
+			_milka_line.text = tr("One clean tap! Not a swipe, not two clicks.")
 			_milka_tex.texture = TEX_MILKA_SMILE
 		elif _last_gesture == "cancelled":
-			_milka_line.text = "Milka: \"That was between a tap and swipe, so I did not count it.\""
+			_milka_line.text = tr("That was between a tap and swipe, so I did not count it.")
 			_milka_tex.texture = TEX_MILKA_SURPRISED
 		elif _score >= 90:
-			_milka_line.text = "Milka: \"GOLDEN CREAM FEVER! Look at all that milk!!\""
+			_milka_line.text = tr("GOLDEN CREAM FEVER! Look at all that milk!!")
 			_milka_tex.texture = TEX_MILKA_SURPRISED
 		elif _combo >= 4:
-			_milka_line.text = "Milka: \"Nya~ You caught the meadow heartbeat!\""
+			_milka_line.text = tr("Nya~ You caught the meadow heartbeat!")
 			_milka_tex.texture = TEX_MILKA_SMILE
 		else:
-			_milka_line.text = "Milka: \"Release still for a tap, or move far enough to swipe~\""
-	if verdict != "":
-		_judge_label.text = verdict
+			_milka_line.text = tr("Release still for a tap, or move far enough to swipe~")
+	if not _current_status_key.is_empty():
+		var translated_status := tr(_current_status_key)
+		if not _current_status_args.is_empty():
+			var translated_args: Array = []
+			for arg: Variant in _current_status_args:
+				translated_args.append(tr(str(arg)) if arg is String else arg)
+			translated_status = translated_status % translated_args
+		_judge_label.text = translated_status
 
 func _on_serve_pressed() -> void:
 	_sfx("save")
@@ -813,7 +843,7 @@ func _finish(immediate: bool = false) -> void:
 		"rank": rank,
 		"total": total,
 	}
-	_judge_label.text = "%s! %d Milk Drops" % [rank, _score]
+	_judge_label.text = tr("%s! %d Milk Drops") % [tr(rank), _score]
 	if not immediate and DisplayServer.get_name() != "headless":
 		await get_tree().create_timer(0.55).timeout
 	else:

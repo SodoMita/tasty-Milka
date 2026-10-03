@@ -24,13 +24,18 @@ echo "== Importing project (editor headless) =="
 
 echo
 echo "== Script checks =="
-for s in scenes/vn_balloon.gd scenes/panic_screen.gd scenes/hold_indicator.gd scenes/vn_scene.gd autoloads/game_state.gd autoloads/audio_director.gd tests/test_vn_ui.gd scenes/route_graph/route_graph_view.gd scenes/route_graph/route_graph_compiler.gd scenes/route_graph/route_graph_mesh_builder.gd scenes/route_graph/route_graph_atlas.gd scenes/route_graph/route_graph_panel.gd scenes/route_graph/route_graph_travel.gd scenes/motion/stage_director.gd scenes/motion/sprite_3d_quad.gd scenes/stage/stage_tag_parser.gd scenes/stage/stage_actors.gd scenes/stage/actor_definition.gd tests/test_staging.gd scenes/ui/name_entry.gd scenes/minigame/rhythm_game.gd autoloads/name_lore.gd autoloads/minigame_host.gd tests/test_name_beat.gd; do
+for s in scenes/vn_balloon.gd scenes/panic_screen.gd scenes/hold_indicator.gd scenes/vn_scene.gd autoloads/game_state.gd autoloads/audio_director.gd tests/test_vn_ui.gd scenes/route_graph/route_graph_view.gd scenes/route_graph/route_graph_compiler.gd scenes/route_graph/route_graph_mesh_builder.gd scenes/route_graph/route_graph_atlas.gd scenes/route_graph/route_graph_panel.gd scenes/route_graph/route_graph_travel.gd scenes/motion/stage_director.gd scenes/motion/sprite_3d_quad.gd scenes/stage/stage_tag_parser.gd scenes/stage/stage_actors.gd scenes/stage/actor_definition.gd tests/test_staging.gd scenes/ui/name_entry.gd scenes/minigame/rhythm_game.gd autoloads/name_lore.gd autoloads/minigame_host.gd tests/test_name_beat.gd tests/test_russian_localization.gd; do
   if "$GODOT" --headless --check-only --script "res://$s" >/tmp/vn_check.log 2>&1; then
     echo "  [OK]   $s"
   else
     echo "  [ERR]  $s"; cat /tmp/vn_check.log; exit 1
   fi
 done
+
+echo
+echo "== Running Russian localization coverage =="
+"$GODOT" --headless --path . --script res://tests/test_russian_localization.gd 2>&1 | tee /tmp/vn_localization.log
+LOCALIZATION_EXIT=${PIPESTATUS[0]}
 
 echo
 echo "== Running headless UI test-suite =="
@@ -59,7 +64,7 @@ STAGING_EXIT=${PIPESTATUS[0]}
 
 echo
 echo "== Scanning logs for runtime errors =="
-grep -nE "SCRIPT ERROR|Parse Error|ERROR:" /tmp/vn_test.log /tmp/vn_route.log /tmp/vn_import.log /tmp/vn_panic.log /tmp/vn_motion.log /tmp/vn_staging.log | grep -v "errors_panel" || echo "  no script/parse errors found"
+grep -nE "SCRIPT ERROR|Parse Error|ERROR:" /tmp/vn_test.log /tmp/vn_route.log /tmp/vn_import.log /tmp/vn_panic.log /tmp/vn_motion.log /tmp/vn_staging.log /tmp/vn_localization.log | grep -v "errors_panel" || echo "  no script/parse errors found"
 
 echo
 echo "== Running shared settings-menu check (title + balloon use scenes/ui/settings_menu.tscn) =="
@@ -72,7 +77,8 @@ echo "route-graph exit code: $ROUTE_EXIT"
 echo "panic-return exit code: $PANIC_EXIT"
 echo "motion exit code: $MOTION_EXIT"
 echo "staging exit code: $STAGING_EXIT"
-if [ "$TEST_EXIT" -ne 0 ] || [ "$ROUTE_EXIT" -ne 0 ] || [ "$PANIC_EXIT" -ne 0 ] || [ "$MOTION_EXIT" -ne 0 ] || [ "$STAGING_EXIT" -ne 0 ] || [ "$SETTINGS_EXIT" -ne 0 ]; then
+echo "localization exit code: $LOCALIZATION_EXIT"
+if [ "$TEST_EXIT" -ne 0 ] || [ "$ROUTE_EXIT" -ne 0 ] || [ "$PANIC_EXIT" -ne 0 ] || [ "$MOTION_EXIT" -ne 0 ] || [ "$STAGING_EXIT" -ne 0 ] || [ "$SETTINGS_EXIT" -ne 0 ] || [ "$LOCALIZATION_EXIT" -ne 0 ]; then
   exit 1
 fi
 exit 0
