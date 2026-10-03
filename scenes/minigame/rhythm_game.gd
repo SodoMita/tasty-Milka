@@ -37,6 +37,30 @@ const TEX_MILKA_SURPRISED: Texture2D = preload("res://assets/characters/milka_ch
 @onready var _root: Control = $Root
 @onready var _canvas: Control = $Root/StageCanvas
 @onready var _lanes: Control = $Root/Play/Lanes
+## Authored msgids. The English text in rhythm_game.tscn IS the msgid.
+const HEADING_MSGID := "Milka's Dairy Beat"
+const CHURN_HEADING_MSGID := "Milk Churn Upgrades"
+const CHEER_MSGID := "Milka: \"Click the Milk Cookie! Hold or drag to slide~\""
+const CONTROLS_HINT_MSGID := "\u2022 PC/Mobile: Click/tap cookie (Drag to slide)\n\u2022 1-Key: Tap [Space/Enter] to click, Hold same key to slide!"
+const SLIDE_CAPTION_MSGID := "\u00ab Optional Slide: Drag Mouse / Touch OR Hold 1 Key \u00bb"
+const SERVE_MSGID := "Serve Milk"
+const TITLE_MSGID := "Milk Beat Clicker"
+const JUDGE_MSGID := "Click the Milk Cookie on the beat \u2014 or hold/drag to slide!"
+const UPGRADE_MSGIDS := [
+	["[ ] Butter Whisk (15 drops)", "[x] Butter Whisk (x2)"],
+	["[ ] Meadow Bell (45 drops)", "[x] Meadow Bell (Auto)"],
+	["[ ] Cream Fever (90 drops)", "[x] Cream Fever (x3!)"],
+]
+## Gesture chips shown in the HUD; the callers pass these words.
+const GESTURE_MSGIDS := {
+	"TAP": "TAP",
+	"SWIPE": "SWIPE",
+	"KEY TAP": "KEY TAP",
+	"HOLD SLIDE": "HOLD SLIDE",
+}
+## Final ranks, lowest first.
+const RANK_MSGIDS := ["milk puddle", "wobbly whisk", "steady churner", "cream legend"]
+
 @onready var _notes_layer: Control = $Root/Play/Notes
 @onready var _hit_line: ColorRect = $Root/Play/HitLine
 @onready var _note_template: Control = $Root/Play/NoteTemplate
@@ -54,6 +78,10 @@ const TEX_MILKA_SURPRISED: Texture2D = preload("res://assets/characters/milka_ch
 @onready var _combo_label: Label = $Root/Hud/Top/Combo
 @onready var _judge_label: Label = $Root/Hud/Judge
 @onready var _title_label: Label = $Root/Hud/Top/Title
+@onready var _heading_label: Label = $Root/LeftCard/Rows/Header/Heading
+@onready var _churn_heading_label: Label = $Root/RightCard/Rows/Header/Heading
+@onready var _controls_hint: Label = $Root/LeftCard/Rows/ControlsHint
+@onready var _slide_caption: Label = $Root/CenterStage/SlideCaption
 
 var _time: float = 0.0
 var _running: bool = false
@@ -101,6 +129,7 @@ var _swipe_trail: Array[Dictionary] = []
 var _popups: Array[Dictionary] = []
 
 func _ready() -> void:
+	_retranslate()
 	layer = 110
 	_note_template.visible = false
 	_canvas.draw.connect(_on_canvas_draw)
@@ -110,7 +139,7 @@ func _ready() -> void:
 	_sync_display_rotation()
 	_build_chart()
 	_spawn_notes()
-	_update_hud("Click the Milk Cookie on the beat — or hold/drag to slide!")
+	_update_hud(tr(JUDGE_MSGID))
 	_running = true
 
 func _sync_display_rotation() -> void:
@@ -475,7 +504,7 @@ func press_one_button() -> void:
 	_key_hold_duration = 0.0
 	_hold_slide_progress = 0.0
 	_last_gesture = "pending"
-	_update_hud("BUTTON DOWN — release for TAP, hold for SLIDE")
+	_update_hud(tr("BUTTON DOWN — release for TAP, hold for SLIDE"))
 
 func release_one_button() -> void:
 	if not _running or not _key_down:
@@ -516,7 +545,7 @@ func _press(pos: Vector2) -> void:
 	if _pointer_started_valid:
 		_last_gesture = "pending"
 		_bounce_cookie(1.06)
-		_update_hud("PRESS — release for TAP, move for SWIPE")
+		_update_hud(tr("PRESS — release for TAP, move for SWIPE"))
 
 func _motion(pos: Vector2) -> void:
 	if not _pointer_down:
@@ -530,7 +559,7 @@ func _motion(pos: Vector2) -> void:
 
 	if not _pointer_is_swipe and _pointer_max_displacement >= SLIDE_DISTANCE:
 		_pointer_is_swipe = true
-		_update_hud("SWIPE DETECTED — tap suppressed")
+		_update_hud(tr("SWIPE DETECTED — tap suppressed"))
 
 	if not _pointer_is_swipe:
 		return
@@ -543,7 +572,7 @@ func _motion(pos: Vector2) -> void:
 		if not _pointer_press_note.is_empty() and bool(_pointer_press_note.get("slide", false)):
 			var expected_dir: int = int(_pointer_press_note.get("dir", 0))
 			if expected_dir != 0 and signf(signed_dx) != float(expected_dir):
-				_update_hud("SWIPE THE OTHER WAY — no tap counted")
+				_update_hud(tr("SWIPE THE OTHER WAY — no tap counted"))
 				continue
 		_complete_slide_churn(pos, "SWIPE")
 		_pointer_swipes_scored += 1
@@ -560,17 +589,17 @@ func _release(pos: Vector2) -> void:
 	_pointer_press_note = {}
 
 	if not was_valid:
-		_update_hud("Tap the Milk Cookie")
+		_update_hud(tr("Tap the Milk Cookie"))
 		return
 	if was_swipe:
 		if _pointer_swipes_scored == 0:
-			_update_hud("SWIPE recognised — try the shown direction")
+			_update_hud(tr("SWIPE recognised — try the shown direction"))
 		return
 	if moved <= TAP_MOVE_TOLERANCE:
 		perform_click(pos, "TAP")
 	else:
 		_last_gesture = "cancelled"
-		_update_hud("GESTURE CANCELLED — tap still or swipe farther")
+		_update_hud(tr("GESTURE CANCELLED — tap still or swipe farther"))
 
 func _point_is_on_cookie(pos: Vector2) -> bool:
 	var center: Vector2 = _cookie_center()
@@ -587,7 +616,7 @@ func perform_click(pos: Vector2 = Vector2(640.0, 330.0), gesture: String = "TAP"
 		if not bool(nearest["slide"]) and dt <= GOOD_WINDOW:
 			_judge(nearest)
 			_spawn_burst(pos, 9, dt <= PERFECT_WINDOW)
-			_update_hud("%s • ON BEAT — exactly one tap" % gesture)
+			_update_hud("%s • ON BEAT — exactly one tap" % _gesture_label(gesture))
 			return
 	var mult: int = _current_multiplier()
 	var gain: int = 2 * mult
@@ -595,9 +624,9 @@ func perform_click(pos: Vector2 = Vector2(640.0, 330.0), gesture: String = "TAP"
 	_combo += 1
 	_best_combo = maxi(_best_combo, _combo)
 	_spawn_burst(pos, 6, false)
-	_add_popup(pos, "%s +%d" % [gesture, gain], Color(1.0, 0.98, 0.88))
+	_add_popup(pos, "%s +%d" % [_gesture_label(gesture), gain], Color(1.0, 0.98, 0.88))
 	_sfx("click")
-	_update_hud("%s +%d — clean single tap" % [gesture, gain])
+	_update_hud("%s +%d — clean single tap" % [_gesture_label(gesture), gain])
 
 func _complete_slide_churn(pos: Vector2, gesture: String = "SWIPE") -> void:
 	_last_gesture = gesture.to_lower()
@@ -612,9 +641,9 @@ func _complete_slide_churn(pos: Vector2, gesture: String = "SWIPE") -> void:
 	_combo += 1
 	_best_combo = maxi(_best_combo, _combo)
 	_spawn_burst(pos, 11, true)
-	_add_popup(pos, "%s +%d!" % [gesture, gain], Color(1.0, 0.88, 0.32))
+	_add_popup(pos, "%s +%d!" % [_gesture_label(gesture), gain], Color(1.0, 0.88, 0.32))
 	_sfx("confirm")
-	_update_hud("%s +%d — tap suppressed" % [gesture, gain])
+	_update_hud("%s +%d — tap suppressed" % [_gesture_label(gesture), gain])
 
 func _current_multiplier() -> int:
 	var mult: int = 1
@@ -733,42 +762,76 @@ func _resolve(note: Dictionary, verdict: String) -> void:
 	_best_combo = maxi(_best_combo, _combo)
 	_update_hud(verdict if (verdict != "MISS" or (_clicks == 0 and _slides == 0)) else "")
 
+## Re-apply every authored string. Idempotent, safe after a locale switch.
+func _retranslate() -> void:
+	if not is_node_ready():
+		return
+	# Authored nodes are addressed by scene path: both cards carry a "Heading",
+	# so % unique names cannot tell them apart.
+	_heading_label.text = tr(HEADING_MSGID)
+	_churn_heading_label.text = tr(CHURN_HEADING_MSGID)
+	_milka_line.text = tr(CHEER_MSGID)
+	_controls_hint.text = tr(CONTROLS_HINT_MSGID)
+	_slide_caption.text = tr(SLIDE_CAPTION_MSGID)
+	_serve_button.text = tr(SERVE_MSGID)
+	_judge_label.text = tr(JUDGE_MSGID)
+	_title_label.text = tr(TITLE_MSGID)
+	_update_hud("")
+
+
+## Gesture chips and ranks are words, so they follow the locale too.
+func _gesture_label(gesture: String) -> String:
+	return tr(String(GESTURE_MSGIDS.get(gesture, gesture)))
+
+
+func _rank_label(rank: String) -> String:
+	# RANK_MSGIDS is an Array (no key lookup), so search it.
+	return tr(rank) if RANK_MSGIDS.has(rank) else rank
+
+
+func _notification(what: int) -> void:
+	# The notification can arrive while the scene is still being built, before
+	# the @onready vars exist.
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		_retranslate()
+
+
 func _update_hud(verdict: String) -> void:
-	_score_label.text = "Milk Drops: %d" % _score
-	_combo_label.text = "Combo x%d (Mult x%d)" % [_combo, _current_multiplier()]
-	_title_label.text = "Milk Beat Clicker"
+	_score_label.text = tr("Milk Drops: %d") % _score
+	_combo_label.text = tr("Combo x%d (Mult x%d)") % [_combo, _current_multiplier()]
+	_title_label.text = tr(TITLE_MSGID)
 	var pct: int = clampi(int(round(float(_score) * 100.0 / float(maxi(target_drops, 1)))), 0, 999)
 	if is_instance_valid(_bottle_label):
-		_bottle_label.text = "Bottle: %d%%" % pct
+		_bottle_label.text = tr("Bottle: %d%%") % pct
 	if is_instance_valid(_upgrade_1):
-		_upgrade_1.text = "[x] Butter Whisk (x2)" if _score >= 15 else "[ ] Butter Whisk (15 drops)"
+		_upgrade_1.text = tr(UPGRADE_MSGIDS[0][1]) if _score >= 15 else tr(UPGRADE_MSGIDS[0][0])
 	if is_instance_valid(_upgrade_2):
-		_upgrade_2.text = "[x] Meadow Bell (Auto)" if _score >= 45 else "[ ] Meadow Bell (45 drops)"
+		_upgrade_2.text = tr(UPGRADE_MSGIDS[1][1]) if _score >= 45 else tr(UPGRADE_MSGIDS[1][0])
 	if is_instance_valid(_upgrade_3):
-		_upgrade_3.text = "[x] Cream Fever (x3!)" if _score >= 90 else "[ ] Cream Fever (90 drops)"
+		_upgrade_3.text = tr(UPGRADE_MSGIDS[2][1]) if _score >= 90 else tr(UPGRADE_MSGIDS[2][0])
 	if is_instance_valid(_milka_line):
 		# Gesture feedback wins for the current action, even after Cream Fever;
 		# otherwise Milka's milestone line would hide whether input was a tap.
 		if _last_gesture.begins_with("swipe"):
-			_milka_line.text = "Milka: \"That was a swipe—no tap counted. Smooth churn!\""
+			_milka_line.text = tr("Milka: \"That was a swipe—no tap counted. Smooth churn!\"")
 			_milka_tex.texture = TEX_MILKA_SMILE
 		elif _last_gesture.begins_with("hold"):
-			_milka_line.text = "Milka: \"A held key becomes a slide. I can hear the whisk!\""
+			_milka_line.text = tr("Milka: \"A held key becomes a slide. I can hear the whisk!\"")
 			_milka_tex.texture = TEX_MILKA_SMILE
 		elif _last_gesture.contains("tap"):
-			_milka_line.text = "Milka: \"One clean tap! Not a swipe, not two clicks.\""
+			_milka_line.text = tr("Milka: \"One clean tap! Not a swipe, not two clicks.\"")
 			_milka_tex.texture = TEX_MILKA_SMILE
 		elif _last_gesture == "cancelled":
-			_milka_line.text = "Milka: \"That was between a tap and swipe, so I did not count it.\""
+			_milka_line.text = tr("Milka: \"That was between a tap and swipe, so I did not count it.\"")
 			_milka_tex.texture = TEX_MILKA_SURPRISED
 		elif _score >= 90:
-			_milka_line.text = "Milka: \"GOLDEN CREAM FEVER! Look at all that milk!!\""
+			_milka_line.text = tr("Milka: \"GOLDEN CREAM FEVER! Look at all that milk!!\"")
 			_milka_tex.texture = TEX_MILKA_SURPRISED
 		elif _combo >= 4:
-			_milka_line.text = "Milka: \"Nya~ You caught the meadow heartbeat!\""
+			_milka_line.text = tr("Milka: \"Nya~ You caught the meadow heartbeat!\"")
 			_milka_tex.texture = TEX_MILKA_SMILE
 		else:
-			_milka_line.text = "Milka: \"Release still for a tap, or move far enough to swipe~\""
+			_milka_line.text = tr("Milka: \"Release still for a tap, or move far enough to swipe~\"")
 	if verdict != "":
 		_judge_label.text = verdict
 
@@ -784,13 +847,13 @@ func _finish(immediate: bool = false) -> void:
 	var total: int = _notes.size()
 	var hits: int = _perfect + _good + _clicks + _slides
 	var accuracy: float = clampf((float(hits) / float(maxi(total, 1))) * 100.0, 0.0, 100.0)
-	var rank: String = "milk puddle"
+	var rank: String = tr("milk puddle")
 	if _score >= 220 or accuracy >= 95.0:
-		rank = "cream legend"
+		rank = tr("cream legend")
 	elif _score >= 90 or accuracy >= 70.0:
-		rank = "steady churner"
+		rank = tr("steady churner")
 	elif _score >= 10 or accuracy >= 35.0:
-		rank = "wobbly whisk"
+		rank = tr("wobbly whisk")
 	var style: String = "none"
 	if _clicks > 0 and _slides == 0:
 		style = "tap_only"
@@ -813,7 +876,7 @@ func _finish(immediate: bool = false) -> void:
 		"rank": rank,
 		"total": total,
 	}
-	_judge_label.text = "%s! %d Milk Drops" % [rank, _score]
+	_judge_label.text = tr("%s! %d Milk Drops") % [_rank_label(rank), _score]
 	if not immediate and DisplayServer.get_name() != "headless":
 		await get_tree().create_timer(0.55).timeout
 	else:

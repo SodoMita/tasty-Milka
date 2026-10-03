@@ -501,3 +501,195 @@ msgstr "Полевые заметки · Жизнь коров"
 
 msgid "A FIELD GUIDE TO COWS\n\n01  WHAT IS A COW?\nCattle (Bos taurus) are domesticated bovines. In everyday speech, “cow” often means any member of the species, but technically a cow is an adult female that has calved; a heifer is a female that has not yet calved. A bull is an adult male, and a steer is a castrated male. Cattle are social herd animals. They remember familiar individuals, spend time grooming one another, and usually prefer to rest near trusted companions.\n\n02  A RUMINANT'S FOUR COMPARTMENTS\nCattle eat grasses and other plants rich in cellulose, which a mammal cannot digest on its own. Their stomach has four compartments: the rumen, reticulum, omasum, and abomasum. The rumen is a warm fermentation chamber populated by bacteria, archaea, protozoa, and fungi. These microbes break down plant fibers and produce volatile fatty acids, an important source of energy for the animal. The reticulum helps sort feed; the omasum absorbs water and nutrients; the abomasum is the acid-secreting “true stomach.” Cows regurgitate partially digested feed as cud, chew it again, and swallow it. This remastication makes plant matter easier for microbes to process. A relaxed cow may spend several hours a day chewing cud.\n\n03  HOW MILK IS MADE\nMilk is produced in the udder after calving. Each of the four udder quarters contains its own glandular tissue and teat. Tiny clusters of secretory cells called alveoli assemble milk from nutrients carried in the blood. The first milk after birth is colostrum, rich in antibodies that help protect the calf. The hormone oxytocin triggers milk letdown by contracting cells around the alveoli. Clean bedding, gentle handling, adequate water, balanced feed, and prompt veterinary care support both udder health and animal welfare. Milk yield varies widely with breed, nutrition, stage of lactation, and the individual cow.\n\n04  THE LIFE OF A HERD\nCattle use sight, sound, scent, and touch to communicate. A calf learns its mother's voice and smell. Ears, tail, posture, and distance from others can all signal comfort or stress. Cattle have panoramic vision but a blind spot directly behind them; they may be startled by sudden movements or sharp contrasts. They prefer calm, predictable handling. Rest matters: cows commonly lie down for many hours each day, and comfortable dry space is important for health. They also need continuous access to clean water; a lactating animal can drink a great deal, especially in warm weather.\n\n05  MORE THAN BLACK AND WHITE\nThere are many cattle breeds, with different coat colors, body types, and adaptations. Holsteins are often black-and-white, Jerseys are smaller and frequently fawn-colored, and Highland cattle have long coats suited to cold, wet weather. Horns are not exclusive to bulls: depending on breed and management, both males and females may grow them. A cow's unique pattern of markings can help people tell individuals apart. Every herd is made up of distinct animals rather than interchangeable silhouettes.\n\n06  CARE AND THE PLANET\nGood husbandry includes appropriate feed, shade or shelter, room to move, social contact, and veterinary attention. Farming choices also affect land, water, and climate. Ruminant digestion produces methane; manure management and feed production can add further emissions. Responsible land management, healthier herds, and improved practices can reduce impacts, though there is no single solution for every region. Understanding cattle means considering their needs as living animals alongside the ecosystems and communities around them.\n\nEND OF FIELD NOTES  ·  Scroll to revisit a section. Close to return to the story."
 msgstr "ПОЛЕВОЙ СПРАВОЧНИК О КОРОВАХ\n\n01  КТО ТАКАЯ КОРОВА?\nКрупный рогатый скот (Bos taurus) — одомашненные полорогие животные. В повседневной речи словом «корова» часто называют любого представителя вида, но строго говоря корова — взрослая самка, которая уже телилась, а тёлка — самка до первого отёла. Взрослый самец — бык, кастрированный самец — вол. Это общественные стадные животные. Они узнают знакомых особей, ухаживают друг за другом и обычно предпочитают отдыхать рядом с проверенными товарищами.\n\n02  ЧЕТЫРЕ ОТДЕЛА ЖЕЛУДКА ЖВАЧНЫХ\nКоровы едят траву и другие растения, богатые целлюлозой, которую млекопитающие не способны переваривать самостоятельно. Их желудок состоит из рубца, сетки, книжки и сычуга. Рубец — тёплая камера ферментации, населённая бактериями, археями, простейшими и грибами. Эти микроорганизмы расщепляют растительные волокна и вырабатывают летучие жирные кислоты — важный источник энергии для животного. Сетка помогает сортировать корм; книжка поглощает воду и питательные вещества; сычуг выделяет кислоту и является «настоящим желудком». Коровы отрыгивают частично переваренный корм в виде жвачки, снова пережёвывают и проглатывают его. Повторное пережёвывание помогает микроорганизмам перерабатывать растения. Спокойная корова может жевать жвачку несколько часов в день.\n\n03  КАК ОБРАЗУЕТСЯ МОЛОКО\nМолоко образуется в вымени после отёла. Каждая из четырёх четвертей вымени имеет собственную железистую ткань и сосок. Маленькие скопления секреторных клеток — альвеолы — создают молоко из питательных веществ, поступающих с кровью. Первое молоко после рождения телёнка называется молозивом: оно богато антителами, защищающими малыша. Гормон окситоцин вызывает отдачу молока, сокращая клетки вокруг альвеол. Чистая подстилка, бережное обращение, достаточное количество воды, сбалансированный корм и своевременная ветеринарная помощь поддерживают здоровье вымени и благополучие животного. Удой сильно зависит от породы, питания, стадии лактации и особенностей коровы.\n\n04  ЖИЗНЬ СТАДА\nКоровы общаются с помощью зрения, звуков, запахов и прикосновений. Телёнок узнаёт голос и запах матери. Положение ушей, хвоста и тела, а также расстояние до других животных говорят о спокойствии или стрессе. У коров широкий обзор, но непосредственно позади них находится слепая зона; резкие движения и контрасты могут их напугать. Им нравится спокойное, предсказуемое обращение. Отдых очень важен: коровы часто лежат много часов в день, и удобное сухое место необходимо для здоровья. Постоянный доступ к чистой воде тоже обязателен: кормящая корова пьёт особенно много в жару.\n\n05  НЕ ТОЛЬКО ЧЁРНО-БЕЛЫЕ\nСуществует множество пород с разной окраской, телосложением и приспособленностью к условиям среды. Голштины часто чёрно-белые, джерсейские коровы меньше и обычно палевого цвета, а у хайлендов длинная шерсть, подходящая для холодной влажной погоды. Рога бывают не только у быков: в зависимости от породы и способов содержания они могут расти у обоих полов. Уникальный рисунок окраски помогает различать отдельных коров. Каждое стадо состоит из непохожих друг на друга животных, а не одинаковых силуэтов.\n\n06  ЗАБОТА И ПЛАНЕТА\nХороший уход включает подходящий корм, тень или укрытие, пространство для движения, общение с сородичами и ветеринарную помощь. Сельское хозяйство также влияет на землю, воду и климат. Пищеварение жвачных образует метан; обращение с навозом и производство кормов тоже могут приводить к выбросам. Ответственное управление угодьями, здоровые стада и улучшенные методы снижают воздействие, хотя единого решения для всех регионов нет. Понимать коров — значит учитывать их потребности как живых существ вместе с окружающими экосистемами и сообществами.\n\nКОНЕЦ ПОЛЕВЫХ ЗАМЕТОК  ·  Прокрутите, чтобы перечитать раздел. Закройте, чтобы вернуться к истории."
+
+# --- Milk-glass UI strings (no context: plain tr() calls) ---
+# The English source text in the .tscn / .gd file IS the msgid - keep them
+# identical or the lookup fails. See docs/TRANSLATING.md.
+msgid "1280 x 720"
+msgstr "1280 × 720"
+
+msgid "1600 x 900"
+msgstr "1600 × 900"
+
+msgid "1920 x 1080"
+msgstr "1920 × 1080"
+
+msgid "2560 x 1440"
+msgstr "2560 × 1440"
+
+msgid "English"
+msgstr "Английский"
+
+msgid "Russian"
+msgstr "Русский"
+
+msgid "x"
+msgstr "×"
+
+msgid "Escape"
+msgstr "Esc"
+
+msgid "OK"
+msgstr "Хорошо"
+
+msgid "starts small"
+msgstr "начинается со строчной"
+
+msgid "has numbers"
+msgstr "есть цифры"
+
+msgid "has emoji"
+msgstr "есть эмодзи"
+
+msgid "has math signs"
+msgstr "есть математические знаки"
+
+msgid "has special symbols"
+msgstr "есть специальные символы"
+
+msgid "shouts in capitals"
+msgstr "написано капсом"
+
+msgid "is quite long"
+msgstr "довольно длинное"
+
+msgid "is very short"
+msgstr "очень короткое"
+
+msgid "That is longer than %d characters. Milka cannot breathe."
+msgstr "Это длиннее %d символов. Милка не может дышать."
+
+msgid "Milka's Dairy Beat"
+msgstr "Молочный ритм Милки"
+
+msgid "Milk Churn Upgrades"
+msgstr "Улучшения маслобойки"
+
+msgid "Milka: \"Click the Milk Cookie! Hold or drag to slide~\""
+msgstr "Милка: «Нажми на Молочное печенье! Или удерживай/веди, чтобы скользить~»"
+
+msgid "• PC/Mobile: Click/tap cookie (Drag to slide)\n• 1-Key: Tap [Space/Enter] to click, Hold same key to slide!"
+msgstr "• ПК/телефон: нажми на печенье (веди, чтобы скользить)\n• Одна кнопка: тап [Space/Enter] — клик, удержание той же кнопки — скольжение!"
+
+msgid "« Optional Slide: Drag Mouse / Touch OR Hold 1 Key »"
+msgstr "« Необязательное скольжение: веди мышью/пальцем ИЛИ удерживай 1 кнопку »"
+
+msgid "Serve Milk"
+msgstr "Подать молоко"
+
+msgid "Milk Beat Clicker"
+msgstr "Молочный кликер"
+
+msgid "Click the Milk Cookie on the beat — or hold/drag to slide!"
+msgstr "Нажимай Молочное печенье в такт — или удерживай/веди для скольжения!"
+
+msgid "[ ] Butter Whisk (15 drops)"
+msgstr "[ ] Масляный венчик (15 капель)"
+
+msgid "[x] Butter Whisk (x2)"
+msgstr "[x] Масляный венчик (x2)"
+
+msgid "[ ] Meadow Bell (45 drops)"
+msgstr "[ ] Луговой колокольчик (45 капель)"
+
+msgid "[x] Meadow Bell (Auto)"
+msgstr "[x] Луговой колокольчик (авто)"
+
+msgid "[ ] Cream Fever (90 drops)"
+msgstr "[ ] Сливовая лихорадка (90 капель)"
+
+msgid "[x] Cream Fever (x3!)"
+msgstr "[x] Сливовая лихорадка (x3!)"
+
+msgid "Milk Drops: %d"
+msgstr "Молочных капель: %d"
+
+msgid "Combo x%d (Mult x%d)"
+msgstr "Комбо x%d (множитель x%d)"
+
+msgid "Bottle: %d%%"
+msgstr "Бутылка: %d%%"
+
+msgid "%s! %d Milk Drops"
+msgstr "%s! Молочных капель: %d"
+
+msgid "SWIPE DETECTED — tap suppressed"
+msgstr "СВАЙП — тап не засчитан"
+
+msgid "%s • ON BEAT — exactly one tap"
+msgstr "%s • В ТАКТ — ровно один тап"
+
+msgid "%s +%d"
+msgstr "%s +%d"
+
+msgid "%s +%d — clean single tap"
+msgstr "%s +%d — чистый одиночный тап"
+
+msgid "%s +%d!"
+msgstr "%s +%d!"
+
+msgid "%s +%d — tap suppressed"
+msgstr "%s +%d — тап не засчитан"
+
+msgid "TAP"
+msgstr "ТАП"
+
+msgid "SWIPE"
+msgstr "СВАЙП"
+
+msgid "KEY TAP"
+msgstr "ТАП КЛАВИШЕЙ"
+
+msgid "HOLD SLIDE"
+msgstr "УДЕРЖАНИЕ-СВАЙП"
+
+msgid "milk puddle"
+msgstr "молочная лужа"
+
+msgid "wobbly whisk"
+msgstr "шаткий венчик"
+
+msgid "steady churner"
+msgstr "уверенная маслобойка"
+
+msgid "cream legend"
+msgstr "сливочная легенда"
+
+msgid "BUTTON DOWN — release for TAP, hold for SLIDE"
+msgstr "КНОПКА НАЖАТА — отпусти для ТАПА, удерживай для СВАЙПА"
+
+msgid "PRESS — release for TAP, move for SWIPE"
+msgstr "НАЖАТИЕ — отпусти для ТАПА, веди для СВАЙПА"
+
+msgid "SWIPE THE OTHER WAY — no tap counted"
+msgstr "СВАЙП В ДРУГУЮ СТОРОНУ — тап не засчитан"
+
+msgid "Tap the Milk Cookie"
+msgstr "Нажми Молочное печенье"
+
+msgid "SWIPE recognised — try the shown direction"
+msgstr "СВАЙП распознан — попробуй в указанном направлении"
+
+msgid "GESTURE CANCELLED — tap still or swipe farther"
+msgstr "ЖЕСТ ОТМЕНЁН — тапни на месте или проведи дальше"
+
+msgid "Milka: \"That was a swipe—no tap counted. Smooth churn!\""
+msgstr "Милка: «Это был свайп — тап не засчитан. Плавное взбивание!»"
+
+msgid "Milka: \"A held key becomes a slide. I can hear the whisk!\""
+msgstr "Милка: «Удержанная кнопка становится свайпом. Слышу, как мешает венчик!»"
+
+msgid "Milka: \"One clean tap! Not a swipe, not two clicks.\""
+msgstr "Милка: «Один чистый тап! Ни свайпа, ни двух кликов.»"
+
+msgid "Milka: \"That was between a tap and swipe, so I did not count it.\""
+msgstr "Милка: «Это было между тапом и свайпом, поэтому я не засчитала.»"
+
+msgid "Milka: \"GOLDEN CREAM FEVER! Look at all that milk!!\""
+msgstr "Милка: «ЗОЛОТАЯ СЛИВОЧНАЯ ЛИХОРАДКА! Глядь, сколько молока!!»"
+
+msgid "Milka: \"Nya~ You caught the meadow heartbeat!\""
+msgstr "Милка: «Ня~ Ты поймала сердцебиение луга!»"
+
+msgid "Milka: \"Release still for a tap, or move far enough to swipe~\""
+msgstr "Милка: «Отпусти без движения — будет тап, или проведи достаточно далеко для свайпа~»"

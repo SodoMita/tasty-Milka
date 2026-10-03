@@ -173,6 +173,13 @@ Continue button resumes the newest save slot (`user://saves/slot_*.json`).
 breathing idle loop, random blinking, `set_expression("neutral"|"happy"|"surprised")`,
 `greet()` hop. Preview it via `scenes/character/character_showcase.tscn`.
 
+## 🌍 Translating the UI
+Every UI string is a msgid (the English source text). Catalogs live in
+`i18n/*.po`; the active language is a shared setting, so the title screen, the
+settings panel and the balloon always match. Full guide — changing a
+translation, adding a string, adding a language, PO gotchas and how to verify:
+[`docs/TRANSLATING.md`](docs/TRANSLATING.md).
+
 ## 📸 Screenshots (headless sway + pixman)
 ```
 sway -c <(echo 'output HEADLESS-1 mode 1280x720') &

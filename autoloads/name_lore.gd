@@ -90,35 +90,40 @@ static func analyze(raw_name: String) -> Dictionary:
 	)
 	return traits
 
+## tr() is not available in a static function, so ask TranslationServer directly.
+static func _t(msgid: String) -> String:
+	return TranslationServer.translate(msgid)
+
+
 ## Short list of what Milka noticed, used by the input hint line.
 static func notes(raw_name: String) -> PackedStringArray:
 	var traits: Dictionary = analyze(raw_name)
 	var list: PackedStringArray = []
 	if bool(traits["starts_lowercase"]):
-		list.append("starts small")
+		list.append(_t("starts small"))
 	if bool(traits["has_digits"]):
-		list.append("has numbers")
+		list.append(_t("has numbers"))
 	if bool(traits["has_emoji"]):
-		list.append("has emoji")
+		list.append(_t("has emoji"))
 	if bool(traits["has_math"]):
-		list.append("has math signs")
+		list.append(_t("has math signs"))
 	if bool(traits["has_special"]):
-		list.append("has special symbols")
+		list.append(_t("has special symbols"))
 	if bool(traits["all_caps"]):
-		list.append("shouts in capitals")
+		list.append(_t("shouts in capitals"))
 	if bool(traits["is_long"]):
-		list.append("is quite long")
+		list.append(_t("is quite long"))
 	if bool(traits["is_short"]):
-		list.append("is very short")
+		list.append(_t("is very short"))
 	return list
 
 ## Human readable validation message, empty when the name may be used.
 static func validation_error(raw_name: String) -> String:
 	var player_name: String = raw_name.strip_edges()
 	if player_name.length() < MIN_LENGTH:
-		return "Milka is waiting for at least one character."
+		return _t("Milka is waiting for at least one character.")
 	if player_name.length() > MAX_LENGTH:
-		return "That is longer than %d characters. Milka cannot breathe." % MAX_LENGTH
+		return _t("That is longer than %d characters. Milka cannot breathe.") % MAX_LENGTH
 	return ""
 
 static func _is_letter(code: int) -> bool:

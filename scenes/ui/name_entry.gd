@@ -11,6 +11,12 @@ const DisplayRotation = preload("res://scenes/display_rotation.gd")
 
 const TOP_SAFE_MARGIN: int = 28
 
+## Authored msgids. The English text in name_entry.tscn IS the msgid.
+const TITLE_MSGID := "Milka leans in: \"What should I call you?\""
+const PLACEHOLDER_MSGID := "Type your name here..."
+const CONFIRM_MSGID := "Tell Milka"
+const OK_MSGID := "OK"
+
 const SUGGESTIONS: PackedStringArray = [
 	"Traveler", "Sonya", "Mikhail", "Lumi", "Vasya", "Anouk", "Kira",
 ]
@@ -19,6 +25,7 @@ const SUGGESTIONS: PackedStringArray = [
 @onready var _top_margin: MarginContainer = $Root/TopMargin
 @onready var _panel: PanelContainer = $Root/TopMargin/Center/Panel
 @onready var _field: LineEdit = $Root/TopMargin/Center/Panel/Rows/InputRow/Field
+@onready var _title: Label = $Root/TopMargin/Center/Panel/Rows/Header/Title
 @onready var _hint: Label = $Root/TopMargin/Center/Panel/Rows/Hint
 @onready var _confirm: Button = $Root/TopMargin/Center/Panel/Rows/InputRow/Confirm
 @onready var _surprise: Button = $Root/TopMargin/Center/Panel/Rows/InputRow/Surprise
@@ -36,6 +43,7 @@ func _ready() -> void:
 	_root.gui_input.connect(_on_root_gui_input)
 	get_viewport().size_changed.connect(_sync_display_rotation)
 	_sync_display_rotation()
+	_retranslate()
 	_on_text_changed(_field.text)
 	_play_popout_intro()
 	_field.grab_focus()
@@ -79,6 +87,24 @@ func _on_submitted(_text: String) -> void:
 	get_viewport().set_input_as_handled()
 	_try_confirm()
 
+## Re-apply every authored string, then the hint (it is rebuilt from the
+## current text, so it has to follow the locale too).
+func _retranslate() -> void:
+	if not is_node_ready():
+		return
+	_title.text = tr(TITLE_MSGID)
+	_field.placeholder_text = tr(PLACEHOLDER_MSGID)
+	_confirm.text = tr(CONFIRM_MSGID)
+	_on_text_changed(_field.text)
+
+
+func _notification(what: int) -> void:
+	# The notification can arrive while the scene is still being built, before
+	# the @onready vars exist.
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		_retranslate()
+
+
 func _on_text_changed(text: String) -> void:
 	var error: String = Lore.validation_error(text)
 	_confirm.disabled = error != ""
@@ -87,7 +113,7 @@ func _on_text_changed(text: String) -> void:
 		return
 	var notes: PackedStringArray = Lore.notes(text)
 	if notes.is_empty():
-		_hint.text = "OK"
+		_hint.text = tr(OK_MSGID)
 	else:
 		_hint.text = "".join(notes)
 

@@ -60,6 +60,73 @@ const KEY_BUTTONS := {
 	"PanicKeyButton": &"dialogue_panic",
 }
 
+## Authored label msgids: node name -> msgid. The English text in
+## settings_menu.tscn IS the msgid, so translating is idempotent and safe to
+## call again after a locale switch. Key chips are deliberately absent: they
+## show physical key names from InputMap ("Enter", "F5"), the same in every
+## locale.
+const LABEL_MSGIDS := {
+	"SettingsTitle": "Settings",
+	"LanguageRowLabel": "Language",
+	"TextSpeedRowLabel": "Text speed",
+	"TextSizeRowLabel": "Text size",
+	"SyncVoiceRowLabel": "Sync text to voice",
+	"SkipSpeedRowLabel": "Skip speed",
+	"SkipModeRowLabel": "Skip texts",
+	"ControlsHeader": "Controls",
+	"AdvanceKeyRowLabel": "Advance",
+	"SkipKeyRowLabel": "Skip mode",
+	"CloseKeyRowLabel": "Close",
+	"HistoryKeyRowLabel": "History",
+	"QuickSaveKeyRowLabel": "Quick save",
+	"QuickLoadKeyRowLabel": "Quick load",
+	"PauseKeyRowLabel": "Pause",
+	"PanicKeyRowLabel": "Panic",
+	"AutoDelayRowLabel": "Auto delay",
+	"UIScaleRowLabel": "UI scale",
+	"DisplayHeader": "Display",
+	"PortraitRowLabel": "Portrait layout",
+	"RotationRowLabel": "Rotation",
+	"FullscreenRowLabel": "Fullscreen",
+	"VsyncRowLabel": "V-Sync",
+	"ResolutionRowLabel": "Resolution",
+	"ResCustomLabel": "Custom size",
+	"ResXLabel": "x",
+	"GlyphScaleRowLabel": "Glyph scale",
+	"GameFilterRowLabel": "Game filter",
+	"MapFilterRowLabel": "Map filter",
+	"AudioHeader": "Audio",
+	"ProceduralMusicRowLabel": "Generated music",
+	"MasterVolRowLabel": "Master volume",
+	"MusicVolRowLabel": "Music volume",
+	"VoiceVolRowLabel": "Voice volume",
+	"SfxVolRowLabel": "SFX volume",
+	"TypewriterSfxRowLabel": "Typewriter sound",
+	"ButtonSfxRowLabel": "Button sound",
+	"SpritesHeader": "Sprites",
+	"SpriteScaleRowLabel": "Sprite scale",
+	"SpriteYRowLabel": "Sprite Y offset",
+	"SettingsHint": "Settings are saved automatically. Use Close or X to exit.",
+}
+## OptionButton -> item msgids, in item order. Keep this in step with the items
+## authored in settings_menu.tscn and the values in OPTIONS.
+const OPTION_MSGIDS := {
+	"LanguageOption": ["English", "Russian"],
+	"SkipModeOption": ["Everything", "Seen only"],
+	"GlyphScaleOption": ["1\u00d7 Low", "2\u00d7 Medium", "3\u00d7 High", "4\u00d7 Ultra"],
+	"GameFilterOption": ["Nearest", "Linear", "Nearest mipmaps", "Linear mipmaps"],
+	"MapFilterOption": ["Nearest", "Linear", "Nearest mipmaps", "Linear mipmaps"],
+	"ResolutionOption": ["1280 x 720", "1600 x 900", "1920 x 1080", "2560 x 1440", "Custom"],
+}
+## Tooltips authored in the scene.
+const TOOLTIP_MSGIDS := {
+	"MenuCloseButton": "Close",
+	"Rot0Button": "0\u00b0",
+	"Rot90Button": "90\u00b0",
+	"Rot180Button": "180\u00b0",
+	"Rot270Button": "270\u00b0",
+}
+
 const HoldTiming = preload("res://scenes/ui/hold_timing.gd")
 
 @onready var close_button: Button = %MenuCloseButton
@@ -79,6 +146,8 @@ func _ready() -> void:
 	# In-game the balloon owns the floating close button and every row.
 	close_button.visible = drive_settings
 	hold_indicator.hide_ring()
+	# Both instances (title and balloon) translate their own authored strings.
+	_retranslate()
 	if not drive_settings:
 		return
 	close_button.pressed.connect(close)
@@ -104,6 +173,7 @@ func _ready() -> void:
 
 func open() -> void:
 	_cancel_hold()
+	_retranslate()
 	if drive_settings:
 		_load_from_store()
 	show()
@@ -119,6 +189,35 @@ func close() -> void:
 		_refresh_key_labels()
 	hide()
 	closed.emit()
+
+
+## Re-apply every authored string. Idempotent, and safe to call again after a
+## locale switch. See docs/TRANSLATING.md.
+func _retranslate() -> void:
+	if not is_node_ready():
+		return
+	for node_name: String in LABEL_MSGIDS:
+		var label := get_node_or_null("%" + node_name) as Label
+		if label != null:
+			label.text = tr(String(LABEL_MSGIDS[node_name]))
+	for node_name: String in TOOLTIP_MSGIDS:
+		var button := get_node_or_null("%" + node_name) as Button
+		if button != null:
+			button.tooltip_text = tr(String(TOOLTIP_MSGIDS[node_name]))
+	for node_name: String in OPTION_MSGIDS:
+		var option := get_node_or_null("%" + node_name) as OptionButton
+		if option == null:
+			continue
+		var items: Array = OPTION_MSGIDS[node_name]
+		for i: int in mini(items.size(), option.item_count):
+			option.set_item_text(i, tr(String(items[i])))
+
+
+func _notification(what: int) -> void:
+	# The notification can arrive while the scene is still being built, before
+	# the @onready vars exist.
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
+		_retranslate()
 
 
 func _unhandled_input(event: InputEvent) -> void:

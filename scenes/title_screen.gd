@@ -9,6 +9,15 @@ const LABEL_KEYS := {
 	"HowToPlayTitle": "How to play",
 	"HowToPlay": "Enter / Space / tap · Advance\nH / swipe up · History    Esc · Pause\nF5 · Quick save    F9 · Quick load    F12 · Field notes",
 }
+## The menu chips are icon-only, so their meaning lives in the tooltip.
+## The msgids are kept here (not in the scene) so the tooltip and
+## docs/TRANSLATING.md stay in step.
+const TOOLTIP_KEYS := {
+	"StartButton": "Begin the Story",
+	"ContinueButton": "Continue",
+	"SettingsButton": "Settings",
+	"QuitButton": "Quit",
+}
 
 @onready var start_button: Button = %StartButton
 @onready var continue_button: Button = %ContinueButton
@@ -71,7 +80,8 @@ func _queue_display_layout() -> void:
 
 func _apply_display_layout() -> void:
 	_layout_queued = false
-	if not is_node_ready():
+	# A deferred reflow can land after the node left the tree (scene change).
+	if not is_node_ready() or not is_inside_tree():
 		return
 	var store := get_node_or_null("/root/SettingsStore")
 	var data: Dictionary = store.data if store != null else {}
@@ -104,6 +114,10 @@ func _translate_labels() -> void:
 	for node_name: String in LABEL_KEYS:
 		var label := get_node("%" + node_name) as Label
 		label.text = tr(str(LABEL_KEYS[node_name]))
+	for node_name: String in TOOLTIP_KEYS:
+		var button := get_node_or_null("%" + node_name) as Button
+		if button != null:
+			button.tooltip_text = tr(str(TOOLTIP_KEYS[node_name]))
 
 
 func _react(expression: String) -> void:

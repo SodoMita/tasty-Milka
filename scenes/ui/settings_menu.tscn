@@ -48,6 +48,7 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 14
 
 [node name="SettingsTitle" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox" unique_id=1125802707]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Settings"
@@ -58,6 +59,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="LanguageRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/LanguageRow" unique_id=1205678672]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -79,6 +81,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="TextSpeedRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/TextSpeedRow" unique_id=1954184179]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -106,6 +109,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="TextSizeRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/TextSizeRow" unique_id=1940455814]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -133,6 +137,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="SyncVoiceRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/SyncVoiceRow" unique_id=830836861]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -149,6 +154,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="SkipSpeedRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/SkipSpeedRow" unique_id=848915833]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -183,6 +189,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="SkipModeRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/SkipModeRow" unique_id=427051723]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -201,6 +208,7 @@ popup/item_1/text = "Seen only"
 popup/item_1/id = 1
 
 [node name="ControlsHeader" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox" unique_id=818078538]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Controls"
@@ -211,6 +219,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="AdvanceKeyRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/AdvanceKeyRow" unique_id=1225810829]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -230,6 +239,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="SkipKeyRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/SkipKeyRow" unique_id=727037264]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -249,6 +259,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="CloseKeyRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/CloseKeyRow" unique_id=19592198]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -268,6 +279,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="HistoryKeyRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/HistoryKeyRow" unique_id=1325944905]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -287,6 +299,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="QuickSaveKeyRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/QuickSaveKeyRow" unique_id=346874202]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -306,6 +319,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="QuickLoadKeyRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/QuickLoadKeyRow" unique_id=121700230]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -325,6 +339,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="PauseKeyRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/PauseKeyRow" unique_id=363676302]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -344,6 +359,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="PanicKeyRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/PanicKeyRow" unique_id=1465747614]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -363,6 +379,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="AutoDelayRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/AutoDelayRow" unique_id=1212259879]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -390,6 +407,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="UIScaleRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/UIScaleRow" unique_id=148803937]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -420,6 +438,7 @@ value = 1.0
 theme_override_font_sizes/font_size = 15
 
 [node name="DisplayHeader" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox" unique_id=240786325]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Display"
@@ -430,6 +449,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="PortraitRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/PortraitRow" unique_id=9221176]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -446,12 +466,14 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="RotationRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/RotationRow" unique_id=343992856]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
 text = "Rotation"
 
 [node name="Rot0Button" type="Button" parent="SettingsMargin/SettingsScroll/SettingsVBox/RotationRow" unique_id=1245860327]
+unique_name_in_owner = true
 unique_name_in_owner = true
 toggle_mode = true
 button_group = SubResource("ButtonGroup_rotation")
@@ -467,6 +489,7 @@ expand_icon = true
 
 [node name="Rot90Button" type="Button" parent="SettingsMargin/SettingsScroll/SettingsVBox/RotationRow" unique_id=2082816303]
 unique_name_in_owner = true
+unique_name_in_owner = true
 toggle_mode = true
 button_group = SubResource("ButtonGroup_rotation")
 layout_mode = 2
@@ -481,6 +504,7 @@ expand_icon = true
 
 [node name="Rot180Button" type="Button" parent="SettingsMargin/SettingsScroll/SettingsVBox/RotationRow" unique_id=523727031]
 unique_name_in_owner = true
+unique_name_in_owner = true
 toggle_mode = true
 button_group = SubResource("ButtonGroup_rotation")
 layout_mode = 2
@@ -494,6 +518,7 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="Rot270Button" type="Button" parent="SettingsMargin/SettingsScroll/SettingsVBox/RotationRow" unique_id=859838960]
+unique_name_in_owner = true
 unique_name_in_owner = true
 toggle_mode = true
 button_group = SubResource("ButtonGroup_rotation")
@@ -512,6 +537,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="FullscreenRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/FullscreenRow" unique_id=585897256]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -528,6 +554,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="VsyncRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/VsyncRow" unique_id=190072175]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -544,6 +571,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="ResolutionRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/ResolutionRow" unique_id=514884363]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -572,6 +600,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="ResCustomLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/ResCustomRow" unique_id=262134012]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -586,6 +615,7 @@ max_value = 7680.0
 value = 1280.0
 
 [node name="ResXLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/ResCustomRow" unique_id=585053954]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
 text = "x"
@@ -603,6 +633,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="GlyphScaleRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/GlyphScaleRow"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -629,6 +660,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="GameFilterRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/GameFilterRow"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -655,6 +687,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="MapFilterRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/MapFilterRow"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -677,6 +710,7 @@ popup/item_3/id = 3
 selected = 1
 
 [node name="AudioHeader" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox" unique_id=1390737954]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Audio"
@@ -687,6 +721,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="ProceduralMusicRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/ProceduralMusicRow" unique_id=1167967568]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -704,6 +739,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="MasterVolRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/MasterVolRow" unique_id=1742434506]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -728,6 +764,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="MusicVolRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/MusicVolRow" unique_id=1486951385]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -752,6 +789,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="VoiceVolRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/VoiceVolRow" unique_id=506570648]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -776,6 +814,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="SfxVolRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/SfxVolRow" unique_id=758761678]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -800,6 +839,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="TypewriterSfxRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/TypewriterSfxRow" unique_id=10770190]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -817,6 +857,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="ButtonSfxRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/ButtonSfxRow" unique_id=624143229]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -830,6 +871,7 @@ button_pressed = true
 text = "on"
 
 [node name="SpritesHeader" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox" unique_id=2479799]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Sprites"
@@ -840,6 +882,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="SpriteScaleRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/SpriteScaleRow" unique_id=1985630327]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -867,6 +910,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="SpriteYRowLabel" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox/SpriteYRow" unique_id=498205108]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
@@ -889,11 +933,13 @@ theme_override_font_sizes/font_size = 15
 text = "—"
 
 [node name="SettingsHint" type="Label" parent="SettingsMargin/SettingsScroll/SettingsVBox" unique_id=626327766]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "Settings are saved automatically. Use Close or X to exit."
 
 [node name="MenuCloseButton" type="Button" parent="."]
+unique_name_in_owner = true
 unique_name_in_owner = true
 custom_minimum_size = Vector2(44, 44)
 layout_mode = 2
