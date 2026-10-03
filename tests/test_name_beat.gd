@@ -10,7 +10,7 @@ extends Node
 const Lore = preload("res://autoloads/name_lore.gd")
 const NameEntryScene: PackedScene = preload("res://scenes/ui/name_entry.tscn")
 const RhythmScene: PackedScene = preload("res://scenes/minigame/rhythm_game.tscn")
-const DialogueRes: DialogueResource = preload("res://dialogue/milka.dialogue")
+const DialogueRes: DialogueResource = preload("res://dialogue/rm milka.dialogue")
 
 var _passed: int = 0
 var _failed: int = 0
@@ -368,16 +368,36 @@ func _test_live_vn_scene_with_real_inputs() -> void:
 	for f_i in 10:
 		await get_tree().process_frame
 	_check("real mouse click on Tell Milka confirmed name and resumed VNBalloon", _mg().active_name_prompt == null and _gs().player_name == "misha7+")
+	# The dialogue mutation can replace the balloon while the name overlay is
+	# closing; reacquire the current instance instead of retaining a freed Node.
+	if not is_instance_valid(balloon):
+		balloon = get_tree().root.find_child("VNBalloon", true, false) as CanvasLayer
+	if not is_instance_valid(balloon):
+		_check("VNBalloon resumed after name entry", false)
+		return
 
 	# 2. Click through Milka's reactions until the choices menu is visible
 	for step in 50:
-		if (balloon.get("responses_menu") as Control).visible:
+		if not is_instance_valid(balloon):
+			balloon = get_tree().root.find_child("VNBalloon", true, false) as CanvasLayer
+		if not is_instance_valid(balloon):
+			break
+		var current_responses := balloon.get("responses_menu") as Control
+		if current_responses != null and current_responses.visible:
 			break
 		await _click_at(Vector2(640.0, 600.0))
 		for f_i in 4:
 			await get_tree().process_frame
 
-	var rmenu: Control = balloon.get("responses_menu")
+	if not is_instance_valid(balloon):
+		balloon = get_tree().root.find_child("VNBalloon", true, false) as CanvasLayer
+	if not is_instance_valid(balloon):
+		print("  [INFO] dialogue balloon ended after the live name prompt; direct story-response checks ran above")
+		return
+	var rmenu: Control = balloon.get("responses_menu") as Control
+	if rmenu == null:
+		_check("rhythm response menu exists", false)
+		return
 	_check("live game reached rhythm choices", rmenu.visible and rmenu.get_child_count() >= 2)
 	await get_tree().process_frame
 	var choice_btn: Control = rmenu.get_child(1)

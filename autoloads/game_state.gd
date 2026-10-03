@@ -63,7 +63,7 @@ func rhythm_score() -> int:
 	return int(rhythm_result.get("score", 0))
 
 func rhythm_rank() -> String:
-	return String(rhythm_result.get("rank", "unplayed"))
+	return tr(String(rhythm_result.get("rank", "unplayed")))
 
 func rhythm_missed() -> int:
 	return int(rhythm_result.get("missed", 0))

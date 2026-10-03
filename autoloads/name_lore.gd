@@ -118,7 +118,7 @@ static func validation_error(raw_name: String) -> String:
 	if player_name.length() < MIN_LENGTH:
 		return "Milka is waiting for at least one character."
 	if player_name.length() > MAX_LENGTH:
-		return "That is longer than %d characters. Milka cannot breathe." % MAX_LENGTH
+		return "That is longer than %d characters. Milka cannot breathe."
 	return ""
 
 static func _is_letter(code: int) -> bool:

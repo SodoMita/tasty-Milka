@@ -501,3 +501,465 @@ msgstr "Полевые заметки · Жизнь коров"
 
 msgid "A FIELD GUIDE TO COWS\n\n01  WHAT IS A COW?\nCattle (Bos taurus) are domesticated bovines. In everyday speech, “cow” often means any member of the species, but technically a cow is an adult female that has calved; a heifer is a female that has not yet calved. A bull is an adult male, and a steer is a castrated male. Cattle are social herd animals. They remember familiar individuals, spend time grooming one another, and usually prefer to rest near trusted companions.\n\n02  A RUMINANT'S FOUR COMPARTMENTS\nCattle eat grasses and other plants rich in cellulose, which a mammal cannot digest on its own. Their stomach has four compartments: the rumen, reticulum, omasum, and abomasum. The rumen is a warm fermentation chamber populated by bacteria, archaea, protozoa, and fungi. These microbes break down plant fibers and produce volatile fatty acids, an important source of energy for the animal. The reticulum helps sort feed; the omasum absorbs water and nutrients; the abomasum is the acid-secreting “true stomach.” Cows regurgitate partially digested feed as cud, chew it again, and swallow it. This remastication makes plant matter easier for microbes to process. A relaxed cow may spend several hours a day chewing cud.\n\n03  HOW MILK IS MADE\nMilk is produced in the udder after calving. Each of the four udder quarters contains its own glandular tissue and teat. Tiny clusters of secretory cells called alveoli assemble milk from nutrients carried in the blood. The first milk after birth is colostrum, rich in antibodies that help protect the calf. The hormone oxytocin triggers milk letdown by contracting cells around the alveoli. Clean bedding, gentle handling, adequate water, balanced feed, and prompt veterinary care support both udder health and animal welfare. Milk yield varies widely with breed, nutrition, stage of lactation, and the individual cow.\n\n04  THE LIFE OF A HERD\nCattle use sight, sound, scent, and touch to communicate. A calf learns its mother's voice and smell. Ears, tail, posture, and distance from others can all signal comfort or stress. Cattle have panoramic vision but a blind spot directly behind them; they may be startled by sudden movements or sharp contrasts. They prefer calm, predictable handling. Rest matters: cows commonly lie down for many hours each day, and comfortable dry space is important for health. They also need continuous access to clean water; a lactating animal can drink a great deal, especially in warm weather.\n\n05  MORE THAN BLACK AND WHITE\nThere are many cattle breeds, with different coat colors, body types, and adaptations. Holsteins are often black-and-white, Jerseys are smaller and frequently fawn-colored, and Highland cattle have long coats suited to cold, wet weather. Horns are not exclusive to bulls: depending on breed and management, both males and females may grow them. A cow's unique pattern of markings can help people tell individuals apart. Every herd is made up of distinct animals rather than interchangeable silhouettes.\n\n06  CARE AND THE PLANET\nGood husbandry includes appropriate feed, shade or shelter, room to move, social contact, and veterinary attention. Farming choices also affect land, water, and climate. Ruminant digestion produces methane; manure management and feed production can add further emissions. Responsible land management, healthier herds, and improved practices can reduce impacts, though there is no single solution for every region. Understanding cattle means considering their needs as living animals alongside the ecosystems and communities around them.\n\nEND OF FIELD NOTES  ·  Scroll to revisit a section. Close to return to the story."
 msgstr "ПОЛЕВОЙ СПРАВОЧНИК О КОРОВАХ\n\n01  КТО ТАКАЯ КОРОВА?\nКрупный рогатый скот (Bos taurus) — одомашненные полорогие животные. В повседневной речи словом «корова» часто называют любого представителя вида, но строго говоря корова — взрослая самка, которая уже телилась, а тёлка — самка до первого отёла. Взрослый самец — бык, кастрированный самец — вол. Это общественные стадные животные. Они узнают знакомых особей, ухаживают друг за другом и обычно предпочитают отдыхать рядом с проверенными товарищами.\n\n02  ЧЕТЫРЕ ОТДЕЛА ЖЕЛУДКА ЖВАЧНЫХ\nКоровы едят траву и другие растения, богатые целлюлозой, которую млекопитающие не способны переваривать самостоятельно. Их желудок состоит из рубца, сетки, книжки и сычуга. Рубец — тёплая камера ферментации, населённая бактериями, археями, простейшими и грибами. Эти микроорганизмы расщепляют растительные волокна и вырабатывают летучие жирные кислоты — важный источник энергии для животного. Сетка помогает сортировать корм; книжка поглощает воду и питательные вещества; сычуг выделяет кислоту и является «настоящим желудком». Коровы отрыгивают частично переваренный корм в виде жвачки, снова пережёвывают и проглатывают его. Повторное пережёвывание помогает микроорганизмам перерабатывать растения. Спокойная корова может жевать жвачку несколько часов в день.\n\n03  КАК ОБРАЗУЕТСЯ МОЛОКО\nМолоко образуется в вымени после отёла. Каждая из четырёх четвертей вымени имеет собственную железистую ткань и сосок. Маленькие скопления секреторных клеток — альвеолы — создают молоко из питательных веществ, поступающих с кровью. Первое молоко после рождения телёнка называется молозивом: оно богато антителами, защищающими малыша. Гормон окситоцин вызывает отдачу молока, сокращая клетки вокруг альвеол. Чистая подстилка, бережное обращение, достаточное количество воды, сбалансированный корм и своевременная ветеринарная помощь поддерживают здоровье вымени и благополучие животного. Удой сильно зависит от породы, питания, стадии лактации и особенностей коровы.\n\n04  ЖИЗНЬ СТАДА\nКоровы общаются с помощью зрения, звуков, запахов и прикосновений. Телёнок узнаёт голос и запах матери. Положение ушей, хвоста и тела, а также расстояние до других животных говорят о спокойствии или стрессе. У коров широкий обзор, но непосредственно позади них находится слепая зона; резкие движения и контрасты могут их напугать. Им нравится спокойное, предсказуемое обращение. Отдых очень важен: коровы часто лежат много часов в день, и удобное сухое место необходимо для здоровья. Постоянный доступ к чистой воде тоже обязателен: кормящая корова пьёт особенно много в жару.\n\n05  НЕ ТОЛЬКО ЧЁРНО-БЕЛЫЕ\nСуществует множество пород с разной окраской, телосложением и приспособленностью к условиям среды. Голштины часто чёрно-белые, джерсейские коровы меньше и обычно палевого цвета, а у хайлендов длинная шерсть, подходящая для холодной влажной погоды. Рога бывают не только у быков: в зависимости от породы и способов содержания они могут расти у обоих полов. Уникальный рисунок окраски помогает различать отдельных коров. Каждое стадо состоит из непохожих друг на друга животных, а не одинаковых силуэтов.\n\n06  ЗАБОТА И ПЛАНЕТА\nХороший уход включает подходящий корм, тень или укрытие, пространство для движения, общение с сородичами и ветеринарную помощь. Сельское хозяйство также влияет на землю, воду и климат. Пищеварение жвачных образует метан; обращение с навозом и производство кормов тоже могут приводить к выбросам. Ответственное управление угодьями, здоровые стада и улучшенные методы снижают воздействие, хотя единого решения для всех регионов нет. Понимать коров — значит учитывать их потребности как живых существ вместе с окружающими экосистемами и сообществами.\n\nКОНЕЦ ПОЛЕВЫХ ЗАМЕТОК  ·  Прокрутите, чтобы перечитать раздел. Закройте, чтобы вернуться к истории."
+
+# --- Current-main name entry, Milk Beat and Milka story ---
+msgid "That is longer than %d characters. Milka cannot breathe."
+msgstr "Это длиннее %d символов. Милке не хватает воздуха."
+
+msgid "Milka notices: %s"
+msgstr "Милка замечает: %s"
+
+msgid "starts small"
+msgstr "начинается со строчной буквы"
+
+msgid "has numbers"
+msgstr "содержит цифры"
+
+msgid "has emoji"
+msgstr "содержит эмодзи"
+
+msgid "has math signs"
+msgstr "содержит математические знаки"
+
+msgid "has special symbols"
+msgstr "содержит специальные символы"
+
+msgid "shouts in capitals"
+msgstr "написано ЗАГЛАВНЫМИ"
+
+msgid "is quite long"
+msgstr "довольно длинное"
+
+msgid "is very short"
+msgstr "очень короткое"
+
+msgid "OK"
+msgstr "Хорошо"
+
+msgid "« Optional Slide: Drag Mouse / Touch OR Hold 1 Key »"
+msgstr "«Свайп: проведи мышью/пальцем или удерживай клавишу»"
+
+msgid "Milka's Dairy Beat"
+msgstr "Молочный ритм Милки"
+
+msgid "• PC/Mobile: Click/tap cookie (Drag to slide)\n• 1-Key: Tap [Space/Enter] to click, Hold same key to slide!"
+msgstr "• ПК/телефон: нажми на печенье (проведи, чтобы сделать свайп)\n• Одна клавиша: нажми [Пробел/Enter] для клика, удерживай её для свайпа!"
+
+msgid "Milk Churn Upgrades"
+msgstr "Улучшения маслобойки"
+
+msgid "Serve Milk"
+msgstr "Подать молоко"
+
+msgid "Click the Milk Cookie on the beat — or hold/drag to slide!"
+msgstr "Попадай по ритму, нажимая на молочное печенье — или удерживай/проводи для свайпа!"
+
+msgid "Milk Drops: %d"
+msgstr "Капли молока: %d"
+
+msgid "Combo x%d (Mult x%d)"
+msgstr "Серия x%d (множитель x%d)"
+
+msgid "Milk Beat Clicker"
+msgstr "Молочный ритм"
+
+msgid "Bottle: %d%%"
+msgstr "Бутылка: %d%%"
+
+msgid "[x] Butter Whisk (x2)"
+msgstr "[x] Масляный венчик (x2)"
+
+msgid "[ ] Butter Whisk (15 drops)"
+msgstr "[ ] Масляный венчик (15 капель)"
+
+msgid "[x] Meadow Bell (Auto)"
+msgstr "[x] Колокольчик луга (авто)"
+
+msgid "[ ] Meadow Bell (45 drops)"
+msgstr "[ ] Колокольчик луга (45 капель)"
+
+msgid "[x] Cream Fever (x3!)"
+msgstr "[x] Сливочная лихорадка (x3!)"
+
+msgid "[ ] Cream Fever (90 drops)"
+msgstr "[ ] Сливочная лихорадка (90 капель)"
+
+msgid "Milka: \"Click the Milk Cookie! Hold or drag to slide~\""
+msgstr "Милка: «Нажми на молочное печенье! Удерживай или проведи, чтобы сделать свайп~»"
+
+msgid "BUTTON DOWN — release for TAP, hold for SLIDE"
+msgstr "КНОПКА НАЖАТА — отпусти для ТАПА, удерживай для СВАЙПА"
+
+msgid "PRESS — release for TAP, move for SWIPE"
+msgstr "НАЖМИ — отпусти для ТАПА, проведи для СВАЙПА"
+
+msgid "SWIPE DETECTED — tap suppressed"
+msgstr "СВАЙП ОБНАРУЖЕН — нажатие не засчитано"
+
+msgid "SWIPE THE OTHER WAY — no tap counted"
+msgstr "ПРОВЕДИ В ДРУГУЮ СТОРОНУ — нажатие не засчитано"
+
+msgid "Tap the Milk Cookie"
+msgstr "Нажми на молочное печенье"
+
+msgid "SWIPE recognised — try the shown direction"
+msgstr "СВАЙП РАСПОЗНАН — попробуй провести в указанном направлении"
+
+msgid "GESTURE CANCELLED — tap still or swipe farther"
+msgstr "ЖЕСТ ОТМЕНЁН — не двигайся при нажатии или проведи дальше"
+
+msgid "%s • ON BEAT — exactly one tap"
+msgstr "%s • В РИТМ — ровно одно нажатие"
+
+msgid "%s +%d"
+msgstr "%s +%d"
+
+msgid "%s +%d — clean single tap"
+msgstr "%s +%d — точное одиночное нажатие"
+
+msgid "%s +%d!"
+msgstr "%s +%d!"
+
+msgid "%s +%d — tap suppressed"
+msgstr "%s +%d — нажатие не засчитано"
+
+msgid "TAP"
+msgstr "ТАП"
+
+msgid "KEY TAP"
+msgstr "НАЖАТИЕ КЛАВИШИ"
+
+msgid "SWIPE"
+msgstr "СВАЙП"
+
+msgid "HOLD SLIDE"
+msgstr "СВАЙП УДЕРЖАНИЕМ"
+
+msgid "PERFECT"
+msgstr "ИДЕАЛЬНО"
+
+msgid "GOOD"
+msgstr "ХОРОШО"
+
+msgid "MISS"
+msgstr "ПРОМАХ"
+
+msgid "PERFECT +%d"
+msgstr "ИДЕАЛЬНО +%d"
+
+msgid "GOOD +%d"
+msgstr "ХОРОШО +%d"
+
+msgid "Milka: \"That was a swipe—no tap counted. Smooth churn!\""
+msgstr "Милка: «Это был свайп — нажатие не засчитано. Вот это сбивание!»"
+
+msgid "Milka: \"A held key becomes a slide. I can hear the whisk!\""
+msgstr "Милка: «Удержал клавишу — получился свайп. Прямо слышу, как взбивается молоко!»"
+
+msgid "Milka: \"One clean tap! Not a swipe, not two clicks.\""
+msgstr "Милка: «Чёткое нажатие! Не свайп и не два клика.»"
+
+msgid "Milka: \"That was between a tap and swipe, so I did not count it.\""
+msgstr "Милка: «Это было где-то между нажатием и свайпом, так что я не засчитала.»"
+
+msgid "Milka: \"GOLDEN CREAM FEVER! Look at all that milk!!\""
+msgstr "Милка: «ЗОЛОТАЯ СЛИВОЧНАЯ ЛИХОРАДКА! Сколько же тут молока!!»"
+
+msgid "Milka: \"Nya~ You caught the meadow heartbeat!\""
+msgstr "Милка: «Ня~ Ты поймал ритм луга!»"
+
+msgid "Milka: \"Release still for a tap, or move far enough to swipe~\""
+msgstr "Милка: «Не двигайся при нажатии или проведи подальше для свайпа~»"
+
+msgid "milk puddle"
+msgstr "молочная лужица"
+
+msgid "cream legend"
+msgstr "сливочная легенда"
+
+msgid "steady churner"
+msgstr "уверенный сбиватель"
+
+msgid "wobbly whisk"
+msgstr "неуверенный венчик"
+
+msgid "unplayed"
+msgstr "ещё не сыграно"
+
+msgid "%s! %d Milk Drops"
+msgstr "%s! %d капель молока"
+
+msgid "English"
+msgstr "Английский"
+
+msgid "Russian"
+msgstr "Русский"
+
+msgctxt "dialogue"
+msgid "Narrator"
+msgstr "Рассказчик"
+
+msgctxt "dialogue"
+msgid "Milka"
+msgstr "Милка"
+
+msgctxt "dialogue"
+msgid "Welcome to Milka VN! 🥛"
+msgstr "Добро пожаловать в Milka VN! 🥛"
+
+msgctxt "dialogue"
+msgid "A gentle breeze sweeps across the creamy meadow, carrying the sweet scent of fresh milk."
+msgstr "Лёгкий ветерок проносится по сливочному лугу, неся сладкий аромат свежего молока."
+
+msgctxt "dialogue"
+msgid "\"Nya~ Welcome traveler! I'm Milka-chan, your milky guide!\""
+msgstr "«Ня~ Добро пожаловать, путник! Я Милка-тян, твой молочный проводник!»"
+
+msgctxt "dialogue"
+msgid "\"I'm so excited you wandered into my meadow today!\""
+msgstr "«Я так рада твоему визиту на мой луг!»"
+
+msgctxt "dialogue"
+msgid "\"Before I pour your first warm glass... wait a second! I still don't know what to call you!\""
+msgstr "«Прежде чем налить тебе первый стакан тёплого молока... погоди! Я ведь даже не знаю, как тебя зовут!»"
+
+msgctxt "dialogue"
+msgid "\"Tell me your name right up top so I can write it on your milk mug~\""
+msgstr "«Напиши своё имя наверху, и я подпишу твою кружку молока~»"
+
+msgctxt "dialogue"
+msgid "\"Let me read the mug... {{GameState.player_name}}!\""
+msgstr "«Посмотрю, что написано на кружке... {{GameState.player_name}}!»"
+
+msgctxt "dialogue"
+msgid "\"Wait, that is nothing at all! I will call you Traveler then.\""
+msgstr "«Погоди, тут совсем пусто! Тогда я буду звать тебя Путником.»"
+
+msgctxt "dialogue"
+msgid "\"Not one single letter?! {{GameState.player_name}} looks like a secret code.\""
+msgstr "«Ни одной буквы?! Имя {{GameState.player_name}} похоже на секретный код.»"
+
+msgctxt "dialogue"
+msgid "\"Fine. Mysterious guests get extra milk.\""
+msgstr "«Ладно. Загадочным гостям наливают побольше молока.»"
+
+msgctxt "dialogue"
+msgid "\"{{GameState.player_name}}. I like the sound of it.\""
+msgstr "«{{GameState.player_name}}. Мне нравится, как оно звучит.»"
+
+msgctxt "dialogue"
+msgid "\"But hold on... it starts with a small letter.\""
+msgstr "«Погоди-ка... имя начинается со строчной буквы.»"
+
+msgctxt "dialogue"
+msgid "\"Are you shy, or did the capital letter run away to the pasture?\""
+msgstr "«Ты стесняешься или заглавная буква убежала на пастбище?»"
+
+msgctxt "dialogue"
+msgid "\"I will write it big in my notebook anyway: {{GameState.player_name.capitalize()}}.\""
+msgstr "«Всё равно запишу его в блокнот с заглавной: {{GameState.player_name.capitalize()}}.»"
+
+msgctxt "dialogue"
+msgid "\"You start with a number? Are you a serial edition of a person?\""
+msgstr "«Имя начинается с цифры? Ты что, серийная версия человека?»"
+
+msgctxt "dialogue"
+msgid "\"Starting with a symbol... very bold. My keyboard is scared.\""
+msgstr "«Начать с символа... смело. Моя клавиатура испугалась.»"
+
+msgctxt "dialogue"
+msgid "\"There are numbers hiding in your name. {{GameState.name_count('digits')}} of them!\""
+msgstr "«В твоём имени прячутся цифры. Их целых {{GameState.name_count('digits')}}!»"
+
+msgctxt "dialogue"
+msgid "\"Is that your milk quota, or your username from a very old forum?\""
+msgstr "«Это твоя норма молока или логин с какого-то древнего форума?»"
+
+msgctxt "dialogue"
+msgid "\"Emoji! Right there in your name!\""
+msgstr "«Эмодзи! Прямо в твоём имени!»"
+
+msgctxt "dialogue"
+msgid "\"I cannot pronounce pictures, so I will just smile very loudly at you.\""
+msgstr "«Я не умею произносить картинки, поэтому просто очень широко тебе улыбнусь.»"
+
+msgctxt "dialogue"
+msgid "\"Plus, minus, equals... your name does arithmetic on its own.\""
+msgstr "«Плюс, минус, равно... твоё имя само решает примеры.»"
+
+msgctxt "dialogue"
+msgid "\"If I solve you, do I get a second glass of milk?\""
+msgstr "«Если я тебя решу, мне нальют второй стакан молока?»"
+
+msgctxt "dialogue"
+msgid "\"Those brackets and slashes look sharp. Careful, you might cut the cheese.\""
+msgstr "«Скобки и слеши выглядят острыми. Осторожно, можно и сыр порезать.»"
+
+msgctxt "dialogue"
+msgid "\"WHY ARE WE SHOUTING? THE COWS ARE SLEEPING!\""
+msgstr "«ПОЧЕМУ МЫ КРИЧИМ? КОРОВЫ СПЯТ!»"
+
+msgctxt "dialogue"
+msgid "\"...sorry. Indoor voice restored.\""
+msgstr "«...прости. Говорю тише.»"
+
+msgctxt "dialogue"
+msgid "\"That name is long enough to milk a whole herd while saying it.\""
+msgstr "«Имя такое длинное, что пока его произнесёшь, успеешь подоить целое стадо.»"
+
+msgctxt "dialogue"
+msgid "\"So short! It fits in one sip.\""
+msgstr "«Такое короткое! Помещается в один глоток.»"
+
+msgctxt "dialogue"
+msgid "\"A name with a space in it. Room for a cow to lie down.\""
+msgstr "«В имени есть пробел. Хватит места, чтобы корова прилегла.»"
+
+msgctxt "dialogue"
+msgid "\"Letters from far away. My notebook feels well travelled today.\""
+msgstr "«Буквы из далёких краёв. Сегодня мой блокнот будто побывал в путешествии.»"
+
+msgctxt "dialogue"
+msgid "\"Neat, capital at the front, no strange guests inside. Very tidy, {{GameState.player_name}}.\""
+msgstr "«Аккуратно: заглавная буква в начале, никаких странных символов. Всё чинно, {{GameState.player_name}}.»"
+
+msgctxt "dialogue"
+msgid "\"Now, {{GameState.player_name}}, the meadow has a heartbeat! Want to bake and churn the giant Milk Cookie with me?\""
+msgstr "«Ну что, {{GameState.player_name}}, у луга появилось сердцебиение! Испечём и взобьём вместе огромное молочное печенье?»"
+
+msgctxt "dialogue"
+msgid "\"How does it work?\""
+msgstr "«Как это работает?»"
+
+msgctxt "dialogue"
+msgid "\"Click the big Milk Cookie in the center — especially when the glowing beat ring touches its rim!\""
+msgstr "«Нажимай на большое молочное печенье в центре — особенно когда светящееся кольцо ритма касается его края!»"
+
+msgctxt "dialogue"
+msgid "\"A still press-and-release is one tap. Move far enough and it becomes a swipe instead, so you never score both.\""
+msgstr "«Нажал и отпустил, не двигая рукой, — это один тап. Проведи подальше — получится свайп, так что оба действия сразу не засчитаются.»"
+
+msgctxt "dialogue"
+msgid "\"With one keyboard button, release quickly for a tap or hold it for a slide. I react to the gesture you actually made!\""
+msgstr "«На клавиатуре быстро отпусти одну клавишу для тапа или удерживай её для свайпа. Я реагирую именно на тот жест, который ты сделал(а)!»"
+
+msgctxt "dialogue"
+msgid "\"Let's click and churn!\""
+msgstr "«Давай нажимать и взбивать!»"
+
+msgctxt "dialogue"
+msgid "\"That is the spirit! Mouse-only or 1-button keyboard both work!\""
+msgstr "«Вот это настрой! Можно играть мышью или одной клавишей!»"
+
+msgctxt "dialogue"
+msgid "\"Maybe later.\""
+msgstr "«Может, позже.»"
+
+msgctxt "dialogue"
+msgid "\"The beat will wait. It is very patient milk.\""
+msgstr "«Ритм подождёт. Молоко очень терпеливое.»"
+
+msgctxt "dialogue"
+msgid "\"Scored {{GameState.rhythm_score()}} milk drops ({{GameState.rhythm_clicks()}} single taps, {{GameState.rhythm_slides()}} swipes)! I call that a {{GameState.rhythm_rank()}}!\""
+msgstr "«Ты набрал(а) {{GameState.rhythm_score()}} капель молока (одиночных тапов: {{GameState.rhythm_clicks()}}, свайпов: {{GameState.rhythm_slides()}})! Вот это я называю: {{GameState.rhythm_rank()}}!»"
+
+msgctxt "dialogue"
+msgid "\"All single taps and zero swipes! Classic rapid Cookie-Clicker fingers, {{GameState.player_name}}!\""
+msgstr "«Только одиночные тапы и ни одного свайпа! Пальцы настоящего мастера кликера, {{GameState.player_name}}!»"
+
+msgctxt "dialogue"
+msgid "\"All swipes and not a single tap! You churned the whole batch by sliding, {{GameState.player_name}}!\""
+msgstr "«Одни свайпы и ни одного тапа! Ты взбил(а) всю порцию движением, {{GameState.player_name}}!»"
+
+msgctxt "dialogue"
+msgid "\"More swipes than single taps—a true butter-swirl master, {{GameState.player_name}}!\""
+msgstr "«Свайпов больше, чем одиночных тапов — настоящий мастер сливочных завихрений, {{GameState.player_name}}!»"
+
+msgctxt "dialogue"
+msgid "\"A sweet rhythm of crisp single taps and creamy swipes, {{GameState.player_name}}!\""
+msgstr "«Сладкий ритм: чёткие одиночные тапы и нежные сливочные свайпы, {{GameState.player_name}}!»"
+
+msgctxt "dialogue"
+msgid "\"Not a single beat missed, {{GameState.player_name}}. Cream perfection!\""
+msgstr "«Не пропущено ни одного удара ритма, {{GameState.player_name}}. Сливочное совершенство!»"
+
+msgctxt "dialogue"
+msgid "\"You unlocked Golden Cream Fever, {{GameState.player_name}}! My churn is overflowing!\""
+msgstr "«Ты открыл(а) Золотую сливочную лихорадку, {{GameState.player_name}}! Маслобойка переполнена!»"
+
+msgctxt "dialogue"
+msgid "\"The floor is very milky now. We will mop it together.\""
+msgstr "«На полу теперь целое молочное озеро. Будем вытирать вместе.»"
+
+msgctxt "dialogue"
+msgid "\"One more round!\""
+msgstr "«Ещё один раунд!»"
+
+msgctxt "dialogue"
+msgid "\"Back to the story.\""
+msgstr "«Вернуться к истории.»"
+
+msgctxt "dialogue"
+msgid "\"Look, the starry night has arrived!\""
+msgstr "«Смотри, наступила звёздная ночь!»"
+
+msgctxt "dialogue"
+msgid "\"Now the stage is all yours, {{GameState.player_name}}.\""
+msgstr "«Теперь сцена полностью в твоём распоряжении, {{GameState.player_name}}.»"
+
+msgctxt "dialogue"
+msgid "\"Edit 'dialogue/milka.dialogue' to write your own story.\""
+msgstr "«Отредактируй файл 'dialogue/milka.dialogue', чтобы написать свою историю.»"
+
+msgctxt "dialogue"
+msgid "\"Add your characters to 'assets/characters/' and backgrounds to 'assets/backgrounds/'.\""
+msgstr "«Добавляй персонажей в 'assets/characters/', а фоны — в 'assets/backgrounds/'.»"
+
+msgctxt "dialogue"
+msgid "\"Thank you for visiting, {{GameState.player_name}}! May your stories be as warm as a glass of milk! ✨🥛\""
+msgstr "«Спасибо, что заглянул(а), {{GameState.player_name}}! Пусть твои истории будут такими же тёплыми, как стакан молока! ✨🥛»"
+
+msgctxt "dialogue"
+msgid "[End of prologue — the stage is yours!]"
+msgstr "[Конец пролога — сцена теперь в твоём распоряжении!]"
+
+# --- Localized measurement units for settings value labels ---
+msgid "%.3f s"
+msgstr "%.3f с"
+
+msgid "%d px"
+msgstr "%d пкс"
+
+msgid "%.2f s"
+msgstr "%.2f с"
+
+msgid "%.2fx"
+msgstr "%.2f×"
+
+# --- Canonical unquoted UI keys and current milk-only ending ---
+msgid "Milka leans in: What should I call you?"
+msgstr "Милка наклонилась: Как мне тебя звать?"
+
+msgid "Milka: Click the Milk Cookie! Hold or drag to slide~"
+msgstr "Милка: Нажми на молочное печенье! Удерживай или проведи, чтобы сделать свайп~"
+
+msgid "That was a swipe—no tap counted. Smooth churn!"
+msgstr "Это был свайп — нажатие не засчитано. Вот это сбивание!"
+
+msgid "A held key becomes a slide. I can hear the whisk!"
+msgstr "Удержал клавишу — получился свайп. Прямо слышу, как взбивается молоко!"
+
+msgid "One clean tap! Not a swipe, not two clicks."
+msgstr "Чёткое нажатие! Не свайп и не два клика."
+
+msgid "That was between a tap and swipe, so I did not count it."
+msgstr "Это было где-то между нажатием и свайпом, так что я не засчитала."
+
+msgid "GOLDEN CREAM FEVER! Look at all that milk!!"
+msgstr "ЗОЛОТАЯ СЛИВОЧНАЯ ЛИХОРАДКА! Сколько же тут молока!!"
+
+msgid "Nya~ You caught the meadow heartbeat!"
+msgstr "Ня~ Ты поймал ритм луга!"
+
+msgid "Release still for a tap, or move far enough to swipe~"
+msgstr "Не двигайся при нажатии или проведи подальше для свайпа~"

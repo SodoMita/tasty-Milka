@@ -1876,17 +1876,17 @@ func _layout_system_row() -> void:
 func _update_slider_value_labels() -> void:
 	if not is_instance_valid(text_speed_value):
 		return
-	text_speed_value.text = "%.3f s" % text_speed_slider.value
-	text_size_value.text = "%d px" % roundi(text_size_slider.value)
+	text_speed_value.text = tr("%.3f s") % text_speed_slider.value
+	text_size_value.text = tr("%d px") % roundi(text_size_slider.value)
 	skip_speed_value.set_block_signals(true)
 	skip_speed_value.value = skip_delay
 	skip_speed_value.set_block_signals(false)
-	auto_delay_value.text = "%.2f s" % auto_delay_slider.value
+	auto_delay_value.text = tr("%.2f s") % auto_delay_slider.value
 	ui_scale_value.set_block_signals(true)
 	ui_scale_value.value = ui_scale_slider.value
 	ui_scale_value.set_block_signals(false)
-	sprite_scale_value.text = "%.2fx" % sprite_scale_slider.value
-	sprite_y_value.text = "%d px" % roundi(sprite_y_slider.value)
+	sprite_scale_value.text = tr("%.2fx") % sprite_scale_slider.value
+	sprite_y_value.text = tr("%d px") % roundi(sprite_y_slider.value)
 	master_vol_value.text = "%d%%" % roundi(master_vol_slider.value)
 	music_vol_value.text = "%d%%" % roundi(music_vol_slider.value)
 	voice_vol_value.text = "%d%%" % roundi(voice_vol_slider.value)
