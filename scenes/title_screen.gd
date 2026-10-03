@@ -39,6 +39,7 @@ func _ready() -> void:
 	var settings_store := get_node_or_null("/root/SettingsStore")
 	if settings_store != null and settings_store.has_signal("settings_changed"):
 		settings_store.settings_changed.connect(_on_shared_setting_changed)
+
 	_play_sfx("open")
 
 
@@ -60,15 +61,28 @@ func _apply_milk_glass() -> void:
 	start_button.add_theme_stylebox_override(&"normal", MilkGlass.settings().chip_style(&"pressed"))
 
 
+## Every authored string is its own msgid (the English text in
+## title_screen.tscn is the msgid), so translating is idempotent and safe to
+## call again after a locale switch.
+const SUBTITLE_MSGID := "a milk-soft visual novel"
+const VERSION_MSGID := "v0.1.0 \u00b7 milk-glass UI \u00b7 placeholder art"
+const NAME_LABEL_MSGID := "Your name"
+const NAME_PLACEHOLDER_MSGID := "Type your name here"
+const NAME_TOOLTIP_MSGID := "Name used by your story"
+
+
 func _translate_labels() -> void:
-	subtitle.text = tr(subtitle.text)
-	version.text = tr(version.text)
-	player_name_label.text = tr("Your name")
-	player_name_input.placeholder_text = tr("Type your name here")
-	for button: Button in [start_button, continue_button, settings_button, quit_button]:
-		if button.tooltip_text.is_empty():
-			continue
-		button.tooltip_text = tr(button.tooltip_text)
+	subtitle.text = tr(SUBTITLE_MSGID)
+	version.text = tr(VERSION_MSGID)
+	player_name_label.text = tr(NAME_LABEL_MSGID)
+	player_name_input.placeholder_text = tr(NAME_PLACEHOLDER_MSGID)
+	player_name_input.tooltip_text = tr(NAME_TOOLTIP_MSGID)
+	# Icon-only chips carry their meaning in the tooltip; the msgids live in
+	# the shared TITLE_MENU table so title and docs stay in step.
+	for button_name: String in MilkGlass.TITLE_MENU:
+		var node := find_child(button_name, true, false)
+		if node is Button:
+			node.tooltip_text = tr(String(MilkGlass.TITLE_MENU[button_name][1]))
 
 
 func _on_start_pressed() -> void:
@@ -114,6 +128,14 @@ func _persist_player_name() -> void:
 
 func _on_shared_setting_changed(key: String, _value: Variant) -> void:
 	if key == "language":
+		_translate_labels()
+
+
+## Follow an engine-level locale change as well (set outside SettingsStore).
+func _notification(what: int) -> void:
+	# The notification can arrive while the scene is still being built, before
+	# @onready vars exist.
+	if what == NOTIFICATION_TRANSLATION_CHANGED and is_node_ready():
 		_translate_labels()
 
 

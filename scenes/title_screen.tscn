@@ -195,20 +195,6 @@ tracks/11/keys = {
 "update": 0,
 "values": [0.0, -0.1, 0.0]
 }
-tracks/12/type = "value"
-tracks/12/imported = false
-tracks/12/enabled = true
-tracks/12/path = NodePath("TitleBlock:position:y")
-tracks/12/interp = 2
-tracks/12/loop_wrap = true
-tracks/12/keys = {
-"times": PackedFloat32Array(0, 3, 6, 9, 12),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [0.0, -6.0, 0.0, 6.0, 0.0]
-}
-
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ambient"]
 _data = {
 "ambient": SubResource("Animation_ambient")

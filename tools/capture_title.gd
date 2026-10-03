@@ -15,6 +15,7 @@ func _run() -> void:
 	var out_path := "/tmp/capture.png"
 	var frames := 90
 	var open_settings := false
+	var lang := ""
 	for i in range(0, args.size() - 1):
 		match args[i]:
 			"--scene":
@@ -25,6 +26,13 @@ func _run() -> void:
 				frames = int(args[i + 1])
 			"--settings":
 				open_settings = true
+			"--lang":
+				lang = args[i + 1]
+	if not lang.is_empty():
+		var store := root.get_node_or_null("/root/SettingsStore")
+		if store != null:
+			store.set_value("language", lang)
+		TranslationServer.set_locale(lang)
 	change_scene_to_file(scene_path)
 	if open_settings:
 		for i in 20:

@@ -7,6 +7,32 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
+# --- UI strings (no context: plain tr() calls from scripts and scenes) ---
+# Every translatable UI string is a msgid here. The English source text in the
+# .tscn / .gd file IS the msgid - keep them identical or the lookup fails.
+# See i18n/README.md for how to add or change a translation.
+
+msgid "a milk-soft visual novel"
+msgstr "молочная визуальная новелла"
+
+msgid "v0.1.0 · milk-glass UI · placeholder art"
+msgstr "v0.1.0 · молочный интерфейс · временная графика"
+
+msgid "Name used by your story"
+msgstr "Имя, которое использует ваш сюжет"
+
+msgid "Begin the Story"
+msgstr "Начать историю"
+
+msgid "Continue"
+msgstr "Продолжить"
+
+msgid "English"
+msgstr "Английский"
+
+msgid "Russian"
+msgstr "Русский"
+
 # --- Dialogue (context "dialogue", as looked up by the Dialogue Manager addon) ---
 
 msgctxt "dialogue"

@@ -36,6 +36,7 @@ layout_mode = 2
 theme_override_constants/separation = 12
 
 [node name="Title" type="Label" parent="Margin/VBox/TitleRow"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.3, 0.29, 0.24, 1)
@@ -54,6 +55,7 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="LanguageLabel" type="Label" parent="Margin/VBox/LanguageRow"]
+unique_name_in_owner = true
 layout_mode = 2
 custom_minimum_size = Vector2(180, 0)
 theme_override_colors/font_color = Color(0.32, 0.31, 0.26, 1)
@@ -65,13 +67,14 @@ layout_mode = 2
 size_flags_horizontal = 3
 item_count = 2
 popup/item_0/text = "English"
-popup/item_1/text = "Русский"
+popup/item_1/text = "Russian"
 
 [node name="TextSpeedRow" type="HBoxContainer" parent="Margin/VBox"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="TextSpeedLabel" type="Label" parent="Margin/VBox/TextSpeedRow"]
+unique_name_in_owner = true
 layout_mode = 2
 custom_minimum_size = Vector2(180, 0)
 theme_override_colors/font_color = Color(0.32, 0.31, 0.26, 1)
@@ -92,6 +95,7 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="TextSizeLabel" type="Label" parent="Margin/VBox/TextSizeRow"]
+unique_name_in_owner = true
 layout_mode = 2
 custom_minimum_size = Vector2(180, 0)
 theme_override_colors/font_color = Color(0.32, 0.31, 0.26, 1)
@@ -112,6 +116,7 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="FullscreenLabel" type="Label" parent="Margin/VBox/FullscreenRow"]
+unique_name_in_owner = true
 layout_mode = 2
 custom_minimum_size = Vector2(180, 0)
 theme_override_colors/font_color = Color(0.32, 0.31, 0.26, 1)
@@ -127,6 +132,7 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="VSyncLabel" type="Label" parent="Margin/VBox/VSyncRow"]
+unique_name_in_owner = true
 layout_mode = 2
 custom_minimum_size = Vector2(180, 0)
 theme_override_colors/font_color = Color(0.32, 0.31, 0.26, 1)
@@ -143,6 +149,7 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="MasterVolLabel" type="Label" parent="Margin/VBox/MasterVolRow"]
+unique_name_in_owner = true
 layout_mode = 2
 custom_minimum_size = Vector2(180, 0)
 theme_override_colors/font_color = Color(0.32, 0.31, 0.26, 1)
@@ -163,6 +170,7 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="SfxVolLabel" type="Label" parent="Margin/VBox/SfxVolRow"]
+unique_name_in_owner = true
 layout_mode = 2
 custom_minimum_size = Vector2(180, 0)
 theme_override_colors/font_color = Color(0.32, 0.31, 0.26, 1)
